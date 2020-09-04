@@ -14,7 +14,7 @@
         let data = {
             "NroDocumento": NroDocumento
         };
-        let entidad = 'Titular';
+        let entidad = 'Titulares';
         let metodo = 'TraerUnoXNroDocumento';
         let url = ApiURL + '/' + entidad + '/' + metodo;
         let datos = await TraerAPI(url, data);

@@ -4,6 +4,7 @@ Imports System.Web.Http.Description
 Imports Clases
 
 Namespace Controllers
+    <RoutePrefix("api/Titulares")>
     Public Class TitularesController
         Inherits ApiController
 

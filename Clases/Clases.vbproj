@@ -45,10 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Connection">
-      <HintPath>..\..\LibreriasPropias\Connection\bin\Debug\Connection.dll</HintPath>
+      <HintPath>..\..\..\LibreriasPropias\Comunes\bin\Debug\Connection.dll</HintPath>
     </Reference>
     <Reference Include="LUM">
-      <HintPath>..\..\LibreriasPropias\LUM\bin\Debug\LUM.dll</HintPath>
+      <HintPath>..\..\..\LibreriasPropias\Comunes\bin\Debug\LUM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
