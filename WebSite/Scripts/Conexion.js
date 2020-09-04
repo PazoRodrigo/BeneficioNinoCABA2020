@@ -106,7 +106,7 @@ function ejecutarProm(url, params) {
     },
   });
 }
-async function TraerAPI(url, params, jwt) {
+async function TraerAPI(url, params) {
   try {
     return await $.ajax({
       url: url,
@@ -117,38 +117,38 @@ async function TraerAPI(url, params, jwt) {
       // beforeSend: function (xhr) {   //Include the bearer token in header
       //    xhr.setRequestHeader("Authorization", 'Bearer ' + jwt);
       //},
-      headers: {
-        Authorization: jwt,
-      },
+      // headers: {
+      //   Authorization: jwt,
+      // },
       success: function (data) {
         return data;
       },
       error: function (xhr, textStatus, error) {
         console.log(url);
         console.log(params);
-        console.log('xhr',xhr);
+        console.log('xhr', xhr);
         console.log(textStatus);
         console.log(error);
         console.log(xhr.responseJSON);
         //console.log(xhr.responseJSON.Message);
-          throw xhr;
+        throw xhr;
       },
     });
   } catch (xhr) {
     //$.unblockUI();
-    if(xhr.status == 401){
+    if (xhr.status == 401) {
       PopUpConfirmarSinCancelar('warning', 'Login', 'Por Favor Ingrese al sistema', 'eventoLogin', 'Aceptar');
-    }else
-   // if (xhr.responseJSON != undefined) {
+    } else
+      // if (xhr.responseJSON != undefined) {
       throw xhr.responseJSON;
-   // }
+    // }
   }
 }
 document.addEventListener(
   "eventoLogin",
   async function (e) {
     window.location.href =
-    "http://localhost:53930/Aplicaciones/Login/Forms/Login.html";
+      "http://localhost:53930/Aplicaciones/Login/Forms/Login.html";
 
   },
   false
@@ -204,7 +204,7 @@ async function PostAPI(url, params, jwt) {
       error: function (xhr, textStatus, error) {
         console.log(url);
         console.log(params);
-        console.log('xhr',xhr);
+        console.log('xhr', xhr);
         console.log(textStatus);
         console.log(error);
         //console.log(xhr.responseJSON.Message);
@@ -213,13 +213,13 @@ async function PostAPI(url, params, jwt) {
     });
     return response;
   } catch (xhr) {
-    if(xhr.status==401){
-    throw  PopUpConfirmarSinCancelar('warning', 'Login', 'Por Favor Ingrese al sistema', 'eventoLogin', 'Aceptar');
+    if (xhr.status == 401) {
+      throw PopUpConfirmarSinCancelar('warning', 'Login', 'Por Favor Ingrese al sistema', 'eventoLogin', 'Aceptar');
     }
-   // if (xhr.responseJSON != undefined) {
-      throw xhr.responseJSON;
-   // } 
-   
+    // if (xhr.responseJSON != undefined) {
+    throw xhr.responseJSON;
+    // } 
+
   }
 }
 //async function PostAPI(url, params) {

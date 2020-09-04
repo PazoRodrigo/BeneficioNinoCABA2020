@@ -9,11 +9,11 @@ Namespace Controllers
         Inherits ApiController
 
         <HttpGet>
-        <ActionName("TraerUnoXNroDocumento")>
-        <ResponseType(GetType(List(Of DTO.DTO_Titular)))>
-        Public Function TraerUnoXNroDocumento(NroDocumento As Integer) As IHttpActionResult
+        <ActionName("TraerTodosXTitular")>
+        <ResponseType(GetType(List(Of DTO.DTO_Familiar)))>
+        Public Function TraerTodosXTitular(IdAfiliado As Integer) As IHttpActionResult
             Try
-                Dim result As List(Of DTO.DTO_Titular) = Entidad.Titular.TraerUnoXNroDocumento_DTO(NroDocumento)
+                Dim result As List(Of DTO.DTO_Familiar) = Entidad.Familiar.TraerTodosXTitular_DTO(IdAfiliado)
                 Return Ok(result)
             Catch ex As Exception
                 Return Content(HttpStatusCode.InternalServerError, ex.Message)

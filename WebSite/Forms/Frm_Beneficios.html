@@ -1,16 +1,22 @@
 ﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>Demo</title>
-    <meta charset="utf-8">
+<html lang="es">
+  <head>
+    <title>Beneficios CABA</title>
+    <meta charset="utf-8" />
+    <link
+      href="../Imagenes/favicon.ico"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
     <link href="../Styles/bootstrap.css" rel="stylesheet" />
-</head>
-<body>
+    <link href="../Styles/jquery.steps.css" rel="stylesheet" />
+  </head>
+  <body>
     <noscript>
-        <p>
-            El Sistema requiere para su funcionamiento el uso de JavaScript. Si lo
-            has deshabilitado intencionadamente, por favor vuelve a activarlo.
-        </p>
+      <p>
+        El Sistema requiere para su funcionamiento el uso de JavaScript. Si lo
+        has deshabilitado intencionadamente, por favor vuelve a activarlo.
+      </p>
     </noscript>
     <!-- jQuery library -->
     <script src="../Scripts/jquery-3.5.1.js"></script>
@@ -19,13 +25,256 @@
     <script src="../Scripts/jquery.blockUI.js"></script>
     <script src="../Scripts/jquery-ui.js"></script>
     <script src="../Scripts/jquery-ui-1.12.1/jquery-ui.js"></script>
+    <script src="../Scripts/jquery.steps.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-
-
-
-
-    <script src="Frm_Beneficios.js?version=20200904"></script>
-
-
-</body>
+    <!-- Entidades -->
+    <script src="../Forms/Scripts/Entidades/Titular.js?version=20200904"></script>
+    <script src="../Forms/Scripts/Entidades/Familiar.js?version=20200904"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Domicilio.js?version=20200904"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200904"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200904"></script>
+    <script>
+      var ApiURL = "http://localhost:64802/api";
+      $("body").on("keyup", "input[type=text]", function (e) {
+        $(this).val($(this).val().toUpperCase());
+      });
+    </script>
+    <div class="container">
+      <div class="row fixed-top">
+        <div class="col-1">Logo UTE</div>
+        <div class="col-10 text-center text-light display-4 bg-primary">
+          Beneficio Día del Niño
+        </div>
+      </div>
+    </div>
+    <div
+      style="
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 90px;
+      "
+    >
+      <div id="pasosBeneficiario">
+        <h3><span class="CabeceraPaso">Condiciones de Beneficios</span></h3>
+        <section>
+          <div class="contenedor">
+            <div id="paso1" class="paso1">
+              <div class="container">
+                <div class="row mb-1">
+                  <textarea
+                    id="P1_TextoAceptacion"
+                    cols="50"
+                    rows="13"
+                    readonly="readonly"
+                    style="overflow-y: scroll"
+                  >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam similique aliquid sit magnam accusantium doloribus dignissimos quod itaque nemo nobis natus impedit a temporibus dolores adipisci, excepturi atque cupiditate explicabo doloremque. Voluptates nisi tempora quisquam iusto ex consequuntur vel labore dignissimos quaerat! Voluptas delectus assumenda eveniet repellat excepturi ipsum aliquid blanditiis reiciendis perspiciatis illum earum a, veritatis quia quas sapiente ipsam? Culpa, eius. Quisquam recusandae error, omnis in sequi sapiente, corrupti, neque illum id ipsam repellat. Porro, enim, illum labore doloremque illo, quia eligendi earum recusandae accusantium mollitia inventore vel tenetur! Eum, eligendi dolor. Laborum, nihil ipsam? Dicta, perspiciatis reprehenderit! Reprehenderit deserunt tenetur voluptatum, quasi eaque eveniet at aperiam assumenda ex, temporibus porro modi quae ipsum dolores magnam libero non minima commodi distinctio totam, amet eius? Dolorum consectetur quasi fugiat numquam rerum non, beatae minima qui magnam iste perspiciatis, harum dignissimos eligendi eveniet repellat ipsum a recusandae! Voluptatem perspiciatis, distinctio quas neque unde minima id, nobis, labore voluptatibus consectetur excepturi. Earum ut officia veniam quibusdam unde, numquam animi totam optio fugit sequi aut fuga maxime rerum voluptas maiores voluptatem saepe esse delectus ullam cupiditate, at vitae. Nesciunt corrupti earum hic perspiciatis doloribus, provident corporis veniam iusto nostrum consequuntur animi. Consequuntur molestiae libero excepturi, necessitatibus reiciendis rerum tenetur eligendi quasi cum temporibus facere aspernatur ipsa doloremque vel debitis nisi, obcaecati nam accusamus perferendis consectetur eveniet dolores. Unde quasi, beatae cumque sapiente, ab mollitia minus iure quas, in fuga odit consequuntur iusto laudantium dolorem reiciendis harum quam optio veritatis porro eum! Corporis, obcaecati. Officiis assumenda possimus quae eius, exercitationem libero ea debitis reiciendis quo non consequuntur, sunt qui, dolorem voluptate sed nesciunt eos voluptatibus voluptates facere maxime doloribus esse tenetur nihil! Molestiae sunt minima eum, quidem ipsam illum autem, aut recusandae laboriosam sint molestias, eaque reiciendis laudantium quae veritatis saepe cum? Quis fugiat dolorum iure sequi pariatur veritatis nobis minus. Perspiciatis nostrum necessitatibus consequatur dolore? Reiciendis molestiae vel error, corrupti, eveniet vero fuga explicabo labore quos accusantium minus adipisci aut inventore, repellat molestias blanditiis nobis autem similique sequi libero mollitia natus alias saepe velit. Aspernatur rerum commodi cumque unde ut maxime enim harum quo impedit sequi? Dolores adipisci unde odio quae et repellendus nulla aliquam ipsa dolore quas. Nobis tenetur, quasi optio quo, itaque eveniet consequatur doloremque similique vero ipsa saepe dolorum, hic veniam deserunt eum odit quam vitae molestiae sapiente inventore ipsum perspiciatis. Quisquam libero soluta quasi minus enim blanditiis hic repellendus, ratione, accusantium quidem modi neque qui? Ea voluptate earum ipsum, mollitia ad facilis eligendi. Repellat ratione cumque neque ipsam repellendus labore quam optio! Sunt doloremque aperiam eum nihil perspiciatis soluta error, nam veritatis ut non eius. Fugit facilis suscipit consequatur dolorem? Voluptate tempore numquam temporibus similique harum odit veritatis blanditiis sunt eveniet non quo voluptatum voluptatem, sapiente nihil quos architecto! Placeat, iure, voluptatibus nemo perferendis dicta fuga incidunt deserunt pariatur mollitia quis sed ducimus ea voluptatem aspernatur dolore beatae. Enim, exercitationem porro? Recusandae fuga aut autem debitis modi aliquid, libero, natus quisquam facere ipsa saepe obcaecati perspiciatis eaque quia nesciunt. Nihil corrupti aliquam repudiandae fugit error, exercitationem illum perferendis eum sit itaque, expedita laboriosam dolore optio animi, deserunt quaerat esse sequi at excepturi! Eveniet suscipit rerum mollitia omnis porro ducimus fugiat, ad voluptate voluptatibus accusamus facilis dignissimos temporibus vel eius assumenda voluptas et aspernatur enim repellat delectus nesciunt quia repellendus. Repudiandae aspernatur repellat beatae dolor neque earum, quis eius cupiditate ut minima dolore mollitia magnam facilis vero a. Aspernatur, voluptates, aliquid praesentium non laboriosam porro facilis vitae iste quo provident optio quibusdam id placeat quod iure officia quaerat sequi! Labore est recusandae deserunt maxime ex similique, alias molestiae explicabo soluta animi voluptatibus eaque nihil numquam eveniet repellendus distinctio? Architecto quae quo aspernatur distinctio? Aliquam delectus architecto aspernatur. Quos, fugit sunt a laudantium nesciunt dolorum pariatur earum alias laborum provident, exercitationem, vel culpa modi placeat magni. Praesentium possimus dicta asperiores est molestias ex magni fuga ullam. Necessitatibus dolorum similique, omnis corrupti at dolore cum totam, esse inventore nesciunt labore id ad recusandae repellat aperiam fugit doloremque, adipisci illo officia consectetur quas rem. Nam consectetur ex cumque? Culpa molestias dignissimos nemo vel in ab praesentium quis ut soluta. Id eum veniam accusamus blanditiis et eveniet, quasi error aperiam quia beatae veritatis omnis? Animi, fugiat? Sint dolores quo magnam facilis officiis iure laudantium placeat obcaecati, quis sapiente neque perferendis, aperiam corrupti, optio laboriosam aspernatur qui voluptate atque illum. Modi veritatis accusantium debitis neque. Suscipit sequi facere quidem numquam at? Distinctio reprehenderit consequatur quam laborum cum delectus illo nisi nemo earum, voluptate omnis ex odit voluptatem. Dolor, qui culpa? Expedita nihil quae ipsam beatae! Quam minima expedita molestias sint quos et neque laudantium, reiciendis repellat natus explicabo ex iusto labore nemo magni officia voluptatibus vero atque, dolores cupiditate perferendis non. Ab tempore odit, nihil explicabo at fuga, incidunt aliquid eos aliquam facere ut dolorum! Doloremque exercitationem, iste quidem unde animi aliquam ipsa dicta? Excepturi modi quo soluta quisquam quidem dolore assumenda et veritatis perspiciatis odit architecto ullam ad porro nobis asperiores laborum illo, quam amet fugiat culpa ipsam reprehenderit repudiandae? Dolorum, laboriosam doloremque asperiores dolor ipsum officiis esse rem non ut. Eveniet consequatur incidunt, facere possimus quia eos voluptates ducimus libero laboriosam iste molestias sapiente recusandae culpa esse minima, nostrum expedita consequuntur quas a quis soluta. Non, tempora quae quasi id vero hic odit quis quaerat unde, accusantium alias. Iure est aliquam atque deserunt quisquam, tempore commodi maxime provident ut maiores facere quod dignissimos voluptates ducimus! Expedita id blanditiis sapiente, voluptatem tempore amet possimus adipisci repellendus ut quis sequi natus? Ea iure, quasi animi error iste porro! Quas, inventore nulla voluptates repudiandae quasi numquam similique saepe consectetur sit autem provident sapiente eos aspernatur? Vel minus obcaecati distinctio repellat quidem deserunt eos asperiores cum nesciunt aut repudiandae consequatur voluptatibus, voluptas velit labore quasi, aliquam pariatur doloremque. Blanditiis vero voluptate eveniet enim qui repellat illum! Illo modi iure sint eos deserunt deleniti tempore dicta iusto! Nulla aliquam cum quos minus quaerat ex vero, ipsam, facilis obcaecati excepturi deserunt modi odio dolores repellendus quas error id!
+                </textarea
+                  >
+                </div>
+                <div class="row mb-1">
+                  <input id="P1_ChkAcepto" type="checkbox" class="mr-3" />Acepto
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <h3><span class="CabeceraPaso">Beneficiarios</span></h3>
+        <section>
+          <div class="contenedor">
+            <div id="paso" class="paso2">
+              <div class="container">
+                <div class="row justify-content-end mb-1">
+                  <div class="col-10 bg-primary text-light"></div>
+                </div>
+                <div class="row justify-content-end mt-2 mb-2">
+                  <div class="col-5 bg-info text-light">
+                    <span class="TituloPaso">Datos de Titular</span>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3">Nro. Documento</div>
+                  <div class="col-3 text-center">
+                    <input
+                      id="P2_NroDocumentoTitular"
+                      type="text"
+                      class="form-control"
+                      placeholder="Nro. Documento"
+                      maxlength="8"
+                      onkeypress="return jsSoloNumeros(event)"
+                    />
+                  </div>
+                  <div class="col-3"></div>
+                  <div class="col-3">
+                    <a
+                      id="BtnBuscarTitular"
+                      href="#"
+                      class="btn btn-primary btn-block"
+                    >
+                      Buscar
+                    </a>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3">Apellido / Nombre</div>
+                  <div class="col-6 text-right pr-3">
+                    <input
+                      id="P2_ApellidoNombreTitular"
+                      type="text"
+                      class="form-control"
+                      readonly="readonly"
+                      placeholder="Apellido / Nombre de Titular"
+                    />
+                  </div>
+                  <div class="col-3">
+                    <a
+                      id="BtnAceptarTitular"
+                      href="#"
+                      class="btn btn-success btn-block"
+                    >
+                      Continuar
+                    </a>
+                  </div>
+                </div>
+                <div class="row justify-content-end mt-2 mb-2">
+                  <div class="col-5 bg-info text-light">
+                    <span class="TituloPaso">Datos de Familiares</span>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3 DatosFamiliares">
+                    Familiares
+                  </div>
+                  <div class="col-6 DatosFamiliares">
+                    <div
+                      id="GrillaFamiliares"
+                      style="height: 180px; overflow-y: scroll"
+                    ></div>
+                  </div>
+                  <div class="col-4 text-center DatosFamiliares">
+                    <small
+                      ><em>
+                        Recuerde que solo podrá seleccionar para recibir el
+                        beneficio a familiares de hasta 12 años inclusive</em
+                      ></small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <h3><span class="CabeceraPaso">Ya estamos !!!</span></h3>
+        <section>
+          <div class="contenedor">
+            <div class="paso3">
+              <div class="container">
+                <div class="row justify-content-end mb-1">
+                  <div class="col-10 bg-primary text-light"></div>
+                </div>
+                <div class="row justify-content-end">
+                  <div class="col-4 bg-info text-light mb-2">
+                    <span class="TituloPaso">Domicilio Titular</span>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3">Domicilio</div>
+                  <div class="col-5">
+                    <input
+                      id="P3_Domicilio"
+                      type="text"
+                      class="form-control"
+                      value=""
+                      placeholder="Domicilio"
+                      maxlength="256"
+                    />
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-2">
+                    <input
+                      id="P3_CodigoPostal"
+                      type="text"
+                      class="form-control"
+                      value=""
+                      onkeypress="return jsSoloNumeros(event)"
+                      placeholder="C.P."
+                      maxlength="4"
+                    />
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3"></div>
+                  <div class="col-5">
+                    <div id="P3_CboLocalidad"></div>
+                    <input
+                      id="P3_Localidad"
+                      readonly="readonly"
+                      type="text"
+                      class="form-control"
+                      value=""
+                      placeholder="Localidad"
+                    />
+                  </div>
+                  <div class="col-5">
+                    <input
+                      id="P3_Provincia"
+                      readonly="readonly"
+                      type="text"
+                      class="form-control"
+                      value=""
+                      placeholder="Provincia"
+                    />
+                  </div>
+                </div>
+                <div class="row justify-content-end">
+                  <div class="col-4 bg-info text-light mt-2 mb-2">
+                    <span class="TituloPaso">Contacto</span>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3">Teléfono</div>
+                  <div class="col-5">
+                    <input
+                      id="P3_Telefono"
+                      type="text"
+                      class="form-control"
+                      value=""
+                      onkeypress="return jsSoloNumeros(event)"
+                      placeholder="10 dígitos sin 15. (Ej. 1123456789)"
+                      maxlength="10"
+                    />
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col-2 text-right pr-3">Correo Electrónico</div>
+                  <div class="col-5">
+                    <input
+                      id="P3_CorreoElectronico"
+                      type="email"
+                      class="form-control"
+                      value=""
+                      placeholder="Correo Electrónico"
+                    />
+                  </div>
+                </div>
+                <div class="row justify-content-end" style="margin-top: 90px">
+                  <div class="col-3">
+                    <a
+                      id="BtnGenerarVoucher"
+                      href="#"
+                      class="btn btn-success btn-block"
+                      >Generar Voucher !</a
+                    >
+                  </div>
+                  <div class="col-1"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="Scripts/Frm_Beneficios.js?version=20200904"></script>
+  </body>
 </html>
