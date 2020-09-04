@@ -10,33 +10,46 @@ Namespace Entidad
     Public Class Familiar
         Inherits DBE
 
-        Private Shared _Todos As List(Of Familiar)
-        Public Shared Property Todos() As List(Of Familiar)
-            Get
-                If _Todos Is Nothing Then
-                    _Todos = DAL_Familiar.TraerTodos
-                End If
-                Return _Todos
-            End Get
-            Set(ByVal value As List(Of Familiar))
-                _Todos = value
-            End Set
-        End Property
+        'Private Shared _Todos As List(Of Familiar)
+        'Public Shared Property Todos() As List(Of Familiar)
+        '    Get
+        '        If _Todos Is Nothing Then
+        '            _Todos = DAL_Familiar.TraerTodos
+        '        End If
+        '        Return _Todos
+        '    End Get
+        '    Set(ByVal value As List(Of Familiar))
+        '        _Todos = value
+        '    End Set
+        'End Property
 
 #Region " Atributos / Propiedades "
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property IdAfiliadoTitular() As Integer = 0
+        Public Property NroAfiliado() As Integer = 0
+        Public Property ApellidoNombre() As String = ""
+        Public Property NroDocumento() As Integer = 0
+        Public Property FechaNacimiento() As Date?
 #End Region
 #Region " Lazy Load "
-        'Public Property IdLazy() As Integer
-        'Private _ObjLazy As Lazy
-        'Public ReadOnly Property ObjLazy() As Lazy
-        '    Get
-        '        If _ObjLazy Is Nothing Then
-        '            _ObjLazy = Lazy.TraerUno(IdLazy)
-        '        End If
-        '        Return _ObjLazy
-        '    End Get
-        'End Property
+        Public ReadOnly Property Edad() As Integer
+            Get
+                Dim Result As Integer = 0
+                If FechaNacimiento.HasValue Then
+                    'Result = LUM.LUM.Reto
+                End If
+                Return Result
+            End Get
+        End Property
+        Public ReadOnly Property LngFechaNacimiento() As Long
+            Get
+                Dim result As Long = 0
+                If FechaNacimiento.HasValue Then
+                    result = CLng(Year(FechaNacimiento.Value).ToString & Right("00" & Month(FechaNacimiento.Value).ToString, 2) & Right("00" & Day(FechaNacimiento.Value).ToString, 2))
+                End If
+                Return result
+            End Get
+        End Property
 #End Region
 #Region " Constructores "
         Sub New()
@@ -53,34 +66,59 @@ Namespace Entidad
             FechaBaja = objImportar.FechaBaja
             ' Entidad
             IdEntidad = objImportar.IdEntidad
+            IdAfiliadoTitular = objImportar.IdAfiliadoTitular
+            ApellidoNombre = objImportar.ApellidoNombre
+            NroDocumento = objImportar.NroDocumento
+            FechaNacimiento = objImportar.FechaNacimiento
+        End Sub
+        Sub New(ByVal ObjDTO As DTO.DTO_Familiar)
+            ' Entidad
+            IdEntidad = ObjDTO.IdEntidad
+            IdAfiliadoTitular = ObjDTO.IdAfiliadoTitular
+            ApellidoNombre = ObjDTO.ApellidoNombre
+            NroDocumento = ObjDTO.NroDocumento
+            If ObjDTO.FechaNacimiento > 0 Then
+                Dim TempFecha As String = Right(ObjDTO.FechaNacimiento.ToString, 2) + "/" + Left(Right(ObjDTO.FechaNacimiento.ToString, 4), 2) + "/" + Left(ObjDTO.FechaNacimiento.ToString, 4)
+                FechaNacimiento = CDate(TempFecha)
+            End If
         End Sub
 #End Region
 #Region " Métodos Estáticos"
         ' Traer
-        Public Shared Function TraerUno(ByVal Id As Integer) As Familiar
-            Dim result As Familiar = Todos.Find(Function(x) x.IdEntidad = Id)
-            If result Is Nothing Then
-                Throw New Exception("No existen resultados para la búsqueda")
-            End If
-            Return result
-        End Function
-        Public Shared Function TraerTodos() As List(Of Familiar)
-            Return Todos
-        End Function
         'Public Shared Function TraerUno(ByVal Id As Integer) As Familiar
-        '    Dim result As Familiar= DAL_Familiar.TraerUno(Id)
+        '    Dim result As Familiar = Todos.Find(Function(x) x.IdEntidad = Id)
         '    If result Is Nothing Then
         '        Throw New Exception("No existen resultados para la búsqueda")
         '    End If
         '    Return result
         'End Function
         'Public Shared Function TraerTodos() As List(Of Familiar)
-        '    Dim result As List(Of Familiar) = DAL_Familiar.TraerTodos()
-        '    If result Is Nothing Then
-        '        Throw New Exception("No existen resultados para la búsqueda")
-        '    End If
-        '    Return result
+        '    Return Todos
         'End Function
+        Public Shared Function TraerUno(ByVal Id As Integer) As Familiar
+            Dim result As Familiar = DAL_Familiar.TraerUno(Id)
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerTodos() As List(Of Familiar)
+            Dim result As List(Of Familiar) = DAL_Familiar.TraerTodos()
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerTodosXTitular(idTitular As Integer) As List(Of Familiar)
+            Dim result As List(Of Familiar) = DAL_Familiar.TraerTodosXTitular(idTitular)
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerTodosXTitular_DTO(idTitular As Integer) As List(Of DTO.DTO_Familiar)
+            Return ToListDTO(TraerTodosXTitular(idTitular))
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -101,11 +139,26 @@ Namespace Entidad
         Public Function ToDTO() As DTO.DTO_Familiar
             Dim result As New DTO.DTO_Familiar
             result.IdEntidad = IdEntidad
+            result.IdAfiliadoTitular = IdAfiliadoTitular
+            result.NroAfiliado = NroAfiliado
+            result.ApellidoNombre = ApellidoNombre
+            result.NroDocumento = NroDocumento
+            result.FechaNacimiento = LngFechaNacimiento
+            result.Edad = Edad
             Return result
         End Function
-        Public Shared Sub refresh()
-            _Todos = DAL_Familiar.TraerTodos
-        End Sub
+        Private Shared Function ToListDTO(ListaOriginal As List(Of Familiar)) As List(Of DTO.DTO_Familiar)
+            Dim ListaResult As New List(Of DTO.DTO_Familiar)
+            If ListaOriginal IsNot Nothing AndAlso ListaOriginal.Count > 0 Then
+                For Each item As Familiar In ListaOriginal
+                    ListaResult.Add(item.ToDTO)
+                Next
+            End If
+            Return ListaResult
+        End Function
+        'Public Shared Sub refresh()
+        '    _Todos = DAL_Familiar.TraerTodos
+        'End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Privados "
@@ -176,7 +229,13 @@ Namespace DTO
     Public Class DTO_Familiar
 
 #Region " Atributos / Propiedades"
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property IdAfiliadoTitular() As Integer = 0
+        Public Property NroAfiliado() As Integer = 0
+        Public Property ApellidoNombre() As String = ""
+        Public Property NroDocumento() As Integer = 0
+        Public Property FechaNacimiento() As Long = 0
+        Public Property Edad() As Integer = 0
 #End Region
     End Class ' DTO_Familiar
 End Namespace ' DTO
@@ -193,6 +252,7 @@ Namespace DataAccessLibrary
         Const storeTraerUnoXId As String = "p_Familiar_TraerUnoXId"
         Const storeTraerTodos As String = "p_Familiar_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Familiar_TraerTodosActivos"
+        Const storeTraerTodosXTitular As String = "p_Familiar_TraerTodosXTitular"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
@@ -280,6 +340,20 @@ Namespace DataAccessLibrary
             End Using
             Return listaResult
         End Function
+        Friend Shared Function TraerTodosXTitular(idTitular As Integer) As List(Of Familiar)
+            Dim store As String = storeTraerTodosXTitular
+            Dim pa As New parametrosArray
+            pa.add("@idTitular", idTitular)
+            Dim listaResult As New List(Of Familiar)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidad(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
 #End Region
 #Region " Métodos Privados "
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Familiar
@@ -321,12 +395,31 @@ Namespace DataAccessLibrary
                     entidad.IdEntidad = CInt(dr.Item("id"))
                 End If
             End If
-            ' VariableString
-            '	If dr.Table.Columns.Contains("VariableString") Then
-            '   	If dr.Item("VariableString") IsNot DBNull.Value Then
-            '   		entidad.VariableString = dr.Item("VariableString").ToString.Trim
-            '    	End If
-            '	End If
+            If dr.Table.Columns.Contains("IdAfiliadoTitular") Then
+                If dr.Item("IdAfiliadoTitular") IsNot DBNull.Value Then
+                    entidad.IdAfiliadoTitular = CInt(dr.Item("IdAfiliadoTitular"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("NroAfiliado") Then
+                If dr.Item("NroAfiliado") IsNot DBNull.Value Then
+                    entidad.NroAfiliado = CInt(dr.Item("NroAfiliado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("ApellidoNombre") Then
+                If dr.Item("ApellidoNombre") IsNot DBNull.Value Then
+                    entidad.ApellidoNombre = dr.Item("ApellidoNombre").ToString.Trim
+                End If
+            End If
+            If dr.Table.Columns.Contains("NroDocumento") Then
+                If dr.Item("NroDocumento") IsNot DBNull.Value Then
+                    entidad.NroDocumento = CInt(dr.Item("NroDocumento"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("FechaNacimiento") Then
+                If dr.Item("FechaNacimiento") IsNot DBNull.Value Then
+                    entidad.FechaNacimiento = CDate(dr.Item("FechaNacimiento"))
+                End If
+            End If
             Return entidad
         End Function
 #End Region

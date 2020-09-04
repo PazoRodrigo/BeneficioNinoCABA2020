@@ -10,21 +10,27 @@ Namespace Entidad
     Public Class Titular
         Inherits DBE
 
-        Private Shared _Todos As List(Of Titular)
-        Public Shared Property Todos() As List(Of Titular)
-            Get
-                If _Todos Is Nothing Then
-                    _Todos = DAL_Titular.TraerTodos
-                End If
-                Return _Todos
-            End Get
-            Set(ByVal value As List(Of Titular))
-                _Todos = value
-            End Set
-        End Property
+        'Private Shared _Todos As List(Of Titular)
+        'Public Shared Property Todos() As List(Of Titular)
+        '    Get
+        '        If _Todos Is Nothing Then
+        '            _Todos = DAL_Titular.TraerTodos
+        '        End If
+        '        Return _Todos
+        '    End Get
+        '    Set(ByVal value As List(Of Titular))
+        '        _Todos = value
+        '    End Set
+        'End Property
 
 #Region " Atributos / Propiedades "
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property NroAfiliado() As Integer = 0
+        Public Property ApellidoNombre() As String = ""
+        Public Property NroDocumento() As Integer = 0
+        Public Property IdSeccional() As Integer = 0
+
+        Public Property ObjDomicilio As Domicilio
 #End Region
 #Region " Lazy Load "
         'Public Property IdLazy() As Integer
@@ -50,37 +56,66 @@ Namespace Entidad
             idUsuarioModifica = objImportar.idUsuarioModifica
             IdMotivoBaja = objImportar.IdMotivoBaja
             fechaAlta = objImportar.fechaAlta
-            fechaBaja = objImportar.fechaBaja
+            fechaBaja = objImportar.FechaBaja
             ' Entidad
             IdEntidad = objImportar.IdEntidad
+            NroAfiliado = objImportar.NroAfiliado
+            ApellidoNombre = objImportar.ApellidoNombre
+            NroDocumento = objImportar.NroDocumento
+            IdSeccional = objImportar.IdSeccional
+            ObjDomicilio = objImportar.ObjDomicilio
+        End Sub
+        Sub New(ByVal ObjDTO As DTO.DTO_Titular)
+            ' Entidad
+            IdEntidad = ObjDTO.IdEntidad
+            NroAfiliado = ObjDTO.NroAfiliado
+            ApellidoNombre = ObjDTO.ApellidoNombre
+            NroDocumento = ObjDTO.NroDocumento
+            IdSeccional = ObjDTO.IdSeccional
+            If Not ObjDTO.ObjDomicilio Is Nothing Then
+                ObjDomicilio = New Domicilio(ObjDTO.ObjDomicilio)
+            End If
         End Sub
 #End Region
 #Region " Métodos Estáticos"
         ' Traer
-        Public Shared Function TraerUno(ByVal Id As Integer) As Titular
-            Dim result As Titular = Todos.Find(Function(x) x.IdEntidad = Id)
-            If result Is Nothing Then
-                Throw New Exception("No existen resultados para la búsqueda")
-            End If
-            Return result
-        End Function
-        Public Shared Function TraerTodos() As List(Of Titular)
-            Return Todos
-        End Function
         'Public Shared Function TraerUno(ByVal Id As Integer) As Titular
-        '    Dim result As Titular= DAL_Titular.TraerUno(Id)
+        '    Dim result As Titular = Todos.Find(Function(x) x.IdEntidad = Id)
         '    If result Is Nothing Then
         '        Throw New Exception("No existen resultados para la búsqueda")
         '    End If
         '    Return result
         'End Function
         'Public Shared Function TraerTodos() As List(Of Titular)
-        '    Dim result As List(Of Titular) = DAL_Titular.TraerTodos()
-        '    If result Is Nothing Then
-        '        Throw New Exception("No existen resultados para la búsqueda")
-        '    End If
-        '    Return result
+        '    Return Todos
         'End Function
+        Public Shared Function TraerUno(ByVal Id As Integer) As Titular
+            Dim result As Titular = DAL_Titular.TraerUno(Id)
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerUnoXNroDocumento(ByVal NroDocumento As Integer) As Titular
+            Dim result As Titular = DAL_Titular.TraerUnoXNroDocumento(NroDocumento)
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+
+        Public Shared Function TraerTodos() As List(Of Titular)
+            Dim result As List(Of Titular) = DAL_Titular.TraerTodos()
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerUnoXNroDocumento_DTO(NroDocumento As Integer) As List(Of DTO.DTO_Titular)
+            Dim Result As New List(Of DTO.DTO_Titular)
+            Result.Add(TraerUnoXNroDocumento(NroDocumento).ToDTO)
+            Return Result
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -101,11 +136,24 @@ Namespace Entidad
         Public Function ToDTO() As DTO.DTO_Titular
             Dim result As New DTO.DTO_Titular
             result.IdEntidad = IdEntidad
+            result.NroAfiliado = NroAfiliado
+            result.ApellidoNombre = ApellidoNombre
+            result.NroDocumento = NroDocumento
+            result.IdSeccional = IdSeccional
             Return result
         End Function
-        Public Shared Sub refresh()
-            _Todos = DAL_Titular.TraerTodos
-        End Sub
+        Private Shared Function ToListDTO(ListaOriginal As List(Of Titular)) As List(Of DTO.DTO_Titular)
+            Dim ListaResult As New List(Of DTO.DTO_Titular)
+            If ListaOriginal IsNot Nothing AndAlso ListaOriginal.Count > 0 Then
+                For Each item As Titular In ListaOriginal
+                    ListaResult.Add(item.ToDTO)
+                Next
+            End If
+            Return ListaResult
+        End Function
+        'Public Shared Sub refresh()
+        '    _Todos = DAL_Titular.TraerTodos
+        'End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Privados "
@@ -176,7 +224,13 @@ Namespace DTO
     Public Class DTO_Titular
 
 #Region " Atributos / Propiedades"
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property NroAfiliado() As Integer = 0
+        Public Property ApellidoNombre() As String = ""
+        Public Property NroDocumento() As Integer = 0
+        Public Property IdSeccional() As Integer = 0
+
+        Public Property ObjDomicilio As DTO.DTO_Domicilio
 #End Region
     End Class ' DTO_Titular
 End Namespace ' DTO
@@ -193,6 +247,7 @@ Namespace DataAccessLibrary
         Const storeTraerUnoXId As String = "p_Titular_TraerUnoXId"
         Const storeTraerTodos As String = "p_Titular_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Titular_TraerTodosActivos"
+        Const storeTraerUnoXNroDocumento As String = "p_Titular_TraerUnoXNroDocumento"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
@@ -280,6 +335,21 @@ Namespace DataAccessLibrary
             End Using
             Return listaResult
         End Function
+        Friend Shared Function TraerUnoXNroDocumento(nroDocumento As Integer) As Titular
+            Dim store As String = storeTraerUnoXNroDocumento
+            Dim pa As New parametrosArray
+            pa.add("@nroDocumento", nroDocumento)
+            Dim result As New Titular
+            Dim listaResult As New List(Of Titular)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+                If Not dt Is Nothing Then
+                    If dt.Rows.Count = 1 Then
+                        result = LlenarEntidad(dt.Rows(0))
+                    End If
+                End If
+            End Using
+            Return result
+        End Function
 #End Region
 #Region " Métodos Privados "
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Titular
@@ -321,12 +391,29 @@ Namespace DataAccessLibrary
                     entidad.idEntidad = CInt(dr.Item("id"))
                 End If
             End If
-            ' VariableString
-            '	If dr.Table.Columns.Contains("VariableString") Then
-            '   	If dr.Item("VariableString") IsNot DBNull.Value Then
-            '   		entidad.VariableString = dr.Item("VariableString").ToString.Trim
-            '    	End If
-            '	End If
+            If dr.Table.Columns.Contains("NroAfiliado") Then
+                If dr.Item("NroAfiliado") IsNot DBNull.Value Then
+                    entidad.NroAfiliado = CInt(dr.Item("NroAfiliado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("ApellidoNombre") Then
+                If dr.Item("ApellidoNombre") IsNot DBNull.Value Then
+                    entidad.ApellidoNombre = dr.Item("ApellidoNombre").ToString.Trim
+                End If
+            End If
+            If dr.Table.Columns.Contains("NroDocumento") Then
+                If dr.Item("NroDocumento") IsNot DBNull.Value Then
+                    entidad.NroDocumento = CInt(dr.Item("NroDocumento"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("IdSeccional") Then
+                If dr.Item("IdSeccional") IsNot DBNull.Value Then
+                    entidad.IdSeccional = CInt(dr.Item("IdSeccional"))
+                End If
+            End If
+            Dim ObjDomicilio As New Domicilio
+            ObjDomicilio = DAL_Domicilio.LlenarEntidad(dr)
+            entidad.ObjDomicilio = ObjDomicilio
             Return entidad
         End Function
 #End Region

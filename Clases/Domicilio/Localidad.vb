@@ -90,13 +90,12 @@ Namespace Entidad
         '    End If
         '    Return result
         'End Function
-        'Public Shared Function TraerTodos() As List(Of Localidad)
-        '    Dim result As List(Of Localidad) = DAL_Localidad.TraerTodos()
-        '    If result Is Nothing Then
-        '        Throw New Exception("No existen resultados para la búsqueda")
-        '    End If
-        '    Return result
-        'End Function
+        Public Shared Function TraerTodosXCodigoPostal(CodigoPostal As Integer) As List(Of Localidad)
+            Return DAL_Localidad.TraerTodos()
+        End Function
+        Public Shared Function TraerTodosXCodigoPostal_DTO(CodigoPostal As Integer) As List(Of DTO.DTO_Localidad)
+            Return ToListDTO(TraerTodosXCodigoPostal(CodigoPostal))
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -115,9 +114,23 @@ Namespace Entidad
         End Sub
         ' Otros
         Public Function ToDTO() As DTO.DTO_Localidad
-            Dim result As New DTO.DTO_Localidad
-            result.IdEntidad = IdEntidad
+            Dim result As New DTO.DTO_Localidad With {
+                .IdEntidad = IdEntidad,
+                .Nombre = Nombre,
+                .CodigoPostal = CodigoPostal,
+                .IdProvincia = IdProvincia,
+                .IdSeccional = IdSeccional
+            }
             Return result
+        End Function
+        Private Shared Function ToListDTO(ListaOriginal As List(Of Localidad)) As List(Of DTO.DTO_Localidad)
+            Dim ListaResult As New List(Of DTO.DTO_Localidad)
+            If ListaOriginal IsNot Nothing AndAlso ListaOriginal.Count > 0 Then
+                For Each item As Localidad In ListaOriginal
+                    ListaResult.Add(item.ToDTO)
+                Next
+            End If
+            Return ListaResult
         End Function
         Public Shared Sub refresh()
             _Todos = DAL_Localidad.TraerTodos

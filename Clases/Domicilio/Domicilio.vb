@@ -10,18 +10,18 @@ Namespace Entidad
     Public Class Domicilio
         Inherits DBE
 
-        Private Shared _Todos As List(Of Domicilio)
-        Public Shared Property Todos() As List(Of Domicilio)
-            Get
-                If _Todos Is Nothing Then
-                    _Todos = DAL_Domicilio.TraerTodos
-                End If
-                Return _Todos
-            End Get
-            Set(ByVal value As List(Of Domicilio))
-                _Todos = value
-            End Set
-        End Property
+        'Private Shared _Todos As List(Of Domicilio)
+        'Public Shared Property Todos() As List(Of Domicilio)
+        '    Get
+        '        If _Todos Is Nothing Then
+        '            _Todos = DAL_Domicilio.TraerTodos
+        '        End If
+        '        Return _Todos
+        '    End Get
+        '    Set(ByVal value As List(Of Domicilio))
+        '        _Todos = value
+        '    End Set
+        'End Property
 
 #Region " Atributos / Propiedades "
         Public Property IdEntidad() As Integer = 0
@@ -45,22 +45,35 @@ Namespace Entidad
         Sub New()
 
         End Sub
-        Sub New(ByVal id As Integer)
-            Dim objImportar As Domicilio = TraerUno(id)
-            ' DBE
-            IdUsuarioAlta = objImportar.IdUsuarioAlta
-            IdUsuarioBaja = objImportar.IdUsuarioBaja
-            IdUsuarioModifica = objImportar.IdUsuarioModifica
-            IdMotivoBaja = objImportar.IdMotivoBaja
-            FechaAlta = objImportar.FechaAlta
-            FechaBaja = objImportar.FechaBaja
-            ' Entidad
-            IdEntidad = objImportar.IdEntidad
-            Domicilio = objImportar.Domicilio
-            CodigoPostal = objImportar.CodigoPostal
-            IdLocalidad = objImportar.IdLocalidad
-        End Sub
+        'Sub New(ByVal id As Integer)
+        '    Dim objImportar As Domicilio = TraerUno(id)
+        '    ' DBE
+        '    IdUsuarioAlta = objImportar.IdUsuarioAlta
+        '    IdUsuarioBaja = objImportar.IdUsuarioBaja
+        '    IdUsuarioModifica = objImportar.IdUsuarioModifica
+        '    IdMotivoBaja = objImportar.IdMotivoBaja
+        '    FechaAlta = objImportar.FechaAlta
+        '    FechaBaja = objImportar.FechaBaja
+        '    ' Entidad
+        '    IdEntidad = objImportar.IdEntidad
+        '    Domicilio = objImportar.Domicilio
+        '    CodigoPostal = objImportar.CodigoPostal
+        '    IdLocalidad = objImportar.IdLocalidad
+        'End Sub
         Sub New(ByVal ObjDTO As DTO.DTO_Domicilio)
+            ' DBE
+            IdUsuarioAlta = ObjDTO.IdUsuarioAlta
+            IdUsuarioBaja = ObjDTO.IdUsuarioBaja
+            IdUsuarioModifica = ObjDTO.IdUsuarioModifica
+            IdMotivoBaja = ObjDTO.IdMotivoBaja
+            If ObjDTO.FechaAlta > 0 Then
+                Dim TempFecha As String = Right(ObjDTO.FechaAlta.ToString, 2) + "/" + Left(Right(ObjDTO.FechaAlta.ToString, 4), 2) + "/" + Left(ObjDTO.FechaAlta.ToString, 4)
+                FechaAlta = CDate(TempFecha)
+            End If
+            If ObjDTO.FechaBaja > 0 Then
+                Dim TempFecha As String = Right(ObjDTO.FechaBaja.ToString, 2) + "/" + Left(Right(ObjDTO.FechaBaja.ToString, 4), 2) + "/" + Left(ObjDTO.FechaBaja.ToString, 4)
+                FechaBaja = CDate(TempFecha)
+            End If
             ' Entidad
             IdEntidad = ObjDTO.IdEntidad
             Domicilio = ObjDTO.Domicilio
@@ -70,16 +83,16 @@ Namespace Entidad
 #End Region
 #Region " Métodos Estáticos"
         ' Traer
-        Public Shared Function TraerUno(ByVal Id As Integer) As Domicilio
-            Dim result As Domicilio = Todos.Find(Function(x) x.IdEntidad = Id)
-            If result Is Nothing Then
-                Throw New Exception("No existen resultados para la búsqueda")
-            End If
-            Return result
-        End Function
-        Public Shared Function TraerTodos() As List(Of Domicilio)
-            Return Todos
-        End Function
+        'Public Shared Function TraerUno(ByVal Id As Integer) As Domicilio
+        '    Dim result As Domicilio = Todos.Find(Function(x) x.IdEntidad = Id)
+        '    If result Is Nothing Then
+        '        Throw New Exception("No existen resultados para la búsqueda")
+        '    End If
+        '    Return result
+        'End Function
+        'Public Shared Function TraerTodos() As List(Of Domicilio)
+        '    Return Todos
+        'End Function
         'Public Shared Function TraerUno(ByVal Id As Integer) As Domicilio
         '    Dim result As Domicilio= DAL_Domicilio.TraerUno(Id)
         '    If result Is Nothing Then
@@ -111,14 +124,29 @@ Namespace Entidad
             DAL_Domicilio.Modifica(Me)
         End Sub
         ' Otros
-        Public Function ToDTO() As DTO.DTO_Domicilio
+        Public Overridable Function ToDTO() As DTO.DTO_Domicilio
             Dim result As New DTO.DTO_Domicilio
-            result.IdEntidad = IdEntidad
+            If CodigoPostal > 0 Then
+                result.IdEntidad = IdEntidad
+                result.Domicilio = Domicilio
+                result.CodigoPostal = CodigoPostal
+                result.IdLocalidad = IdLocalidad
+            End If
+            result.Domicilio = Domicilio.ToUpper.Trim
             Return result
         End Function
-        Public Shared Sub refresh()
-            _Todos = DAL_Domicilio.TraerTodos
-        End Sub
+        Private Shared Function ToListDTO(ListaOriginal As List(Of Domicilio)) As List(Of DTO.DTO_Domicilio)
+            Dim ListaResult As New List(Of DTO.DTO_Domicilio)
+            If ListaOriginal IsNot Nothing AndAlso ListaOriginal.Count > 0 Then
+                For Each item As Domicilio In ListaOriginal
+                    ListaResult.Add(item.ToDTO)
+                Next
+            End If
+            Return ListaResult
+        End Function
+        'Public Shared Sub refresh()
+        '    _Todos = DAL_Domicilio.TraerTodos
+        'End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Privados "
@@ -189,6 +217,14 @@ Namespace DTO
     Public Class DTO_Domicilio
 
 #Region " Atributos / Propiedades"
+        Public Property IdUsuarioAlta As Integer = 0
+        Public Property IdUsuarioBaja As Integer = 0
+        Public Property IdUsuarioModifica As Integer = 0
+        Public Property FechaAlta As Long = 0
+        Public Property FechaBaja As Long = 0
+        Public Property FechaModifica As Long = 0
+        Public Property IdMotivoBaja As Integer = 0
+
         Public Property IdEntidad() As Integer = 0
         Public Property Domicilio() As String = ""
         Public Property CodigoPostal() As Integer = 0
@@ -298,7 +334,7 @@ Namespace DataAccessLibrary
         End Function
 #End Region
 #Region " Métodos Privados "
-        Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Domicilio
+        Public Shared Function LlenarEntidad(ByVal dr As DataRow) As Domicilio
             Dim entidad As New Domicilio
             ' DBE
             If dr.Table.Columns.Contains("idUsuarioAlta") Then

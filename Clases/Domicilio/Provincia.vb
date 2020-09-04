@@ -70,6 +70,9 @@ Namespace Entidad
         Public Shared Function TraerTodos() As List(Of Provincia)
             Return Todos
         End Function
+        Public Shared Function TraerTodos_DTO() As List(Of DTO.DTO_Provincia)
+            Return ToListDTO(TraerTodos())
+        End Function
         'Public Shared Function TraerUno(ByVal Id As Integer) As Provincia
         '    Dim result As Provincia= DAL_Provincia.TraerUno(Id)
         '    If result Is Nothing Then
@@ -102,9 +105,21 @@ Namespace Entidad
         End Sub
         ' Otros
         Public Function ToDTO() As DTO.DTO_Provincia
-            Dim result As New DTO.DTO_Provincia
-            result.IdEntidad = IdEntidad
+            Dim result As New DTO.DTO_Provincia With {
+                .IdEntidad = IdEntidad,
+                .Nombre = Nombre,
+                .Letra = Letra
+            }
             Return result
+        End Function
+        Private Shared Function ToListDTO(ListaOriginal As List(Of Provincia)) As List(Of DTO.DTO_Provincia)
+            Dim ListaResult As New List(Of DTO.DTO_Provincia)
+            If ListaOriginal IsNot Nothing AndAlso ListaOriginal.Count > 0 Then
+                For Each item As Provincia In ListaOriginal
+                    ListaResult.Add(item.ToDTO)
+                Next
+            End If
+            Return ListaResult
         End Function
         Public Shared Sub refresh()
             _Todos = DAL_Provincia.TraerTodos
@@ -185,8 +200,6 @@ Namespace DTO
 #End Region
     End Class ' DTO_Provincia
 End Namespace ' DTO
-
-
 
 Namespace DataAccessLibrary
     Public Class DAL_Provincia
@@ -326,12 +339,16 @@ Namespace DataAccessLibrary
                     entidad.IdEntidad = CInt(dr.Item("id"))
                 End If
             End If
-            ' VariableString
-            '	If dr.Table.Columns.Contains("VariableString") Then
-            '   	If dr.Item("VariableString") IsNot DBNull.Value Then
-            '   		entidad.VariableString = dr.Item("VariableString").ToString.Trim
-            '    	End If
-            '	End If
+            If dr.Table.Columns.Contains("Nombre") Then
+                If dr.Item("Nombre") IsNot DBNull.Value Then
+                    entidad.Nombre = dr.Item("Nombre").ToString.Trim
+                End If
+            End If
+            If dr.Table.Columns.Contains("Letra") Then
+                If dr.Item("Letra") IsNot DBNull.Value Then
+                    entidad.Letra = dr.Item("Letra").ToString.Trim
+                End If
+            End If
             Return entidad
         End Function
 #End Region
