@@ -99,7 +99,11 @@ Namespace Entidad
         Public Shared Function TraerUnoXNroDocumento(ByVal NroDocumento As Integer) As Titular
             Dim result As Titular = DAL_Titular.TraerUnoXNroDocumento(NroDocumento)
             If result Is Nothing Then
-                Throw New Exception("No existen resultados para la búsqueda")
+                Throw New Exception("No existen Titulares para la búsqueda")
+            Else
+                If result.IdSeccional <> 1 Then
+                    Throw New Exception("NEL Beneficio es solo para Titulares de Seccional Capital Federal")
+                End If
             End If
             Return result
         End Function
@@ -140,6 +144,9 @@ Namespace Entidad
             result.ApellidoNombre = ApellidoNombre
             result.NroDocumento = NroDocumento
             result.IdSeccional = IdSeccional
+            If ObjDomicilio IsNot Nothing Then
+                result.ObjDomicilio = ObjDomicilio.ToDTO
+            End If
             Return result
         End Function
         Private Shared Function ToListDTO(ListaOriginal As List(Of Titular)) As List(Of DTO.DTO_Titular)
@@ -247,7 +254,7 @@ Namespace DataAccessLibrary
         Const storeTraerUnoXId As String = "p_Titular_TraerUnoXId"
         Const storeTraerTodos As String = "p_Titular_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Titular_TraerTodosActivos"
-        Const storeTraerUnoXNroDocumento As String = "p_Titular_TraerUnoXNroDocumento"
+        Const storeTraerUnoXNroDocumento As String = "p_Representado_TraerUnoXNroDocumento"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
@@ -380,35 +387,35 @@ Namespace DataAccessLibrary
                     entidad.fechaAlta = CDate(dr.Item("fechaAlta"))
                 End If
             End If
-            If dr.Table.Columns.Contains("fechaBaja") Then
-                If dr.Item("fechaBaja") IsNot DBNull.Value Then
-                    entidad.fechaBaja = CDate(dr.Item("fechaBaja"))
+            If dr.Table.Columns.Contains("fec_Baj") Then
+                If dr.Item("fec_Baj") IsNot DBNull.Value Then
+                    entidad.FechaBaja = CDate(dr.Item("fec_Baj"))
                 End If
             End If
             ' Entidad
-            If dr.Table.Columns.Contains("id") Then
-                If dr.Item("id") IsNot DBNull.Value Then
-                    entidad.idEntidad = CInt(dr.Item("id"))
+            If dr.Table.Columns.Contains("id_afiliado") Then
+                If dr.Item("id_afiliado") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("id_afiliado"))
                 End If
             End If
-            If dr.Table.Columns.Contains("NroAfiliado") Then
-                If dr.Item("NroAfiliado") IsNot DBNull.Value Then
-                    entidad.NroAfiliado = CInt(dr.Item("NroAfiliado"))
+            If dr.Table.Columns.Contains("NRO_SIND") Then
+                If dr.Item("NRO_SIND") IsNot DBNull.Value Then
+                    entidad.NroAfiliado = CInt(dr.Item("NRO_SIND"))
                 End If
             End If
-            If dr.Table.Columns.Contains("ApellidoNombre") Then
-                If dr.Item("ApellidoNombre") IsNot DBNull.Value Then
-                    entidad.ApellidoNombre = dr.Item("ApellidoNombre").ToString.Trim
+            If dr.Table.Columns.Contains("APE_NOM") Then
+                If dr.Item("APE_NOM") IsNot DBNull.Value Then
+                    entidad.ApellidoNombre = dr.Item("APE_NOM").ToString.Trim
                 End If
             End If
-            If dr.Table.Columns.Contains("NroDocumento") Then
-                If dr.Item("NroDocumento") IsNot DBNull.Value Then
-                    entidad.NroDocumento = CInt(dr.Item("NroDocumento"))
+            If dr.Table.Columns.Contains("NRO_DOC") Then
+                If dr.Item("NRO_DOC") IsNot DBNull.Value Then
+                    entidad.NroDocumento = CInt(dr.Item("NRO_DOC"))
                 End If
             End If
-            If dr.Table.Columns.Contains("IdSeccional") Then
-                If dr.Item("IdSeccional") IsNot DBNull.Value Then
-                    entidad.IdSeccional = CInt(dr.Item("IdSeccional"))
+            If dr.Table.Columns.Contains("sec") Then
+                If dr.Item("sec") IsNot DBNull.Value Then
+                    entidad.IdSeccional = CInt(dr.Item("sec"))
                 End If
             End If
             Dim ObjDomicilio As New Domicilio

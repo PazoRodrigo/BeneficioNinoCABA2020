@@ -11,9 +11,9 @@ Namespace Controllers
         <HttpGet>
         <ActionName("TraerTodosXTitular")>
         <ResponseType(GetType(List(Of DTO.DTO_Familiar)))>
-        Public Function TraerTodosXTitular(IdAfiliado As Integer) As IHttpActionResult
+        Public Function TraerTodosXTitular(IdTitular As Integer) As IHttpActionResult
             Try
-                Dim result As List(Of DTO.DTO_Familiar) = Entidad.Familiar.TraerTodosXTitular_DTO(IdAfiliado)
+                Dim result As List(Of DTO.DTO_Familiar) = Entidad.Familiar.TraerTodosXTitular_DTO(IdTitular)
                 Return Ok(result)
             Catch ex As Exception
                 Return Content(HttpStatusCode.InternalServerError, ex.Message)

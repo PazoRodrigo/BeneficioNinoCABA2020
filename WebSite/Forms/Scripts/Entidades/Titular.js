@@ -30,8 +30,8 @@ function llenarEntidadTitular(entidad) {
     let objResult = new Titular;
     // Persona
     objResult.IdEntidad = entidad.IdEntidad;
-    objResult.NroAfiliado = entidad.NroAfiliadov;
-    objResult.Nombre = entidad.ApellidoNombre;
+    objResult.NroAfiliado = entidad.NroAfiliado;
+    objResult.ApellidoNombre = entidad.ApellidoNombre;
     objResult.NroDocumento = entidad.NroDocumento;
     objResult.IdSeccional = entidad.IdSeccional;
     objResult.ObjDomicilio = entidad.ObjDomicilio;

@@ -252,7 +252,7 @@ Namespace DataAccessLibrary
         Const storeTraerUnoXId As String = "p_Familiar_TraerUnoXId"
         Const storeTraerTodos As String = "p_Familiar_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Familiar_TraerTodosActivos"
-        Const storeTraerTodosXTitular As String = "p_Familiar_TraerTodosXTitular"
+        Const storeTraerTodosXTitular As String = "p_Familiar_getAllByid_afiliado"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
@@ -343,7 +343,7 @@ Namespace DataAccessLibrary
         Friend Shared Function TraerTodosXTitular(idTitular As Integer) As List(Of Familiar)
             Dim store As String = storeTraerTodosXTitular
             Dim pa As New parametrosArray
-            pa.add("@idTitular", idTitular)
+            pa.add("@id_Afiliado", idTitular)
             Dim listaResult As New List(Of Familiar)
             Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
                 If dt.Rows.Count > 0 Then
@@ -390,9 +390,9 @@ Namespace DataAccessLibrary
                 End If
             End If
             ' Entidad
-            If dr.Table.Columns.Contains("id") Then
-                If dr.Item("id") IsNot DBNull.Value Then
-                    entidad.IdEntidad = CInt(dr.Item("id"))
+            If dr.Table.Columns.Contains("id_familiar") Then
+                If dr.Item("id_familiar") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("id_familiar"))
                 End If
             End If
             If dr.Table.Columns.Contains("IdAfiliadoTitular") Then
@@ -400,24 +400,24 @@ Namespace DataAccessLibrary
                     entidad.IdAfiliadoTitular = CInt(dr.Item("IdAfiliadoTitular"))
                 End If
             End If
-            If dr.Table.Columns.Contains("NroAfiliado") Then
-                If dr.Item("NroAfiliado") IsNot DBNull.Value Then
-                    entidad.NroAfiliado = CInt(dr.Item("NroAfiliado"))
+            If dr.Table.Columns.Contains("id_afiliado") Then
+                If dr.Item("id_afiliado") IsNot DBNull.Value Then
+                    entidad.NroAfiliado = CInt(dr.Item("id_afiliado"))
                 End If
             End If
-            If dr.Table.Columns.Contains("ApellidoNombre") Then
-                If dr.Item("ApellidoNombre") IsNot DBNull.Value Then
-                    entidad.ApellidoNombre = dr.Item("ApellidoNombre").ToString.Trim
+            If dr.Table.Columns.Contains("ape_nom") Then
+                If dr.Item("ape_nom") IsNot DBNull.Value Then
+                    entidad.ApellidoNombre = dr.Item("ape_nom").ToString.Trim
                 End If
             End If
-            If dr.Table.Columns.Contains("NroDocumento") Then
-                If dr.Item("NroDocumento") IsNot DBNull.Value Then
-                    entidad.NroDocumento = CInt(dr.Item("NroDocumento"))
+            If dr.Table.Columns.Contains("nro_doc") Then
+                If dr.Item("nro_doc") IsNot DBNull.Value Then
+                    entidad.NroDocumento = CInt(dr.Item("nro_doc"))
                 End If
             End If
-            If dr.Table.Columns.Contains("FechaNacimiento") Then
-                If dr.Item("FechaNacimiento") IsNot DBNull.Value Then
-                    entidad.FechaNacimiento = CDate(dr.Item("FechaNacimiento"))
+            If dr.Table.Columns.Contains("fec_nac") Then
+                If dr.Item("fec_nac") IsNot DBNull.Value Then
+                    entidad.FechaNacimiento = CDate(dr.Item("fec_nac"))
                 End If
             End If
             Return entidad

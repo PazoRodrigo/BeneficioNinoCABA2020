@@ -1,4 +1,5 @@
 ﻿var _TempObjDomicilio;
+var _ObjTitular;
 var _ListaFamiliares = [];
 var _ListaBeneficiarios = [];
 
@@ -15,7 +16,7 @@ function LimpiarFormulario() {
     //Paso 1
     $("#P1_ChkAcepto").prop("checked", false);
     //Paso 2
-    $("#P2_NroDocumentoTitular").val('');
+    $("#P2_NroDocumentoTitular").val('17109689'); // Borrar
     $("#P2_ApellidoNombreTitular").val('');
     $("#BtnAceptarTitular").css('display', 'none');
     $(".DatosFamiliares").hide();
@@ -49,11 +50,15 @@ $("#pasosBeneficiario").steps({
 $("body").on("click", "#BtnBuscarTitular", async function () {
     try {
         spinner();
+        _ObjTitular = undefined;
+        _ListaFamiliares = [];
+        _ListaBeneficiarios = [];
         let NroDocumento = $("#P2_NroDocumentoTitular").val();
         if (NroDocumento.length <= 6) {
             throw 'Verifique el Nro. de Documento';
         }
-        await Titular.TraerUnoXNroDocumento(NroDocumento);
+        _ObjTitular = await Titular.TraerUnoXNroDocumento(NroDocumento);
+        $("#P2_ApellidoNombreTitular").val(_ObjTitular.ApellidoNombre);
         $("#BtnAceptarTitular").css('display', 'block');
         spinnerClose();
     } catch (error) {
@@ -63,8 +68,16 @@ $("body").on("click", "#BtnBuscarTitular", async function () {
 });
 $("body").on("click", "#BtnAceptarTitular", async function () {
     try {
+        spinner();
+        _ListaFamiliares = await Familiar.TraerTodosXTitular(_ObjTitular.IdEntidad);
+        if (_ListaFamiliares?.length == 0) {
+            throw 'Usted no tiene posibles beneficiarios del Beneficio';
+        }
+        await Familiar.ArmarGrilla('GrillaFamiliares', _ListaFamiliares)
         $(".DatosFamiliares").show();
+        spinnerClose();
     } catch (error) {
+        spinnerClose();
         alertInfo(error);
     }
 });

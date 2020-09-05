@@ -373,14 +373,14 @@ Namespace DataAccessLibrary
                     entidad.IdEntidad = CInt(dr.Item("id"))
                 End If
             End If
-            If dr.Table.Columns.Contains("Domicilio") Then
-                If dr.Item("Domicilio") IsNot DBNull.Value Then
-                    entidad.Domicilio = dr.Item("Domicilio").ToString.Trim
+            If dr.Table.Columns.Contains("CALLE") Then
+                If dr.Item("CALLE") IsNot DBNull.Value Then
+                    entidad.Domicilio = dr.Item("CALLE").ToString.Trim
                 End If
             End If
-            If dr.Table.Columns.Contains("CodigoPostal") Then
-                If dr.Item("CodigoPostal") IsNot DBNull.Value Then
-                    entidad.CodigoPostal = CInt(dr.Item("CodigoPostal"))
+            If dr.Table.Columns.Contains("CP") Then
+                If dr.Item("CP") IsNot DBNull.Value Then
+                    entidad.CodigoPostal = CInt(dr.Item("CP"))
                 End If
             End If
             If dr.Table.Columns.Contains("IdLocalidad") Then
