@@ -29,18 +29,20 @@ Namespace Entidad
         Public Property NroAfiliado() As Integer = 0
         Public Property ApellidoNombre() As String = ""
         Public Property NroDocumento() As Integer = 0
+        Public Property Edad() As Integer = 0
         Public Property FechaNacimiento() As Date?
+
 #End Region
 #Region " Lazy Load "
-        Public ReadOnly Property Edad() As Integer
-            Get
-                Dim Result As Integer = 0
-                If FechaNacimiento.HasValue Then
-                    'Result = LUM.LUM.Reto
-                End If
-                Return Result
-            End Get
-        End Property
+        'Public ReadOnly Property Edad() As Integer
+        '    Get
+        '        Dim Result As Integer = 0
+        '        If FechaNacimiento.HasValue Then
+        '            'Result = LUM.LUM.Reto
+        '        End If
+        '        Return Result
+        '    End Get
+        'End Property
         Public ReadOnly Property LngFechaNacimiento() As Long
             Get
                 Dim result As Long = 0
@@ -70,6 +72,7 @@ Namespace Entidad
             ApellidoNombre = objImportar.ApellidoNombre
             NroDocumento = objImportar.NroDocumento
             FechaNacimiento = objImportar.FechaNacimiento
+            Edad = objImportar.Edad
         End Sub
         Sub New(ByVal ObjDTO As DTO.DTO_Familiar)
             ' Entidad
@@ -413,6 +416,11 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("nro_doc") Then
                 If dr.Item("nro_doc") IsNot DBNull.Value Then
                     entidad.NroDocumento = CInt(dr.Item("nro_doc"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("edad") Then
+                If dr.Item("edad") IsNot DBNull.Value Then
+                    entidad.Edad = CInt(dr.Item("edad"))
                 End If
             End If
             If dr.Table.Columns.Contains("fec_nac") Then
