@@ -125,8 +125,8 @@ Namespace Entidad
             Return result
         End Function
         Public Shared Function TraerTodosXTitular_DTO(idTitular As Integer) As List(Of DTO.DTO_Familiar)
-            'filtro menores por parentesco 3,5,7,8,9,10
-            Dim listafamiliares As List(Of Familiar) = TraerTodosXTitular(idTitular).Where(Function(s) s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10).ToList
+            'filtro menores por parentesco 3,5,7,8,9,10 y de alta
+            Dim listafamiliares As List(Of Familiar) = TraerTodosXTitular(idTitular).Where(Function(s) (s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10) And s.FechaBaja Is Nothing).ToList
             Return ToListDTO(listafamiliares)
         End Function
         ' Nuevos
@@ -396,9 +396,9 @@ Namespace DataAccessLibrary
                     entidad.FechaAlta = CDate(dr.Item("fechaAlta"))
                 End If
             End If
-            If dr.Table.Columns.Contains("fechaBaja") Then
-                If dr.Item("fechaBaja") IsNot DBNull.Value Then
-                    entidad.FechaBaja = CDate(dr.Item("fechaBaja"))
+            If dr.Table.Columns.Contains("fec_baja") Then
+                If dr.Item("fec_baja") IsNot DBNull.Value Then
+                    entidad.FechaBaja = CDate(dr.Item("fec_baja"))
                 End If
             End If
             ' Entidad
