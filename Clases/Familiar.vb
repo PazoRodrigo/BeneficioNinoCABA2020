@@ -5,6 +5,7 @@ Imports Clases.DataAccessLibrary
 Imports LUM
 Imports Clases.Entidad
 Imports Connection
+Imports System.IO
 
 Namespace Entidad
     Public Class Familiar
@@ -26,6 +27,7 @@ Namespace Entidad
 #Region " Atributos / Propiedades "
         Public Property IdEntidad() As Integer = 0
         Public Property IdAfiliadoTitular() As Integer = 0
+        Public Property IdParentesco() As Integer = 0
         Public Property NroAfiliado() As Integer = 0
         Public Property ApellidoNombre() As String = ""
         Public Property NroDocumento() As Integer = 0
@@ -73,6 +75,7 @@ Namespace Entidad
             NroDocumento = objImportar.NroDocumento
             FechaNacimiento = objImportar.FechaNacimiento
             Edad = objImportar.Edad
+            IdParentesco = objImportar.IdParentesco
         End Sub
         Sub New(ByVal ObjDTO As DTO.DTO_Familiar)
             ' Entidad
@@ -80,6 +83,8 @@ Namespace Entidad
             IdAfiliadoTitular = ObjDTO.IdAfiliadoTitular
             ApellidoNombre = ObjDTO.ApellidoNombre
             NroDocumento = ObjDTO.NroDocumento
+            Edad = ObjDTO.Edad
+            IdParentesco = ObjDTO.IdParentesco
             If ObjDTO.FechaNacimiento > 0 Then
                 Dim TempFecha As String = Right(ObjDTO.FechaNacimiento.ToString, 2) + "/" + Left(Right(ObjDTO.FechaNacimiento.ToString, 4), 2) + "/" + Left(ObjDTO.FechaNacimiento.ToString, 4)
                 FechaNacimiento = CDate(TempFecha)
@@ -120,7 +125,9 @@ Namespace Entidad
             Return result
         End Function
         Public Shared Function TraerTodosXTitular_DTO(idTitular As Integer) As List(Of DTO.DTO_Familiar)
-            Return ToListDTO(TraerTodosXTitular(idTitular))
+            'filtro menores por parentesco 3,5,7,8,9,10
+            Dim listafamiliares As List(Of Familiar) = TraerTodosXTitular(idTitular).Where(Function(s) s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10).ToList
+            Return ToListDTO(listafamiliares)
         End Function
         ' Nuevos
 #End Region
@@ -148,6 +155,7 @@ Namespace Entidad
             result.NroDocumento = NroDocumento
             result.FechaNacimiento = LngFechaNacimiento
             result.Edad = Edad
+            result.IdParentesco = IdParentesco
             Return result
         End Function
         Private Shared Function ToListDTO(ListaOriginal As List(Of Familiar)) As List(Of DTO.DTO_Familiar)
@@ -239,6 +247,7 @@ Namespace DTO
         Public Property NroDocumento() As Integer = 0
         Public Property FechaNacimiento() As Long = 0
         Public Property Edad() As Integer = 0
+        Public Property IdParentesco() As Integer = 0
 #End Region
     End Class ' DTO_Familiar
 End Namespace ' DTO
@@ -401,6 +410,11 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("IdAfiliadoTitular") Then
                 If dr.Item("IdAfiliadoTitular") IsNot DBNull.Value Then
                     entidad.IdAfiliadoTitular = CInt(dr.Item("IdAfiliadoTitular"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("parentesco") Then
+                If dr.Item("parentesco") IsNot DBNull.Value Then
+                    entidad.idParentesco = CInt(dr.Item("parentesco"))
                 End If
             End If
             If dr.Table.Columns.Contains("id_afiliado") Then

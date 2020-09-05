@@ -101,8 +101,11 @@ Namespace Entidad
             If result Is Nothing Then
                 Throw New Exception("No existen Titulares para la búsqueda")
             Else
+                If result.FechaBaja IsNot Nothing Then
+                    Throw New Exception("EL Beneficio es solo para Titulares de Alta")
+                End If
                 If result.IdSeccional <> 1 Then
-                    Throw New Exception("NEL Beneficio es solo para Titulares de Seccional Capital Federal")
+                    Throw New Exception("EL Beneficio es solo para Titulares de Seccional Capital Federal")
                 End If
             End If
             Return result
@@ -387,9 +390,9 @@ Namespace DataAccessLibrary
                     entidad.fechaAlta = CDate(dr.Item("fechaAlta"))
                 End If
             End If
-            If dr.Table.Columns.Contains("fec_Baj") Then
-                If dr.Item("fec_Baj") IsNot DBNull.Value Then
-                    entidad.FechaBaja = CDate(dr.Item("fec_Baj"))
+            If dr.Table.Columns.Contains("FEC_BAJA") Then
+                If dr.Item("FEC_BAJA") IsNot DBNull.Value Then
+                    entidad.FechaBaja = CDate(dr.Item("FEC_BAJA"))
                 End If
             End If
             ' Entidad
