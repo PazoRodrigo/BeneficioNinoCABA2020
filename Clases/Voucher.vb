@@ -16,6 +16,10 @@ Namespace Entidad
         Public Property IdFamiliar() As Integer = 0
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
+        Public Property CP() As Integer = 0
+        Public Property IdLocalidad() As Integer = 0
+        Public Property IdProvincia() As Integer = 0
+        Public Property Domicilio() As String = ""
         Public Property Fecha() As Date?
 #End Region
 #Region " Lazy Load "
@@ -49,6 +53,10 @@ Namespace Entidad
             Fecha = objImportar.Fecha
             IdTitular = objImportar.IdTitular
             Idfamiliar = objImportar.Idfamiliar
+            CP = objImportar.CP
+            IdLocalidad = objImportar.IdLocalidad
+            IdProvincia -= objImportar.IdProvincia
+            Domicilio = objImportar.Domicilio
         End Sub
         Sub New(ByVal objDesdeDTOVoucher As DTO.DTO_Voucher)
             ' DBE
@@ -61,7 +69,11 @@ Namespace Entidad
             Confirmado = objDesdeDTOVoucher.Confirmado
             Fecha = LUM.LUM.Fecha_LngToDate(objDesdeDTOVoucher.fecha)
             IdTitular = objDesdeDTOVoucher.IdTitular
-            Idfamiliar = objDesdeDTOVoucher.Idfamiliar
+            Idfamiliar = objDesdeDTOVoucher.IdFamiliar
+            CP = objDesdeDTOVoucher.CP
+            IdLocalidad = objDesdeDTOVoucher.IdLocalidad
+            IdProvincia -= objDesdeDTOVoucher.IdProvincia
+            Domicilio = objDesdeDTOVoucher.Domicilio
         End Sub
 #End Region
 #Region " Métodos Estáticos"
@@ -118,7 +130,11 @@ Namespace Entidad
             result.IdTitular = IdTitular
             result.Confirmado = Confirmado
             result.Codigo = Codigo
-            result.fecha = LngFecha
+            result.Fecha = LngFecha
+            result.CP = CP
+            result.IdLocalidad = IdLocalidad
+            result.IdProvincia -= IdProvincia
+            result.Domicilio = Domicilio
             Return result
         End Function
         'Public Shared Sub refresh()
@@ -201,6 +217,10 @@ Namespace DTO
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
         Public Property Fecha() As Long = 0
+        Public Property CP() As Integer = 0
+        Public Property IdLocalidad() As Integer = 0
+        Public Property IdProvincia() As Integer = 0
+        Public Property Domicilio() As String = ""
 #End Region
     End Class ' DTO_Voucher
 End Namespace ' DTO
@@ -303,6 +323,26 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("IdMotivoBaja") Then
                 If dr.Item("IdMotivoBaja") IsNot DBNull.Value Then
                     entidad.IdMotivoBaja = CInt(dr.Item("IdMotivoBaja"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("cp") Then
+                If dr.Item("cp") IsNot DBNull.Value Then
+                    entidad.CP = CInt(dr.Item("cp"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("id_provincia") Then
+                If dr.Item("id_provincia") IsNot DBNull.Value Then
+                    entidad.IdProvincia = CInt(dr.Item("id_provincia"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("id_localidad") Then
+                If dr.Item("id_localidad") IsNot DBNull.Value Then
+                    entidad.IdLocalidad = CInt(dr.Item("id_localidad"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("domicilio") Then
+                If dr.Item("domicilio") IsNot DBNull.Value Then
+                    entidad.Domicilio = CStr(dr.Item("domicilio"))
                 End If
             End If
             If dr.Table.Columns.Contains("fechaAlta") Then

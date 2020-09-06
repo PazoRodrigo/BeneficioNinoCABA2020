@@ -5,7 +5,10 @@ class Voucher {
     this.IdFamiliar = "";
     this.Codigo = "";
     this.Confirmado = 0;
-    this.Fecha = 0;
+    this.IdProvincia = 0;
+    this.CP = 0;
+    this.IdLocalidad = 0;
+    this.Domicilio = '';
   }
 
   static async TraerUnoXId(idVoucher) {
@@ -95,5 +98,9 @@ function llenarEntidadVoucher(entidad) {
   objResult.Codigo = entidad.Codigo;
   objResult.Confirmado = entidad.Confirmado;
   objResult.Fecha = entidad.Fecha;
+  objResult.IdProvincia = entidad.IdProvincia;
+  objResult.CP = entidad.CP;
+  objResult.IdLocalidad = entidad.IdLocalidad;
+  objResult.Domicilio = entidad.Domicilio;
   return objResult;
 }
