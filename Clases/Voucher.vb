@@ -5,26 +5,27 @@ Imports Clases.DataAccessLibrary
 Imports LUM
 Imports Clases.Entidad
 Imports Connection
+Imports LUM.DTO
 
 Namespace Entidad
     Public Class Voucher
         Inherits DBE
-
-        Private Shared _Todos As List(Of Voucher)
-        Public Shared Property Todos() As List(Of Voucher)
-            Get
-                If _Todos Is Nothing Then
-                    _Todos = DAL_Voucher.TraerTodos
-                End If
-                Return _Todos
-            End Get
-            Set(ByVal value As List(Of Voucher))
-                _Todos = value
-            End Set
-        End Property
-
 #Region " Atributos / Propiedades "
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property IdTitular() As Integer = 0
+        Public Property Idfamiliar() As Integer = 0
+        Public Property Codigo() As String = ""
+        Public Property Confirmado() As Integer = 0
+        Public Property Fecha() As Date?
+        Public ReadOnly Property LngFecha() As Long
+            Get
+                Dim result As Long = 0
+                If Fecha.HasValue Then
+                    result = CLng(Year(Fecha.Value).ToString & Right("00" & Month(Fecha.Value).ToString, 2) & Right("00" & Day(Fecha.Value).ToString, 2))
+                End If
+                Return result
+            End Get
+        End Property
 #End Region
 #Region " Lazy Load "
         'Public Property IdLazy() As Integer
@@ -53,34 +54,56 @@ Namespace Entidad
             FechaBaja = objImportar.FechaBaja
             ' Entidad
             IdEntidad = objImportar.IdEntidad
+            Codigo = objImportar.Codigo
+            Confirmado = objImportar.Confirmado
+            Fecha = objImportar.Fecha
+            IdTitular = objImportar.IdTitular
+            Idfamiliar = objImportar.Idfamiliar
+        End Sub
+        Sub New(ByVal objDesdeDTOVoucher As DTO.DTO_Voucher)
+            ' DBE
+            IdUsuarioBaja = objDesdeDTOVoucher.IdUsuarioBaja
+            IdUsuarioModifica = objDesdeDTOVoucher.IdUsuarioModifica
+            IdMotivoBaja = objDesdeDTOVoucher.IdMotivoBaja
+            ' Entidad
+            IdEntidad = objDesdeDTOVoucher.IdEntidad
+            Codigo = objDesdeDTOVoucher.Codigo
+            Confirmado = objDesdeDTOVoucher.Confirmado
+            Fecha = LUM.LUM.Fecha_LngToDate(objDesdeDTOVoucher.fecha)
+            IdTitular = objDesdeDTOVoucher.IdTitular
+            Idfamiliar = objDesdeDTOVoucher.Idfamiliar
         End Sub
 #End Region
 #Region " Métodos Estáticos"
         ' Traer
-        Public Shared Function TraerUno(ByVal Id As Integer) As Voucher
-            Dim result As Voucher = Todos.Find(Function(x) x.IdEntidad = Id)
-            If result Is Nothing Then
-                Throw New Exception("No existen resultados para la búsqueda")
-            End If
-            Return result
-        End Function
-        Public Shared Function TraerTodos() As List(Of Voucher)
-            Return Todos
-        End Function
         'Public Shared Function TraerUno(ByVal Id As Integer) As Voucher
-        '    Dim result As Voucher= DAL_Voucher.TraerUno(Id)
+        '    Dim result As Voucher = Todos.Find(Function(x) x.IdEntidad = Id)
         '    If result Is Nothing Then
         '        Throw New Exception("No existen resultados para la búsqueda")
         '    End If
         '    Return result
         'End Function
         'Public Shared Function TraerTodos() As List(Of Voucher)
-        '    Dim result As List(Of Voucher) = DAL_Voucher.TraerTodos()
-        '    If result Is Nothing Then
-        '        Throw New Exception("No existen resultados para la búsqueda")
-        '    End If
-        '    Return result
+        '    Return Todos
         'End Function
+        Public Shared Function TraerUno(ByVal Id As Integer) As Voucher
+            Dim result As Voucher = DAL_Voucher.TraerUno(Id)
+            If result Is Nothing Then
+                Throw New Exception("No existe el voucher")
+            End If
+            Return result
+        End Function
+        Public Shared Function TraerTodosPorTitular(idafiliado As Integer) As List(Of DTO.DTO_Voucher)
+            Dim L As List(Of Voucher) = DAL_Voucher.TraerTodosPorTitular(idafiliado)
+            Dim result As New List(Of DTO.DTO_Voucher)
+            For Each item As Voucher In L
+                result.Add(item.ToDTO)
+            Next
+            If result Is Nothing Or result.Count = 0 Then
+                Throw New Exception("No existen vouchers para el grupo")
+            End If
+            Return result
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -101,27 +124,32 @@ Namespace Entidad
         Public Function ToDTO() As DTO.DTO_Voucher
             Dim result As New DTO.DTO_Voucher
             result.IdEntidad = IdEntidad
+            result.Idfamiliar = Idfamiliar
+            result.IdTitular = IdTitular
+            result.Confirmado = Confirmado
+            result.Codigo = Codigo
+            result.fecha = LngFecha
             Return result
         End Function
-        Public Shared Sub refresh()
-            _Todos = DAL_Voucher.TraerTodos
-        End Sub
+        'Public Shared Sub refresh()
+        '    _Todos = DAL_Voucher.TraerTodos
+        'End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Privados "
         ' ABM
         Private Sub ValidarAlta()
-            ValidarUsuario(Me.IdUsuarioAlta)
-            ValidarCampos()
-            ValidarNoDuplicados()
+            ' ValidarUsuario(Me.IdUsuarioAlta)
+            ' ValidarCampos()
+            '  ValidarNoDuplicados()
         End Sub
         Private Sub ValidarBaja()
-            ValidarUsuario(Me.IdUsuarioBaja)
+            '  ValidarUsuario(Me.IdUsuarioBaja)
         End Sub
         Private Sub ValidarModifica()
-            ValidarUsuario(Me.IdUsuarioModifica)
-            ValidarCampos()
-            ValidarNoDuplicados()
+            '  ValidarUsuario(Me.IdUsuarioModifica)
+            ' ValidarCampos()
+            'ValidarNoDuplicados()
         End Sub
         ' Validaciones
         Private Sub ValidarUsuario(ByVal idUsuario As Integer)
@@ -174,9 +202,15 @@ End Namespace ' Entidad
 
 Namespace DTO
     Public Class DTO_Voucher
+        Inherits DTO_DBE
 
 #Region " Atributos / Propiedades"
-        Public Property IdEntidad() As Integer
+        Public Property IdEntidad() As Integer = 0
+        Public Property IdTitular() As Integer = 0
+        Public Property IdFamiliar() As Integer = 0
+        Public Property Codigo() As String = ""
+        Public Property Confirmado() As Integer = 0
+        Public Property Fecha() As Long = 0
 #End Region
     End Class ' DTO_Voucher
 End Namespace ' DTO
@@ -191,7 +225,7 @@ Namespace DataAccessLibrary
         Const storeBaja As String = "p_Voucher_Baja"
         Const storeModifica As String = "p_Voucher_Modifica"
         Const storeTraerUnoXId As String = "p_Voucher_TraerUnoXId"
-        Const storeTraerTodos As String = "p_Voucher_TraerTodos"
+        Const storeTraerTodosxTitular As String = "p_Voucher_TraerTodosxTitular"
         Const storeTraerTodosActivos As String = "p_Voucher_TraerTodosActivos"
 #End Region
 #Region " Métodos Públicos "
@@ -199,24 +233,11 @@ Namespace DataAccessLibrary
         Public Shared Sub Alta(ByVal entidad As Voucher)
             Dim store As String = storeAlta
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioAlta", entidad.IdUsuarioAlta)
-            ' Variable Numérica
-            '	If entidad.codPostal <> 0 Then
-            '		pa.add("@VariableNumero", entidad.VariableNumero)
-            '	Else
-            '		pa.add("@codPostal", "borrarEntero")
-            '	End If
-            ' VariableFecha
-            '	If entidad.fechaNacimiento.HasValue Then
-            '		pa.add("@fechaNacimiento", entidad.fechaNacimiento)
-            '	Else
-            '		pa.add("@fechaNacimiento", "borrarFecha")
-            '	End If
-            ' VariableString
-            '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            pa.add("@idafiliado", entidad.IdTitular)
+            pa.add("@idfamiliar", entidad.Idfamiliar)
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
-                    If dt.Rows.Count = 1 Then
+                    If dt.Rows.Count > 0 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
                     End If
                 End If
@@ -225,30 +246,15 @@ Namespace DataAccessLibrary
         Public Shared Sub Baja(ByVal entidad As Voucher)
             Dim store As String = storeBaja
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioBaja", entidad.IdUsuarioBaja)
             pa.add("@id", entidad.IdEntidad)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
+            Connection.Connection.Ejecutar(store, pa, "strConn_CABA")
         End Sub
         Public Shared Sub Modifica(ByVal entidad As Voucher)
             Dim store As String = storeModifica
             Dim pa As New parametrosArray
             pa.add("@idUsuarioModifica", entidad.IdUsuarioModifica)
             pa.add("@id", entidad.IdEntidad)
-            ' Variable Numérica
-            '	If entidad.codPostal <> 0 Then
-            '		pa.add("@VariableNumero", entidad.VariableNumero)
-            '	Else
-            '		pa.add("@codPostal", "borrarEntero")
-            '	End If
-            ' VariableFecha
-            '	If entidad.fechaNacimiento.HasValue Then
-            '		pa.add("@fechaNacimiento", entidad.fechaNacimiento)
-            '	Else
-            '		pa.add("@fechaNacimiento", "borrarFecha")
-            '	End If
-            ' VariableString
-            '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
+            Connection.Connection.Ejecutar(store, pa, "strConn_CABA")
         End Sub
         ' Traer
         Public Shared Function TraerUno(ByVal id As Integer) As Voucher
@@ -256,7 +262,7 @@ Namespace DataAccessLibrary
             Dim result As New Voucher
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -267,11 +273,12 @@ Namespace DataAccessLibrary
             End Using
             Return result
         End Function
-        Public Shared Function TraerTodos() As List(Of Voucher)
-            Dim store As String = storeTraerTodos
+        Public Shared Function TraerTodosPorTitular(idtitular As Integer) As List(Of Voucher)
+            Dim store As String = storeTraerTodosxTitular
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Voucher)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            pa.add("@idtitular", idtitular)
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -316,17 +323,32 @@ Namespace DataAccessLibrary
                 End If
             End If
             ' Entidad
-            If dr.Table.Columns.Contains("id") Then
-                If dr.Item("id") IsNot DBNull.Value Then
-                    entidad.IdEntidad = CInt(dr.Item("id"))
+            If dr.Table.Columns.Contains("id_voucher") Then
+                If dr.Item("id_voucher") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("id_voucher"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("id_afiliado") Then
+                If dr.Item("id_afiliado") IsNot DBNull.Value Then
+                    entidad.IdTitular = CInt(dr.Item("id_afiliado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("id_familiar") Then
+                If dr.Item("id_familiar") IsNot DBNull.Value Then
+                    entidad.Idfamiliar = CInt(dr.Item("id_familiar"))
                 End If
             End If
             ' VariableString
-            '	If dr.Table.Columns.Contains("VariableString") Then
-            '   	If dr.Item("VariableString") IsNot DBNull.Value Then
-            '   		entidad.VariableString = dr.Item("VariableString").ToString.Trim
-            '    	End If
-            '	End If
+            If dr.Table.Columns.Contains("codigo") Then
+                If dr.Item("codigo") IsNot DBNull.Value Then
+                    entidad.Codigo = dr.Item("codigo").ToString.Trim
+                End If
+            End If
+            If dr.Table.Columns.Contains("confirmado") Then
+                If dr.Item("confirmado") IsNot DBNull.Value Then
+                    entidad.Confirmado = CInt(dr.Item("confirmado"))
+                End If
+            End If
             Return entidad
         End Function
 #End Region

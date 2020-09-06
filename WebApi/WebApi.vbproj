@@ -198,6 +198,7 @@
     <Compile Include="Controllers\Domicilio\ProvinciasController.vb" />
     <Compile Include="Controllers\FamiliaresController.vb" />
     <Compile Include="Controllers\TitularesController.vb" />
+    <Compile Include="Controllers\VoucherController.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
