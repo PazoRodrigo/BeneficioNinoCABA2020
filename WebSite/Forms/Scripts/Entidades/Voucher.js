@@ -1,3 +1,4 @@
+
 class Voucher {
   constructor() {
     this.IdEntidad = 0;
@@ -62,7 +63,8 @@ class Voucher {
         ObjVoucher.Domicilio = ObjDomicilio.Domicilio;
         ObjVoucher.CodigoPostal = ObjDomicilio.CodigoPostal;
         ObjVoucher.IdLocalidad = ObjDomicilio.IdLocalidad;
-        await Voucher.Alta(ObjVoucher, ObjDomicilio);
+        let idVoucher = await Voucher.Alta(ObjVoucher, ObjDomicilio);
+        _ListaVouchers.push(idVoucher);
         i++;
       }
       spinnerClose();
@@ -113,7 +115,7 @@ class Voucher {
       str += '             <th class="text-center">Nacimiento</th>';
       str += '             <th class="text-center">Nro. Documento</th>';
       str += '             <th class="text-center">Edad</th>';
-      str += '             <th class="text-center">Id Voucher</th>';
+      str += '             <th class="text-center">Codigo Beneficio</th>';
       str += '         </tr>';
       str += '     </thead>';
       str += '     <tbody>';

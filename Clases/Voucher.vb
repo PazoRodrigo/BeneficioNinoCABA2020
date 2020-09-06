@@ -88,7 +88,7 @@ Namespace Entidad
         Public Shared Function TraerUno(ByVal Id As Integer) As Voucher
             Dim result As Voucher = DAL_Voucher.TraerUno(Id)
             If result Is Nothing Then
-                Throw New Exception("No existe el voucher")
+                Throw New Exception("Voucher Generado Con Anterioridad para ese Familiar")
             End If
             Return result
         End Function
@@ -243,7 +243,7 @@ Namespace DataAccessLibrary
             pa.add("@domicilio", entidad.Domicilio)
             pa.add("@cp", entidad.CodigoPostal)
             pa.add("@idlocalidad", entidad.IdLocalidad)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count > 0 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
@@ -270,7 +270,7 @@ Namespace DataAccessLibrary
             Dim result As New Voucher
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -286,7 +286,7 @@ Namespace DataAccessLibrary
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Voucher)
             pa.add("@IdAfiliado", IdAfiliado)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
