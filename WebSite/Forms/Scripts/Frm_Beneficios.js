@@ -141,7 +141,7 @@ async function ImprimirVoucher() {
     let _window = window.open("", "Impresion Voucher");
     if (_window != null) {
       _window.document.write(
-        '<html><head><link rel="stylesheet" media="print,screen"  type="text/css" href="/Styles/bootstrap.css"/></head><body>'
+        '<html><head><link rel="stylesheet" media="print,screen"  type="text/css" href="../Styles/bootstrap.css"/></head><body>'
       );
       _window.document.write(divContents);
       _window.document.write("</body></html>");
