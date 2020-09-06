@@ -18,7 +18,6 @@ Namespace Entidad
         Public Property Confirmado() As Integer = 0
         Public Property CP() As Integer = 0
         Public Property IdLocalidad() As Integer = 0
-        Public Property IdProvincia() As Integer = 0
         Public Property Domicilio() As String = ""
         Public Property Fecha() As Date?
 #End Region
@@ -52,10 +51,9 @@ Namespace Entidad
             Confirmado = objImportar.Confirmado
             Fecha = objImportar.Fecha
             IdTitular = objImportar.IdTitular
-            Idfamiliar = objImportar.Idfamiliar
+            IdFamiliar = objImportar.IdFamiliar
             CP = objImportar.CP
             IdLocalidad = objImportar.IdLocalidad
-            IdProvincia -= objImportar.IdProvincia
             Domicilio = objImportar.Domicilio
         End Sub
         Sub New(ByVal objDesdeDTOVoucher As DTO.DTO_Voucher)
@@ -67,12 +65,11 @@ Namespace Entidad
             IdEntidad = objDesdeDTOVoucher.IdEntidad
             Codigo = objDesdeDTOVoucher.Codigo
             Confirmado = objDesdeDTOVoucher.Confirmado
-            Fecha = LUM.LUM.Fecha_LngToDate(objDesdeDTOVoucher.fecha)
+            Fecha = LUM.LUM.Fecha_LngToDate(objDesdeDTOVoucher.Fecha)
             IdTitular = objDesdeDTOVoucher.IdTitular
-            Idfamiliar = objDesdeDTOVoucher.IdFamiliar
+            IdFamiliar = objDesdeDTOVoucher.IdFamiliar
             CP = objDesdeDTOVoucher.CP
             IdLocalidad = objDesdeDTOVoucher.IdLocalidad
-            IdProvincia -= objDesdeDTOVoucher.IdProvincia
             Domicilio = objDesdeDTOVoucher.Domicilio
         End Sub
 #End Region
@@ -110,9 +107,9 @@ Namespace Entidad
 #End Region
 #Region " Métodos Públicos"
         ' ABM
-        Public Sub Alta()
+        Public Sub Alta(objDomicilio As Domicilio)
             ValidarAlta()
-            DAL_Voucher.Alta(Me)
+            DAL_Voucher.Alta(Me, objDomicilio)
         End Sub
         Public Sub Baja()
             ValidarBaja()
@@ -126,14 +123,13 @@ Namespace Entidad
         Public Function ToDTO() As DTO.DTO_Voucher
             Dim result As New DTO.DTO_Voucher
             result.IdEntidad = IdEntidad
-            result.Idfamiliar = Idfamiliar
+            result.IdFamiliar = IdFamiliar
             result.IdTitular = IdTitular
             result.Confirmado = Confirmado
             result.Codigo = Codigo
             result.Fecha = LngFecha
             result.CP = CP
             result.IdLocalidad = IdLocalidad
-            result.IdProvincia -= IdProvincia
             result.Domicilio = Domicilio
             Return result
         End Function
@@ -240,14 +236,14 @@ Namespace DataAccessLibrary
 #End Region
 #Region " Métodos Públicos "
         ' ABM
-        Public Shared Sub Alta(ByVal entidad As Voucher, ObjTitular As Titular)
+        Public Shared Sub Alta(ByVal entidad As Voucher, ObjDomicilio As Domicilio)
             Dim store As String = storeAlta
             Dim pa As New parametrosArray
             pa.add("@idafiliado", entidad.IdTitular)
             pa.add("@idfamiliar", entidad.IdFamiliar)
-            pa.add("@cp", ObjTitular.ObjDomicilio.CodigoPostal)
-            pa.add("@idlocalidad", ObjTitular.ObjDomicilio.IdLocalidad)
-            pa.add("@domicilio", ObjTitular.ObjDomicilio.Domicilio)
+            pa.add("@cp", ObjDomicilio.CodigoPostal)
+            pa.add("@idlocalidad", ObjDomicilio.IdLocalidad)
+            pa.add("@domicilio", ObjDomicilio.Domicilio)
             Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count > 0 Then
@@ -275,7 +271,7 @@ Namespace DataAccessLibrary
             Dim result As New Voucher
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -328,11 +324,6 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("cp") Then
                 If dr.Item("cp") IsNot DBNull.Value Then
                     entidad.CP = CInt(dr.Item("cp"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("id_provincia") Then
-                If dr.Item("id_provincia") IsNot DBNull.Value Then
-                    entidad.IdProvincia = CInt(dr.Item("id_provincia"))
                 End If
             End If
             If dr.Table.Columns.Contains("id_localidad") Then

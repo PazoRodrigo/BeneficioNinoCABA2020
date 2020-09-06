@@ -5,10 +5,6 @@ class Voucher {
     this.IdFamiliar = "";
     this.Codigo = "";
     this.Confirmado = 0;
-    this.IdProvincia = 0;
-    this.CP = 0;
-    this.IdLocalidad = 0;
-    this.Domicilio = '';
   }
 
   static async TraerUnoXId(idVoucher) {
@@ -50,7 +46,7 @@ class Voucher {
     }
 
   }
-  static async Guardar(ListaBeneficios) {
+  static async Guardar(ListaBeneficios, ObjDomicilio) {
     try {
       spinner();
       let i = 0;
@@ -58,7 +54,7 @@ class Voucher {
         let ObjVoucher = new Voucher;
         ObjVoucher.IdTitular = ListaBeneficios[i].NroAfiliado;
         ObjVoucher.IdFamiliar = ListaBeneficios[i].IdEntidad;
-        await Voucher.Alta(ObjVoucher);
+        await Voucher.Alta(ObjVoucher, ObjDomicilio);
         i++;
       }
       spinnerClose();
@@ -75,13 +71,13 @@ class Voucher {
       alertAlerta(error);
     }
   }
-  static async Alta(entidadVoucher) {
+  static async Alta(entidadVoucher, ObjDomicilio) {
     try {
-      // let data = {
-      //   'voucher': entidadVoucher
-      // }
-      let data = entidadVoucher;
-      let entidad = 'voucher';
+      let data = {
+        'voucher': entidadVoucher,
+        'ObjDomicilio': ObjDomicilio
+      }
+      let entidad = 'Voucher';
       let metodo = 'Alta';
       let url = ApiURL + '/' + entidad + '/' + metodo;
       return await PostAPI(url, data);
@@ -98,9 +94,5 @@ function llenarEntidadVoucher(entidad) {
   objResult.Codigo = entidad.Codigo;
   objResult.Confirmado = entidad.Confirmado;
   objResult.Fecha = entidad.Fecha;
-  objResult.IdProvincia = entidad.IdProvincia;
-  objResult.CP = entidad.CP;
-  objResult.IdLocalidad = entidad.IdLocalidad;
-  objResult.Domicilio = entidad.Domicilio;
   return objResult;
 }

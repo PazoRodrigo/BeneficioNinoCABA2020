@@ -109,7 +109,7 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
     try {
         spinner();
         await ValidarGenerarVoucher();
-        await Voucher.Guardar(_ListaBeneficiarios);
+        await Voucher.Guardar(_ListaBeneficiarios, _TempObjDomicilio);
         // let reporte = 'beneficio2020Caba';
         // let carpeta = 'Beneficios';
         // let url = 'https://www.utedyc.org.ar/webapiutedyc/Forms/Reportes/Report.aspx?carpeta=' + carpeta + '&reporte=' + reporte + '&cuit=' + cuitempresa + '&IdEstablecimiento=' + _IdEstablecimientoSeleccionado
@@ -156,6 +156,7 @@ async function ValidarGenerarVoucher() {
         sError += '- Informe el Domicilio <br>';
         MarcoError('P3_Domicilio');
     }
+    _TempObjDomicilio.Domicilio = $("#P3_Domicilio").val();
     if ($("#P3_CodigoPostal").val().length == 0) {
         sError += '- Informe el Código Postal <br>';
         MarcoError('P3_CodigoPostal');
@@ -164,17 +165,17 @@ async function ValidarGenerarVoucher() {
             sError += '- El Código Postal debe componerse de 4 dígitos <br>';
             MarcoError('P3_CodigoPostal');
         } else {
-            if (_TempObjDomicilio.CodigoPostal = 0) {
+            if (_TempObjDomicilio.CodigoPostal == 0) {
                 sError += '- El Código Postal debe ser válido <br>';
                 MarcoError('P3_CodigoPostal');
             }
         }
     }
-    if (_TempObjDomicilio.IdLocalidad = 0) {
+    if (_TempObjDomicilio.IdLocalidad == 0) {
         sError += '- Informe la Localidad <br>';
         MarcoError('P3_Localidad');
     }
-    if (_TempObjDomicilio.IdProvincia = 0) {
+    if (_TempObjDomicilio.IdProvincia == 0) {
         sError += '- Informe la Provincia <br>';
         MarcoError('P3_Provincia');
     }
@@ -208,7 +209,7 @@ async function ValidarGenerarVoucher() {
 async function BuscadorLocalidad(MiElemento) {
     if (_TempObjDomicilio == null) {
         // Si no fue cargado anteriormente
-        _TempObjDomicilio = new Domicilio();
+        _TempObjDomicilio = new Domicilio;
     }
     let CodPos = $("#P3_CodigoPostal").val();
     $("#P3_Localidad").val("");

@@ -32,10 +32,11 @@ Namespace Controllers
         <HttpPost>
         <ActionName("Alta")>
         <ResponseType(GetType(DTO.DTO_Voucher))>
-        Public Function Alta(<FromBody()> voucher As DTO.DTO_Voucher) As IHttpActionResult
+        Public Function Alta(<FromBody()> voucher As DTO.DTO_Voucher, ObjDomicilio As DTO.DTO_Domicilio) As IHttpActionResult
             Try
-                Dim v As New Voucher(voucher)
-                v.Alta()
+                Dim D As New Entidad.Domicilio(ObjDomicilio)
+                Dim V As New Voucher(voucher)
+                V.Alta(D)
                 Dim result As DTO.DTO_Voucher = Entidad.Voucher.TraerUno(v.IdEntidad).ToDTO
                 Return Ok(result)
             Catch ex As Exception
