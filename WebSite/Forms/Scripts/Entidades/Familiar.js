@@ -30,7 +30,7 @@
         if (lista.length > 0) {
             str += ' <table class="table table-bordered">';
             str += '     <thead>';
-            str += '         <tr>';
+            str += '         <tr class="bg-primary text-light">';
             str += '             <th></th>'; //Seleccion
             str += '             <th class="text-center">Nombre</th>';
             str += '             <th class="text-center">Fecha Nacimiento</th>';
@@ -44,9 +44,9 @@
                 if (item.Edad > 12) {
                     habilitado = 'readonly="readonly"';
                 }
-                let seleccion = '';
+                let checkBox = '<input type="checkbox" id="' + item.IdEntidad + '" name="nombre_' + item.IdEntidad + '" onchange="SeleccionFamiliar(this)" value="" data-Id="' + item.IdEntidad + '" data-Evento="' + evento + '"><label for="nombre_' + item.IdEntidad + '"></label>';
                 str += '    <tr>';
-                str += '        <td ' + habilitado + '> ' + seleccion + '</td>';
+                str += '        <td ' + habilitado + '> ' + checkBox + '</td>';
                 str += '        <td class="text-left pl-1"> ' + item.ApellidoNombre + '</td>';
                 str += '        <td class="text-center"> ' + LongToDateString(item.FechaNacimiento) + '</td>';
                 str += '        <td class="text-center"> ' + Right('00000000' + item.NroDocumento, 8) + '</td>';
@@ -71,6 +71,25 @@ function llenarEntidadFamiliar(entidad) {
     objResult.Edad = entidad.Edad;
     return objResult;
 }
+
+async function SeleccionFamiliar(MiElemento) {
+    try {
+        let elemento = document.getElementById(MiElemento.id);
+        let evento = elemento.getAttribute('data-Evento');
+        let Identificador = elemento.getAttribute('data-Id');
+        let buscado = $.grep(_ListaFamiliares, function (entidad, index) {
+            return entidad.IdEntidad == Identificador;
+        });
+        let Seleccionado = buscado[0];
+        let event = new CustomEvent(evento, {
+            detail: Seleccionado
+        });
+        document.dispatchEvent(event);
+    } catch (e) {
+        alertAlerta(e);
+    }
+}
+
 
 
 

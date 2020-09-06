@@ -70,10 +70,14 @@ $("body").on("click", "#BtnAceptarTitular", async function () {
     try {
         spinner();
         _ListaFamiliares = await Familiar.TraerTodosXTitular(_ObjTitular.IdEntidad);
+        let ListaBeneficiarios = await Voucher.TraerTodosxAfiliado(_ObjTitular.IdEntidad);
         if (_ListaFamiliares?.length == 0) {
             throw 'Usted no tiene posibles beneficiarios del Beneficio';
         }
-        await Familiar.ArmarGrilla('GrillaFamiliares', _ListaFamiliares)
+        await Familiar.ArmarGrilla('GrillaFamiliares', _ListaFamiliares, 'EventoFamiliarSeleccionado')
+        if (ListaBeneficiarios.length > 0) {
+            await MarcarBeneficiarios(ListaBeneficiarios);
+        }
         $(".DatosFamiliares").show();
         spinnerClose();
     } catch (error) {
@@ -81,13 +85,55 @@ $("body").on("click", "#BtnAceptarTitular", async function () {
         alertInfo(error);
     }
 });
+async function MarcarBeneficiarios(ListaBeneficiarios) {
+    if (_ListaFamiliares.length > 0) {
+        let f = 0;
+        while (f <= _ListaFamiliares.length - 1) {
+            let Marcado = false;
+            let b = 0;
+            while (b <= ListaBeneficiarios.length) {
+                if (ListaBeneficiarios[b].IdEntidad == _ListaFamiliares[f].IdEntidad) {
+                    Marcado = true;
+                }
+                b++;
+            }
+            if (Marcado) {
+                // Marcar
+
+            }
+            f++;
+        }
+    }
+}
 $("body").on("click", "#BtnGenerarVoucher", async function () {
     try {
+        spinner();
         await ValidarGenerarVoucher();
+        await Voucher.Guardar(_ListaBeneficiarios);
+        // let reporte = 'beneficio2020Caba';
+        // let carpeta = 'Beneficios';
+        // let url = 'https://www.utedyc.org.ar/webapiutedyc/Forms/Reportes/Report.aspx?carpeta=' + carpeta + '&reporte=' + reporte + '&cuit=' + cuitempresa + '&IdEstablecimiento=' + _IdEstablecimientoSeleccionado
+        // //let url = 'http://localhost:54382/Forms/Reportes/Report.aspx?carpeta=' + carpeta + '&reporte=' + reporte + '&cuit=' + cuitempresa + ''
+        // //var win = window.open(url, '_blank');
+        // var win = window.open(url);
+        // win.focus();
+        spinnerClose();
     } catch (error) {
+        spinnerClose();
         alertInfo('<b>Realice las correcciones informadas para Generar el Voucher</b><br><br>' + error);
     }
 });
+
+$("body").on("click", "#BtnAyuda", function () {
+    alertOk('<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6224 (LUN A VIER 10 A 18 HS)</em>')
+});
+$("body").on("click", "#BtnAgregarFamiliar", function () {
+    alertOk('<b>Agregar Familiar</b><br><br><em>Para la carga del familiar comuniquese al 5219-1592. (LUN A VIER 10 A 18 HS)<br>Deberá tener disponible el DNI del familiar y la partida de nacimiento.</em>')
+});
+$("body").on("click", "#BtnQuieroAfiliarme", function () {
+    alertOk('<b>Quiero Afiliarme</b><br><br><em>Por favor comuniquese al 5219-1591 <br> (LUN A VIER 10 A 18 HS)</em>')
+});
+
 
 async function ValidarGenerarVoucher() {
     let sError = '';
@@ -102,16 +148,14 @@ async function ValidarGenerarVoucher() {
     }
     //Paso 3
     MarcoDefault('P3_Domicilio');
+    MarcoDefault('P3_CodigoPostal');
+    MarcoDefault('P3_Localidad');
+    MarcoDefault('P3_Provincia');
+
     if ($("#P3_Domicilio").val().length == 0) {
         sError += '- Informe el Domicilio <br>';
         MarcoError('P3_Domicilio');
     }
-    MarcoDefault('P3_CodigoPostal');
-    if ($("#P3_CodigoPostal").val().length != 4) {
-        sError += '- Informe el Código Postal <br>';
-        MarcoError('P3_CodigoPostal');
-    }
-    MarcoDefault('P3_CodigoPostal');
     if ($("#P3_CodigoPostal").val().length == 0) {
         sError += '- Informe el Código Postal <br>';
         MarcoError('P3_CodigoPostal');
@@ -119,15 +163,18 @@ async function ValidarGenerarVoucher() {
         if ($("#P3_CodigoPostal").val().length != 4) {
             sError += '- El Código Postal debe componerse de 4 dígitos <br>';
             MarcoError('P3_CodigoPostal');
+        } else {
+            if (_TempObjDomicilio.CodigoPostal = 0) {
+                sError += '- El Código Postal debe ser válido <br>';
+                MarcoError('P3_CodigoPostal');
+            }
         }
     }
-    MarcoDefault('P3_Localidad');
-    if ($("#P3_Localidad").val().length != 4) {
+    if (_TempObjDomicilio.IdLocalidad = 0) {
         sError += '- Informe la Localidad <br>';
         MarcoError('P3_Localidad');
     }
-    MarcoDefault('P3_Provincia');
-    if ($("#P3_Provincia").val().length != 4) {
+    if (_TempObjDomicilio.IdProvincia = 0) {
         sError += '- Informe la Provincia <br>';
         MarcoError('P3_Provincia');
     }
@@ -158,7 +205,7 @@ async function ValidarGenerarVoucher() {
 }
 
 //Eventos
-$("body").on("keyup", "#P3_CodigoPostal", async function () {
+async function BuscadorLocalidad(MiElemento) {
     if (_TempObjDomicilio == null) {
         // Si no fue cargado anteriormente
         _TempObjDomicilio = new Domicilio();
@@ -170,7 +217,7 @@ $("body").on("keyup", "#P3_CodigoPostal", async function () {
     $("#P3_Localidad").css("display", "block");
     _TempObjDomicilio.CodigoPostal = 0;
     if (CodPos.length == 4) {
-        let listaLocalidades = await Localidad.TraerTodasXCP(CodPos);
+        let listaLocalidades = await Localidad.TraerTodosXCodigoPostal(CodPos);
         if (listaLocalidades.length == 0) {
             $(this).css("background-color", "pink");
             _TempObjDomicilio.CodigoPostal = parseInt(0);
@@ -180,9 +227,9 @@ $("body").on("keyup", "#P3_CodigoPostal", async function () {
         } else {
             $(this).css("background-color", "transparent");
             _TempObjDomicilio.CodigoPostal = parseInt(CodPos);
-            if (listaLocalidades.length == parseInt(1)) {
+            if (parseInt(listaLocalidades.length) == 1) {
                 if (listaLocalidades.length == 1) {
-                    await LlenarLocalidad(listaLocalidades[0], 2);
+                    await LlenarLocalidad(listaLocalidades[0]);
                     $("#P3_Localidad").css("display", "block");
                     $("#P3_CboLocalidad").css("display", "none");
                 }
@@ -203,7 +250,9 @@ $("body").on("keyup", "#P3_CodigoPostal", async function () {
             }
         }
     }
-});
+};
+
+//Escuchadores
 document.addEventListener("P3_LodalidadSeleccionado", async function (e) {
     try {
         let objSeleccionado = e.detail;
@@ -212,11 +261,37 @@ document.addEventListener("P3_LodalidadSeleccionado", async function (e) {
         alertAlerta(error);
     }
 }, false);
+document.addEventListener("EventoFamiliarSeleccionado", async function (e) {
+    try {
+        let objSeleccionado = e.detail;
+        await AgregarBeneficiario(objSeleccionado);
+    } catch (error) {
+        alertAlerta(error);
+    }
+}, false);
+
+//Funciones
 async function LlenarLocalidad(objLocalidadBuscado) {
+    $("#P3_Localidad").val(objLocalidadBuscado.Nombre);
     let objProvinciaBuscada = await Provincia.TraerUna(
         objLocalidadBuscado.IdProvincia
     );
-    $("#P3_Localidad").val(objLocalidadBuscado.Nombre);
     _TempObjDomicilio.IdLocalidad = objLocalidadBuscado.IdEntidad;
     $("#P3_Provincia").val(objProvinciaBuscada.Nombre);
+}
+async function AgregarBeneficiario(ObjBeneficiario) {
+    if (_ListaBeneficiarios?.length == 0) {
+        _ListaBeneficiarios.push(ObjBeneficiario);
+    } else {
+        let buscado = $.grep(_ListaBeneficiarios, function (entidad, index) {
+            return entidad.IdEntidad == ObjBeneficiario.IdEntidad;
+        });
+        if (buscado == undefined) {
+            _ListaBeneficiarios.push(ObjBeneficiario);
+        } else {
+            _ListaBeneficiarios = $.grep(_ListaBeneficiarios, function (entidad, index) {
+                return entidad.IdEntidad != ObjBeneficiario.IdEntidad;
+            });
+        }
+    }
 }

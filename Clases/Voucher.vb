@@ -13,10 +13,12 @@ Namespace Entidad
 #Region " Atributos / Propiedades "
         Public Property IdEntidad() As Integer = 0
         Public Property IdTitular() As Integer = 0
-        Public Property Idfamiliar() As Integer = 0
+        Public Property IdFamiliar() As Integer = 0
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
         Public Property Fecha() As Date?
+#End Region
+#Region " Lazy Load "
         Public ReadOnly Property LngFecha() As Long
             Get
                 Dim result As Long = 0
@@ -26,18 +28,6 @@ Namespace Entidad
                 Return result
             End Get
         End Property
-#End Region
-#Region " Lazy Load "
-        'Public Property IdLazy() As Integer
-        'Private _ObjLazy As Lazy
-        'Public ReadOnly Property ObjLazy() As Lazy
-        '    Get
-        '        If _ObjLazy Is Nothing Then
-        '            _ObjLazy = Lazy.TraerUno(IdLazy)
-        '        End If
-        '        Return _ObjLazy
-        '    End Get
-        'End Property
 #End Region
 #Region " Constructores "
         Sub New()
@@ -99,9 +89,9 @@ Namespace Entidad
             For Each item As Voucher In L
                 result.Add(item.ToDTO)
             Next
-            If result Is Nothing Or result.Count = 0 Then
-                Throw New Exception("No existen vouchers para el grupo")
-            End If
+            'If result Is Nothing Or result.Count = 0 Then
+            '    Throw New Exception("No existen vouchers para el grupo")
+            'End If
             Return result
         End Function
         ' Nuevos
@@ -230,12 +220,15 @@ Namespace DataAccessLibrary
 #End Region
 #Region " Métodos Públicos "
         ' ABM
-        Public Shared Sub Alta(ByVal entidad As Voucher)
+        Public Shared Sub Alta(ByVal entidad As Voucher, ObjTitular As Titular)
             Dim store As String = storeAlta
             Dim pa As New parametrosArray
             pa.add("@idafiliado", entidad.IdTitular)
-            pa.add("@idfamiliar", entidad.Idfamiliar)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            pa.add("@idfamiliar", entidad.IdFamiliar)
+            pa.add("@cp", ObjTitular.ObjDomicilio.CodigoPostal)
+            pa.add("@idlocalidad", ObjTitular.ObjDomicilio.IdLocalidad)
+            pa.add("@domicilio", ObjTitular.ObjDomicilio.Domicilio)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count > 0 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
@@ -273,12 +266,12 @@ Namespace DataAccessLibrary
             End Using
             Return result
         End Function
-        Public Shared Function TraerTodosPorTitular(idtitular As Integer) As List(Of Voucher)
+        Public Shared Function TraerTodosPorTitular(IdAfiliado As Integer) As List(Of Voucher)
             Dim store As String = storeTraerTodosxTitular
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Voucher)
-            pa.add("@idtitular", idtitular)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            pa.add("@IdAfiliado", IdAfiliado)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))

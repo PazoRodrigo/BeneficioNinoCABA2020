@@ -90,19 +90,6 @@ Namespace Entidad
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
-        ' ABM
-        Public Sub Alta()
-            ValidarAlta()
-            DAL_Provincia.Alta(Me)
-        End Sub
-        Public Sub Baja()
-            ValidarBaja()
-            DAL_Provincia.Baja(Me)
-        End Sub
-        Public Sub Modifica()
-            ValidarModifica()
-            DAL_Provincia.Modifica(Me)
-        End Sub
         ' Otros
         Public Function ToDTO() As DTO.DTO_Provincia
             Dim result As New DTO.DTO_Provincia With {
@@ -205,76 +192,17 @@ Namespace DataAccessLibrary
     Public Class DAL_Provincia
 
 #Region " Stored "
-        Const storeAlta As String = "p_Provincia_Alta"
-        Const storeBaja As String = "p_Provincia_Baja"
-        Const storeModifica As String = "p_Provincia_Modifica"
         Const storeTraerUnoXId As String = "p_Provincia_TraerUnoXId"
-        Const storeTraerTodos As String = "p_Provincia_TraerTodos"
-        Const storeTraerTodosActivos As String = "p_Provincia_TraerTodosActivos"
+        Const storeTraerTodos As String = "DIM.usp_Provincia_TraerTodos"
 #End Region
 #Region " Métodos Públicos "
-        ' ABM
-        Public Shared Sub Alta(ByVal entidad As Provincia)
-            Dim store As String = storeAlta
-            Dim pa As New parametrosArray
-            pa.add("@idUsuarioAlta", entidad.IdUsuarioAlta)
-            ' Variable Numérica
-            '	If entidad.codPostal <> 0 Then
-            '		pa.add("@VariableNumero", entidad.VariableNumero)
-            '	Else
-            '		pa.add("@codPostal", "borrarEntero")
-            '	End If
-            ' VariableFecha
-            '	If entidad.fechaNacimiento.HasValue Then
-            '		pa.add("@fechaNacimiento", entidad.fechaNacimiento)
-            '	Else
-            '		pa.add("@fechaNacimiento", "borrarFecha")
-            '	End If
-            ' VariableString
-            '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
-                If Not dt Is Nothing Then
-                    If dt.Rows.Count = 1 Then
-                        entidad.IdEntidad = CInt(dt.Rows(0)(0))
-                    End If
-                End If
-            End Using
-        End Sub
-        Public Shared Sub Baja(ByVal entidad As Provincia)
-            Dim store As String = storeBaja
-            Dim pa As New parametrosArray
-            pa.add("@idUsuarioBaja", entidad.IdUsuarioBaja)
-            pa.add("@id", entidad.IdEntidad)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
-        End Sub
-        Public Shared Sub Modifica(ByVal entidad As Provincia)
-            Dim store As String = storeModifica
-            Dim pa As New parametrosArray
-            pa.add("@idUsuarioModifica", entidad.IdUsuarioModifica)
-            pa.add("@id", entidad.IdEntidad)
-            ' Variable Numérica
-            '	If entidad.codPostal <> 0 Then
-            '		pa.add("@VariableNumero", entidad.VariableNumero)
-            '	Else
-            '		pa.add("@codPostal", "borrarEntero")
-            '	End If
-            ' VariableFecha
-            '	If entidad.fechaNacimiento.HasValue Then
-            '		pa.add("@fechaNacimiento", entidad.fechaNacimiento)
-            '	Else
-            '		pa.add("@fechaNacimiento", "borrarFecha")
-            '	End If
-            ' VariableString
-            '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
-        End Sub
         ' Traer
         Public Shared Function TraerUno(ByVal id As Integer) As Provincia
             Dim store As String = storeTraerUnoXId
             Dim result As New Provincia
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_SIGES")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -289,7 +217,7 @@ Namespace DataAccessLibrary
             Dim store As String = storeTraerTodos
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Provincia)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_SIGES")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -334,14 +262,14 @@ Namespace DataAccessLibrary
                 End If
             End If
             ' Entidad
-            If dr.Table.Columns.Contains("id") Then
-                If dr.Item("id") IsNot DBNull.Value Then
-                    entidad.IdEntidad = CInt(dr.Item("id"))
+            If dr.Table.Columns.Contains("Id_Provincia") Then
+                If dr.Item("Id_Provincia") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("Id_Provincia"))
                 End If
             End If
-            If dr.Table.Columns.Contains("Nombre") Then
-                If dr.Item("Nombre") IsNot DBNull.Value Then
-                    entidad.Nombre = dr.Item("Nombre").ToString.Trim
+            If dr.Table.Columns.Contains("Provincia") Then
+                If dr.Item("Provincia") IsNot DBNull.Value Then
+                    entidad.Nombre = dr.Item("Provincia").ToString.Trim
                 End If
             End If
             If dr.Table.Columns.Contains("Letra") Then

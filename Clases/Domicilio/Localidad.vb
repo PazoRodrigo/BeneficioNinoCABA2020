@@ -91,7 +91,11 @@ Namespace Entidad
         '    Return result
         'End Function
         Public Shared Function TraerTodosXCodigoPostal(CodigoPostal As Integer) As List(Of Localidad)
-            Return DAL_Localidad.TraerTodos()
+            Dim result As List(Of Localidad) = Todos.Where(Function(s) s.CodigoPostal = CodigoPostal).ToList
+            If result Is Nothing Then
+                Throw New Exception("No existen Localidades para la búsqueda")
+            End If
+            Return result
         End Function
         Public Shared Function TraerTodosXCodigoPostal_DTO(CodigoPostal As Integer) As List(Of DTO.DTO_Localidad)
             Return ToListDTO(TraerTodosXCodigoPostal(CodigoPostal))
@@ -222,7 +226,7 @@ Namespace DataAccessLibrary
         Const storeBaja As String = "p_Localidad_Baja"
         Const storeModifica As String = "p_Localidad_Modifica"
         Const storeTraerUnoXId As String = "p_Localidad_TraerUnoXId"
-        Const storeTraerTodos As String = "p_Localidad_TraerTodos"
+        Const storeTraerTodos As String = "DIM.usp_Localidad_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Localidad_TraerTodosActivos"
 #End Region
 #Region " Métodos Públicos "
@@ -245,7 +249,7 @@ Namespace DataAccessLibrary
             '	End If
             ' VariableString
             '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_SIGES")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
@@ -258,7 +262,7 @@ Namespace DataAccessLibrary
             Dim pa As New parametrosArray
             pa.add("@idUsuarioBaja", entidad.IdUsuarioBaja)
             pa.add("@id", entidad.IdEntidad)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
+            Connection.Connection.Ejecutar(store, pa, "strConn_SIGES")
         End Sub
         Public Shared Sub Modifica(ByVal entidad As Localidad)
             Dim store As String = storeModifica
@@ -279,7 +283,7 @@ Namespace DataAccessLibrary
             '	End If
             ' VariableString
             '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
+            Connection.Connection.Ejecutar(store, pa, "strConn_SIGES")
         End Sub
         ' Traer
         Public Shared Function TraerUno(ByVal id As Integer) As Localidad
@@ -287,7 +291,7 @@ Namespace DataAccessLibrary
             Dim result As New Localidad
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_SIGES")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -302,7 +306,7 @@ Namespace DataAccessLibrary
             Dim store As String = storeTraerTodos
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Localidad)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_SIGES")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -347,29 +351,29 @@ Namespace DataAccessLibrary
                 End If
             End If
             ' Entidad
-            If dr.Table.Columns.Contains("id") Then
-                If dr.Item("id") IsNot DBNull.Value Then
-                    entidad.IdEntidad = CInt(dr.Item("id"))
+            If dr.Table.Columns.Contains("id_Localidad") Then
+                If dr.Item("id_Localidad") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("id_Localidad"))
                 End If
             End If
-            If dr.Table.Columns.Contains("CodigoPostal") Then
-                If dr.Item("CodigoPostal") IsNot DBNull.Value Then
-                    entidad.CodigoPostal = CInt(dr.Item("CodigoPostal"))
+            If dr.Table.Columns.Contains("cp") Then
+                If dr.Item("cp") IsNot DBNull.Value Then
+                    entidad.CodigoPostal = CInt(dr.Item("cp"))
                 End If
             End If
-            If dr.Table.Columns.Contains("Nombre") Then
-                If dr.Item("Nombre") IsNot DBNull.Value Then
-                    entidad.Nombre = dr.Item("Nombre").ToString.Trim
+            If dr.Table.Columns.Contains("Localidad") Then
+                If dr.Item("Localidad") IsNot DBNull.Value Then
+                    entidad.Nombre = dr.Item("Localidad").ToString.Trim
                 End If
             End If
-            If dr.Table.Columns.Contains("IdProvincia") Then
-                If dr.Item("IdProvincia") IsNot DBNull.Value Then
-                    entidad.IdProvincia = CInt(dr.Item("IdProvincia"))
+            If dr.Table.Columns.Contains("id_Provincia") Then
+                If dr.Item("id_Provincia") IsNot DBNull.Value Then
+                    entidad.IdProvincia = CInt(dr.Item("id_Provincia"))
                 End If
             End If
-            If dr.Table.Columns.Contains("IdSeccional") Then
-                If dr.Item("IdSeccional") IsNot DBNull.Value Then
-                    entidad.IdSeccional = CInt(dr.Item("IdSeccional"))
+            If dr.Table.Columns.Contains("Id_Sec") Then
+                If dr.Item("Id_Sec") IsNot DBNull.Value Then
+                    entidad.IdSeccional = CInt(dr.Item("Id_Sec"))
                 End If
             End If
             Return entidad
