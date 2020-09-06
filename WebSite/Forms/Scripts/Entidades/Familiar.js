@@ -44,7 +44,7 @@
                 if (item.Edad > 12) {
                     habilitado = 'readonly="readonly"';
                 }
-                let checkBox = '<input type="checkbox" id="' + item.IdEntidad + '" name="nombre_' + item.IdEntidad + '" onchange="SeleccionFamiliar(this)" value="" data-Id="' + item.IdEntidad + '" data-Evento="' + evento + '"><label for="nombre_' + item.IdEntidad + '"></label>';
+                let checkBox = '<input type="checkbox" id="Chk_' + item.IdEntidad + '" name="chkFamiliar" onchange="SeleccionFamiliar(this)" value="" data-Id="' + item.IdEntidad + '" data-Evento="' + evento + '">';
                 str += '    <tr>';
                 str += '        <td ' + habilitado + '> ' + checkBox + '</td>';
                 str += '        <td class="text-left pl-1"> ' + item.ApellidoNombre + '</td>';

@@ -9,14 +9,14 @@ Imports LUM.DTO
 
 Namespace Entidad
     Public Class Voucher
-        Inherits DBE
+        'Inherits DBE
 #Region " Atributos / Propiedades "
         Public Property IdEntidad() As Integer = 0
         Public Property IdTitular() As Integer = 0
         Public Property IdFamiliar() As Integer = 0
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
-        Public Property CP() As Integer = 0
+        Public Property CodigoPostal() As Integer = 0
         Public Property IdLocalidad() As Integer = 0
         Public Property Domicilio() As String = ""
         Public Property Fecha() As Date?
@@ -39,12 +39,12 @@ Namespace Entidad
         Sub New(ByVal id As Integer)
             Dim objImportar As Voucher = TraerUno(id)
             ' DBE
-            IdUsuarioAlta = objImportar.IdUsuarioAlta
-            IdUsuarioBaja = objImportar.IdUsuarioBaja
-            IdUsuarioModifica = objImportar.IdUsuarioModifica
-            IdMotivoBaja = objImportar.IdMotivoBaja
-            FechaAlta = objImportar.FechaAlta
-            FechaBaja = objImportar.FechaBaja
+            'IdUsuarioAlta = objImportar.IdUsuarioAlta
+            'IdUsuarioBaja = objImportar.IdUsuarioBaja
+            'IdUsuarioModifica = objImportar.IdUsuarioModifica
+            'IdMotivoBaja = objImportar.IdMotivoBaja
+            'FechaAlta = objImportar.FechaAlta
+            'FechaBaja = objImportar.FechaBaja
             ' Entidad
             IdEntidad = objImportar.IdEntidad
             Codigo = objImportar.Codigo
@@ -52,15 +52,15 @@ Namespace Entidad
             Fecha = objImportar.Fecha
             IdTitular = objImportar.IdTitular
             IdFamiliar = objImportar.IdFamiliar
-            CP = objImportar.CP
+            CodigoPostal = objImportar.CodigoPostal
             IdLocalidad = objImportar.IdLocalidad
             Domicilio = objImportar.Domicilio
         End Sub
         Sub New(ByVal objDesdeDTOVoucher As DTO.DTO_Voucher)
             ' DBE
-            IdUsuarioBaja = objDesdeDTOVoucher.IdUsuarioBaja
-            IdUsuarioModifica = objDesdeDTOVoucher.IdUsuarioModifica
-            IdMotivoBaja = objDesdeDTOVoucher.IdMotivoBaja
+            'IdUsuarioBaja = objDesdeDTOVoucher.IdUsuarioBaja
+            'IdUsuarioModifica = objDesdeDTOVoucher.IdUsuarioModifica
+            'IdMotivoBaja = objDesdeDTOVoucher.IdMotivoBaja
             ' Entidad
             IdEntidad = objDesdeDTOVoucher.IdEntidad
             Codigo = objDesdeDTOVoucher.Codigo
@@ -68,7 +68,7 @@ Namespace Entidad
             Fecha = LUM.LUM.Fecha_LngToDate(objDesdeDTOVoucher.Fecha)
             IdTitular = objDesdeDTOVoucher.IdTitular
             IdFamiliar = objDesdeDTOVoucher.IdFamiliar
-            CP = objDesdeDTOVoucher.CP
+            CodigoPostal = objDesdeDTOVoucher.CodigoPostal
             IdLocalidad = objDesdeDTOVoucher.IdLocalidad
             Domicilio = objDesdeDTOVoucher.Domicilio
         End Sub
@@ -107,9 +107,9 @@ Namespace Entidad
 #End Region
 #Region " Métodos Públicos"
         ' ABM
-        Public Sub Alta(objDomicilio As Domicilio)
+        Public Sub Alta()
             ValidarAlta()
-            DAL_Voucher.Alta(Me, objDomicilio)
+            DAL_Voucher.Alta(Me)
         End Sub
         Public Sub Baja()
             ValidarBaja()
@@ -128,9 +128,9 @@ Namespace Entidad
             result.Confirmado = Confirmado
             result.Codigo = Codigo
             result.Fecha = LngFecha
-            result.CP = CP
-            result.IdLocalidad = IdLocalidad
-            result.Domicilio = Domicilio
+            'result.CodigoPostal = CodigoPostal
+            'result.IdLocalidad = IdLocalidad
+            'result.Domicilio = Domicilio
             Return result
         End Function
         'Public Shared Sub refresh()
@@ -204,7 +204,7 @@ End Namespace ' Entidad
 
 Namespace DTO
     Public Class DTO_Voucher
-        Inherits DTO_DBE
+        'Inherits DTO_DBE
 
 #Region " Atributos / Propiedades"
         Public Property IdEntidad() As Integer = 0
@@ -213,9 +213,8 @@ Namespace DTO
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
         Public Property Fecha() As Long = 0
-        Public Property CP() As Integer = 0
+        Public Property CodigoPostal() As Integer = 0
         Public Property IdLocalidad() As Integer = 0
-        Public Property IdProvincia() As Integer = 0
         Public Property Domicilio() As String = ""
 #End Region
     End Class ' DTO_Voucher
@@ -227,23 +226,23 @@ Namespace DataAccessLibrary
     Public Class DAL_Voucher
 
 #Region " Stored "
-        Const storeAlta As String = "p_Voucher_Alta"
-        Const storeBaja As String = "p_Voucher_Baja"
+        Const storeAlta As String = "p_VoucherDiaDelNino2020_Alta"
+        Const storeBaja As String = "p_VoucherDiaDelNino2020_Baja"
         Const storeModifica As String = "p_Voucher_Modifica"
-        Const storeTraerUnoXId As String = "p_Voucher_TraerUnoXId"
-        Const storeTraerTodosxTitular As String = "p_Voucher_TraerTodosxTitular"
+        Const storeTraerUnoXId As String = "p_VoucherDiaDelNino2020_TraerUnoXId"
+        Const storeTraerTodosxTitular As String = "p_VoucherDiaDelNino2020_TraerTodosxTitular"
         Const storeTraerTodosActivos As String = "p_Voucher_TraerTodosActivos"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
-        Public Shared Sub Alta(ByVal entidad As Voucher, ObjDomicilio As Domicilio)
+        Public Shared Sub Alta(ByVal entidad As Voucher)
             Dim store As String = storeAlta
             Dim pa As New parametrosArray
             pa.add("@idafiliado", entidad.IdTitular)
             pa.add("@idfamiliar", entidad.IdFamiliar)
-            pa.add("@cp", ObjDomicilio.CodigoPostal)
-            pa.add("@idlocalidad", ObjDomicilio.IdLocalidad)
-            pa.add("@domicilio", ObjDomicilio.Domicilio)
+            pa.add("@domicilio", entidad.Domicilio)
+            pa.add("@cp", entidad.CodigoPostal)
+            pa.add("@idlocalidad", entidad.IdLocalidad)
             Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count > 0 Then
@@ -261,7 +260,7 @@ Namespace DataAccessLibrary
         Public Shared Sub Modifica(ByVal entidad As Voucher)
             Dim store As String = storeModifica
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioModifica", entidad.IdUsuarioModifica)
+            'pa.add("@idUsuarioModifica", entidad.IdUsuarioModifica)
             pa.add("@id", entidad.IdEntidad)
             Connection.Connection.Ejecutar(store, pa, "strConn_CABA")
         End Sub
@@ -301,51 +300,51 @@ Namespace DataAccessLibrary
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Voucher
             Dim entidad As New Voucher
             ' DBE
-            If dr.Table.Columns.Contains("idUsuarioAlta") Then
-                If dr.Item("idUsuarioAlta") IsNot DBNull.Value Then
-                    entidad.IdUsuarioAlta = CInt(dr.Item("idUsuarioAlta"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("idUsuarioBaja") Then
-                If dr.Item("idUsuarioBaja") IsNot DBNull.Value Then
-                    entidad.IdUsuarioBaja = CInt(dr.Item("idUsuarioBaja"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("idUsuarioModifica") Then
-                If dr.Item("idUsuarioModifica") IsNot DBNull.Value Then
-                    entidad.IdUsuarioModifica = CInt(dr.Item("idUsuarioModifica"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("IdMotivoBaja") Then
-                If dr.Item("IdMotivoBaja") IsNot DBNull.Value Then
-                    entidad.IdMotivoBaja = CInt(dr.Item("IdMotivoBaja"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("cp") Then
-                If dr.Item("cp") IsNot DBNull.Value Then
-                    entidad.CP = CInt(dr.Item("cp"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("id_localidad") Then
-                If dr.Item("id_localidad") IsNot DBNull.Value Then
-                    entidad.IdLocalidad = CInt(dr.Item("id_localidad"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("domicilio") Then
-                If dr.Item("domicilio") IsNot DBNull.Value Then
-                    entidad.Domicilio = CStr(dr.Item("domicilio"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("fechaAlta") Then
-                If dr.Item("fechaAlta") IsNot DBNull.Value Then
-                    entidad.FechaAlta = CDate(dr.Item("fechaAlta"))
-                End If
-            End If
-            If dr.Table.Columns.Contains("fechaBaja") Then
-                If dr.Item("fechaBaja") IsNot DBNull.Value Then
-                    entidad.FechaBaja = CDate(dr.Item("fechaBaja"))
-                End If
-            End If
+            'If dr.Table.Columns.Contains("idUsuarioAlta") Then
+            '    If dr.Item("idUsuarioAlta") IsNot DBNull.Value Then
+            '        entidad.IdUsuarioAlta = CInt(dr.Item("idUsuarioAlta"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("idUsuarioBaja") Then
+            '    If dr.Item("idUsuarioBaja") IsNot DBNull.Value Then
+            '        entidad.IdUsuarioBaja = CInt(dr.Item("idUsuarioBaja"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("idUsuarioModifica") Then
+            '    If dr.Item("idUsuarioModifica") IsNot DBNull.Value Then
+            '        entidad.IdUsuarioModifica = CInt(dr.Item("idUsuarioModifica"))
+            '    End If
+            ''End If
+            'If dr.Table.Columns.Contains("IdMotivoBaja") Then
+            '    If dr.Item("IdMotivoBaja") IsNot DBNull.Value Then
+            '        entidad.IdMotivoBaja = CInt(dr.Item("IdMotivoBaja"))
+            '    End If
+            'End If
+            ''If dr.Table.Columns.Contains("cp") Then
+            '    If dr.Item("cp") IsNot DBNull.Value Then
+            '        entidad.CodigoPostal = CInt(dr.Item("cp"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("id_localidad") Then
+            '    If dr.Item("id_localidad") IsNot DBNull.Value Then
+            '        entidad.IdLocalidad = CInt(dr.Item("id_localidad"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("domicilio") Then
+            '    If dr.Item("domicilio") IsNot DBNull.Value Then
+            '        entidad.Domicilio = CStr(dr.Item("domicilio"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("fechaAlta") Then
+            '    If dr.Item("fechaAlta") IsNot DBNull.Value Then
+            '        entidad.FechaAlta = CDate(dr.Item("fechaAlta"))
+            '    End If
+            'End If
+            'If dr.Table.Columns.Contains("fechaBaja") Then
+            '    If dr.Item("fechaBaja") IsNot DBNull.Value Then
+            '        entidad.FechaBaja = CDate(dr.Item("fechaBaja"))
+            '    End If
+            'End If
             ' Entidad
             If dr.Table.Columns.Contains("id_voucher") Then
                 If dr.Item("id_voucher") IsNot DBNull.Value Then

@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 function Inicio() {
     LimpiarFormulario();
-    _TempObjDomicilio = new Domicilio;
 }
 
 function LimpiarFormulario() {
@@ -27,6 +26,10 @@ function LimpiarFormulario() {
     $("#P3_Provincia").val('');
     $("#P3_Telefono").val('');
     $("#P3_CorreoElectronico").val('');
+    _TempObjDomicilio = new Domicilio;
+    _ListaBeneficiarios = [];
+    _ListaFamiliares = [];
+    _ObjTitular = new Titular;
 }
 // Steps
 $("#pasosBeneficiario").steps({
@@ -70,13 +73,13 @@ $("body").on("click", "#BtnAceptarTitular", async function () {
     try {
         spinner();
         _ListaFamiliares = await Familiar.TraerTodosXTitular(_ObjTitular.IdEntidad);
-        let ListaBeneficiarios = await Voucher.TraerTodosxAfiliado(_ObjTitular.IdEntidad);
+        _ListaBeneficiarios = await Voucher.TraerTodosxAfiliado(_ObjTitular.IdEntidad);
         if (_ListaFamiliares?.length == 0) {
             throw 'Usted no tiene posibles beneficiarios del Beneficio';
         }
         await Familiar.ArmarGrilla('GrillaFamiliares', _ListaFamiliares, 'EventoFamiliarSeleccionado')
-        if (ListaBeneficiarios.length > 0) {
-            await MarcarBeneficiarios(ListaBeneficiarios);
+        if (_ListaBeneficiarios.length > 0) {
+            await MarcarBeneficiarios();
         }
         $(".DatosFamiliares").show();
         spinnerClose();
@@ -85,21 +88,20 @@ $("body").on("click", "#BtnAceptarTitular", async function () {
         alertInfo(error);
     }
 });
-async function MarcarBeneficiarios(ListaBeneficiarios) {
+async function MarcarBeneficiarios() {
     if (_ListaFamiliares.length > 0) {
         let f = 0;
         while (f <= _ListaFamiliares.length - 1) {
             let Marcado = false;
             let b = 0;
-            while (b <= ListaBeneficiarios.length) {
-                if (ListaBeneficiarios[b].IdEntidad == _ListaFamiliares[f].IdEntidad) {
+            while (b <= _ListaBeneficiarios.length - 1) {
+                if (_ListaBeneficiarios[b].IdFamiliar == _ListaFamiliares[f].IdEntidad) {
                     Marcado = true;
                 }
                 b++;
             }
             if (Marcado) {
-                // Marcar
-
+                $("#Chk_" + _ListaFamiliares[f].IdEntidad + "").prop('checked', true);
             }
             f++;
         }
@@ -110,19 +112,30 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
         spinner();
         await ValidarGenerarVoucher();
         await Voucher.Guardar(_ListaBeneficiarios, _TempObjDomicilio);
-        // let reporte = 'beneficio2020Caba';
-        // let carpeta = 'Beneficios';
-        // let url = 'https://www.utedyc.org.ar/webapiutedyc/Forms/Reportes/Report.aspx?carpeta=' + carpeta + '&reporte=' + reporte + '&cuit=' + cuitempresa + '&IdEstablecimiento=' + _IdEstablecimientoSeleccionado
-        // //let url = 'http://localhost:54382/Forms/Reportes/Report.aspx?carpeta=' + carpeta + '&reporte=' + reporte + '&cuit=' + cuitempresa + ''
-        // //var win = window.open(url, '_blank');
-        // var win = window.open(url);
-        // win.focus();
+        await Voucher.ArmarGrilla('GrillaBeneficiariosImpresion', _ListaBeneficiarios, _ListaFamiliares)
+        await ImprimirVoucher();
         spinnerClose();
+        spinnerClose();
+        LimpiarFormulario();
     } catch (error) {
         spinnerClose();
         alertInfo('<b>Realice las correcciones informadas para Generar el Voucher</b><br><br>' + error);
     }
 });
+async function ImprimirVoucher() {
+    let divImprimir = $("#ImpresionVoucher");
+    let divContents = divImprimir.html();
+    let _window = window.open("", "Impresion Voucher");
+    _window.document.write('<html><head><link rel="stylesheet" media="print,screen"  type="text/css" href="/Styles/bootstrap.css"/></head><body>');
+    _window.document.write(divContents);
+    _window.document.write("</body></html>");
+    _window.document.close();
+    _window.focus();
+    _window.document.body.onload = function () {
+        _window.print();
+        _window.close();
+    };
+}
 
 $("body").on("click", "#BtnAyuda", function () {
     alertOk('<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6224 (LUN A VIER 10 A 18 HS)</em>')
@@ -281,8 +294,11 @@ async function LlenarLocalidad(objLocalidadBuscado) {
     $("#P3_Provincia").val(objProvinciaBuscada.Nombre);
 }
 async function AgregarBeneficiario(ObjBeneficiario) {
+    let ObjVoucher = new Voucher;
+    ObjVoucher.IdTitular = ObjBeneficiario.IdEntidad;
+    ObjVoucher.IdFamiliar = ObjBeneficiario.NroAfiliado;
     if (_ListaBeneficiarios?.length == 0) {
-        _ListaBeneficiarios.push(ObjBeneficiario);
+        _ListaBeneficiarios.push(ObjVoucher);
     } else {
         let buscado = $.grep(_ListaBeneficiarios, function (entidad, index) {
             return entidad.IdEntidad == ObjBeneficiario.IdEntidad;
