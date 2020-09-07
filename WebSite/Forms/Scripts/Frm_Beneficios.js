@@ -172,7 +172,12 @@ async function ImprimirVoucher() {
     alertAlerta(err);
   }
 }
-
+BtnConfirmacion
+$("body").on("click", "#BtnConfirmacion", function () {
+  alertInfo(
+    "<b>Confirmación de Entrega</b><br><br><em>Utilice este link para Validar la entrega luego del Sorteo.</em>"
+  );
+});
 $("body").on("click", "#BtnAyuda", function () {
   alertOk(
     "<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6224 (LUN A VIER 10 A 18 HS)</em>"
