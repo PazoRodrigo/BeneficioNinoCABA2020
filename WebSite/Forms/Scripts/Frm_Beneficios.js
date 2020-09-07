@@ -156,7 +156,7 @@ async function ImprimirVoucher() {
       };
     } else {
       throw new Error(
-        "Desbloquee las venranas emergentes para imprimir por favor"
+        "Desbloquee las ventanas emergentes para imprimir por favor"
       );
     }
 
