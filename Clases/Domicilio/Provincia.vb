@@ -269,12 +269,12 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("Provincia") Then
                 If dr.Item("Provincia") IsNot DBNull.Value Then
-                    entidad.Nombre = dr.Item("Provincia").ToString.Trim
+                    entidad.Nombre = dr.Item("Provincia").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("Letra") Then
                 If dr.Item("Letra") IsNot DBNull.Value Then
-                    entidad.Letra = dr.Item("Letra").ToString.Trim
+                    entidad.Letra = dr.Item("Letra").ToString.Trim.ToUpper
                 End If
             End If
             Return entidad

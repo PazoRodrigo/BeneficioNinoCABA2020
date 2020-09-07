@@ -364,7 +364,7 @@ Namespace DataAccessLibrary
             ' VariableString
             If dr.Table.Columns.Contains("codigo") Then
                 If dr.Item("codigo") IsNot DBNull.Value Then
-                    entidad.Codigo = dr.Item("codigo").ToString.Trim
+                    entidad.Codigo = dr.Item("codigo").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("confirmado") Then

@@ -363,7 +363,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("Localidad") Then
                 If dr.Item("Localidad") IsNot DBNull.Value Then
-                    entidad.Nombre = dr.Item("Localidad").ToString.Trim
+                    entidad.Nombre = dr.Item("Localidad").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("id_Provincia") Then

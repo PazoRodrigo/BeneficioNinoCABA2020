@@ -120,7 +120,7 @@ Namespace Entidad
         Public Shared Function TraerTodosXTitular(idTitular As Integer) As List(Of Familiar)
             'Con filtro menores por parentesco 3,5,7,8,9,10 y de alta
             Dim result As List(Of Familiar) = DAL_Familiar.TraerTodosXTitular(idTitular)
-            result = result.Where(Function(s) (s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10) And s.FechaBaja Is Nothing).ToList
+            result = result.Where(Function(s) (s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10) And s.FechaBaja Is Nothing And s.Edad <= 12).ToList
             If result Is Nothing Then
                 Throw New Exception("No existen resultados para la búsqueda")
             End If
@@ -427,7 +427,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("ape_nom") Then
                 If dr.Item("ape_nom") IsNot DBNull.Value Then
-                    entidad.ApellidoNombre = dr.Item("ape_nom").ToString.Trim
+                    entidad.ApellidoNombre = dr.Item("ape_nom").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("nro_doc") Then

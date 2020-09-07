@@ -375,7 +375,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("CALLE") Then
                 If dr.Item("CALLE") IsNot DBNull.Value Then
-                    entidad.Domicilio = dr.Item("CALLE").ToString.Trim
+                    entidad.Domicilio = dr.Item("CALLE").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("CP") Then

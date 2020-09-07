@@ -31,6 +31,9 @@ function LimpiarFormulario() {
   _ListaFamiliares = [];
   _ListaVouchers = [];
   _ObjTitular = new Titular();
+  $("#P1_TextoAceptacion1").text('* Válido para participación de sorteos de premios en vivo.');
+  $("#P1_TextoAceptacion2").text('* Mediante el presente comprobante durante el mes de octubre se entregará y/o enviará a su domicilio registrado un juguete para el niño/a según grupo etario.');
+  
 }
 // Steps
 $("#pasosBeneficiario").steps({
@@ -153,7 +156,7 @@ async function ImprimirVoucher() {
       };
     } else {
       throw new Error(
-        "Desbloquee las venranas emergentoes para imprimir por favor"
+        "Desbloquee las venranas emergentes para imprimir por favor"
       );
     }
 
@@ -335,16 +338,16 @@ async function LlenarLocalidad(objLocalidadBuscado) {
 }
 async function AgregarBeneficiario(ObjBeneficiario) {
   let ObjVoucher = new Voucher();
-  ObjVoucher.IdTitular = ObjBeneficiario.IdEntidad;
-  ObjVoucher.IdFamiliar = ObjBeneficiario.NroAfiliado;
+  ObjVoucher.IdTitular = ObjBeneficiario.NroAfiliado;
+  ObjVoucher.IdFamiliar = ObjBeneficiario.IdEntidad;
   if (_ListaBeneficios?.length == 0) {
     _ListaBeneficios.push(ObjVoucher);
   } else {
     let buscado = $.grep(_ListaBeneficios, function (entidad, index) {
       return entidad.IdEntidad == ObjBeneficiario.IdEntidad;
     });
-    if (buscado == undefined) {
-      _ListaBeneficios.push(ObjBeneficiario);
+    if (buscado.length ==0) {
+      _ListaBeneficios.push(ObjVoucher);
     } else {
       _ListaBeneficios = $.grep(_ListaBeneficios, function (entidad, index) {
         return entidad.IdEntidad != ObjBeneficiario.IdEntidad;

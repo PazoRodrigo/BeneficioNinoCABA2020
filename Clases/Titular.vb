@@ -408,7 +408,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("APE_NOM") Then
                 If dr.Item("APE_NOM") IsNot DBNull.Value Then
-                    entidad.ApellidoNombre = dr.Item("APE_NOM").ToString.Trim
+                    entidad.ApellidoNombre = dr.Item("APE_NOM").ToString.Trim.ToUpper
                 End If
             End If
             If dr.Table.Columns.Contains("NRO_DOC") Then

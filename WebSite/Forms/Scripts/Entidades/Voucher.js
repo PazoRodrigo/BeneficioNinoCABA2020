@@ -94,7 +94,7 @@ class Voucher {
     while (f <= ListaFamiliares.length - 1) {
       let b = 0;
       while (b <= ListaBeneficios.length - 1) {
-        if (ListaBeneficios[b].IdFamiliar == ListaFamiliares[f].NroAfiliado) {
+        if (ListaBeneficios[b].IdFamiliar == ListaFamiliares[f].IdEntidad) {
           Impresion = [];
           Impresion.ApellidoNombre = ListaFamiliares[f].ApellidoNombre;
           Impresion.FechaNacimiento = ListaFamiliares[f].FechaNacimiento;
@@ -102,10 +102,10 @@ class Voucher {
           Impresion.Edad = ListaFamiliares[f].Edad;
           Impresion.Codigo = ListaBeneficios[b].Codigo;
           ListaImpresion.push(Impresion);
-          b++;
         }
-        f++;
+        b++;
       }
+      f++;
     }
     if (ListaImpresion.length > 0) {
       str += ' <table class="table table-bordered">';
