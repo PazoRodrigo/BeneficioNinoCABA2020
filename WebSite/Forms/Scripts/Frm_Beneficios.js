@@ -15,7 +15,7 @@ function LimpiarFormulario() {
   //Paso 1
   $("#P1_ChkAcepto").prop("checked", false);
   //Paso 2
-  $("#P2_NroDocumentoTitular").val("17109689"); // Borrar
+  $("#P2_NroDocumentoTitular").val("");
   $("#P2_ApellidoNombreTitular").val("");
   $("#BtnAceptarTitular").css("display", "none");
   $(".DatosFamiliares").hide();
@@ -33,7 +33,7 @@ function LimpiarFormulario() {
   _ObjTitular = new Titular();
   $("#P1_TextoAceptacion1").text('* Válido para participación de sorteos de premios en vivo.');
   $("#P1_TextoAceptacion2").text('* Mediante el presente comprobante durante el mes de octubre se entregará y/o enviará a su domicilio registrado un juguete para el niño/a según grupo etario.');
-  
+
 }
 // Steps
 $("#pasosBeneficiario").steps({
@@ -117,6 +117,12 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
   try {
     spinner();
     await ValidarGenerarVoucher();
+    let i = 0;
+    while (i <= _ListaBeneficios.length - 1) {
+      _ListaBeneficios[i].CorreoElectronico = $("#P3_CorreoElectronico").val();
+      _ListaBeneficios[i].Telefono = $("#P3_Telefono").val();
+      i++;
+    }
     await Voucher.Guardar(_ListaBeneficios, _TempObjDomicilio);
     // let l = _ListaVouchers;
     await Voucher.ArmarGrilla(
@@ -132,7 +138,7 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
     spinnerClose();
     alertInfo(
       "<b>Realice las correcciones informadas para Generar el Voucher</b><br><br>" +
-        error
+      error
     );
   }
 });
@@ -166,7 +172,12 @@ async function ImprimirVoucher() {
     alertAlerta(err);
   }
 }
-
+BtnConfirmacion
+$("body").on("click", "#BtnConfirmacion", function () {
+  alertInfo(
+    "<b>Confirmación de Entrega</b><br><br><em>Utilice este link para Validar la entrega luego del Sorteo.</em>"
+  );
+});
 $("body").on("click", "#BtnAyuda", function () {
   alertOk(
     "<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6224 (LUN A VIER 10 A 18 HS)</em>"
@@ -346,7 +357,7 @@ async function AgregarBeneficiario(ObjBeneficiario) {
     let buscado = $.grep(_ListaBeneficios, function (entidad, index) {
       return entidad.IdEntidad == ObjBeneficiario.IdEntidad;
     });
-    if (buscado.length ==0) {
+    if (buscado.length == 0) {
       _ListaBeneficios.push(ObjVoucher);
     } else {
       _ListaBeneficios = $.grep(_ListaBeneficios, function (entidad, index) {

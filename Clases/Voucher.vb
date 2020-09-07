@@ -20,6 +20,8 @@ Namespace Entidad
         Public Property IdLocalidad() As Integer = 0
         Public Property Domicilio() As String = ""
         Public Property Fecha() As Date?
+        Public Property CorreoElectronico() As String = ""
+        Public Property Telefono() As Long = 0
 #End Region
 #Region " Lazy Load "
         Public ReadOnly Property LngFecha() As Long
@@ -55,6 +57,8 @@ Namespace Entidad
             CodigoPostal = objImportar.CodigoPostal
             IdLocalidad = objImportar.IdLocalidad
             Domicilio = objImportar.Domicilio
+            CorreoElectronico = objImportar.CorreoElectronico
+            Telefono = objImportar.Telefono
         End Sub
         Sub New(ByVal objDesdeDTOVoucher As DTO.DTO_Voucher)
             ' DBE
@@ -71,6 +75,8 @@ Namespace Entidad
             CodigoPostal = objDesdeDTOVoucher.CodigoPostal
             IdLocalidad = objDesdeDTOVoucher.IdLocalidad
             Domicilio = objDesdeDTOVoucher.Domicilio
+            CorreoElectronico = objDesdeDTOVoucher.CorreoElectronico
+            Telefono = objDesdeDTOVoucher.Telefono
         End Sub
 #End Region
 #Region " Métodos Estáticos"
@@ -216,6 +222,8 @@ Namespace DTO
         Public Property CodigoPostal() As Integer = 0
         Public Property IdLocalidad() As Integer = 0
         Public Property Domicilio() As String = ""
+        Public Property CorreoElectronico() As String = ""
+        Public Property Telefono() As Long = 0
 #End Region
     End Class ' DTO_Voucher
 End Namespace ' DTO
@@ -243,7 +251,9 @@ Namespace DataAccessLibrary
             pa.add("@domicilio", entidad.Domicilio)
             pa.add("@cp", entidad.CodigoPostal)
             pa.add("@idlocalidad", entidad.IdLocalidad)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            pa.add("@CorreoElectronico", entidad.CorreoElectronico)
+            pa.add("@Telefono", entidad.Telefono)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count > 0 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
@@ -270,7 +280,7 @@ Namespace DataAccessLibrary
             Dim result As New Voucher
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -286,7 +296,7 @@ Namespace DataAccessLibrary
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Voucher)
             pa.add("@IdAfiliado", IdAfiliado)
-            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -358,10 +368,9 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("id_familiar") Then
                 If dr.Item("id_familiar") IsNot DBNull.Value Then
-                    entidad.Idfamiliar = CInt(dr.Item("id_familiar"))
+                    entidad.IdFamiliar = CInt(dr.Item("id_familiar"))
                 End If
             End If
-            ' VariableString
             If dr.Table.Columns.Contains("codigo") Then
                 If dr.Item("codigo") IsNot DBNull.Value Then
                     entidad.Codigo = dr.Item("codigo").ToString.Trim.ToUpper
@@ -370,6 +379,16 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("confirmado") Then
                 If dr.Item("confirmado") IsNot DBNull.Value Then
                     entidad.Confirmado = CInt(dr.Item("confirmado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("CorreoElectronico") Then
+                If dr.Item("CorreoElectronico") IsNot DBNull.Value Then
+                    entidad.CorreoElectronico = dr.Item("CorreoElectronico").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Telefono") Then
+                If dr.Item("Telefono") IsNot DBNull.Value Then
+                    entidad.Telefono = CLng(dr.Item("Telefono"))
                 End If
             End If
             Return entidad
