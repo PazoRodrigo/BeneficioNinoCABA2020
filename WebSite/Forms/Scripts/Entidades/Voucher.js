@@ -11,6 +11,8 @@ class Voucher {
     this.Domicilio = '';
     this.CodigoPostal = 0;
     this.IdLocalidad = 0;
+    this.CorreoElectronico = '';
+    this.Telefono = 0;
   }
 
   static async TraerUnoXId(idVoucher) {
@@ -63,6 +65,8 @@ class Voucher {
         ObjVoucher.Domicilio = ObjDomicilio.Domicilio;
         ObjVoucher.CodigoPostal = ObjDomicilio.CodigoPostal;
         ObjVoucher.IdLocalidad = ObjDomicilio.IdLocalidad;
+        ObjVoucher.CorreoElectronico = ListaBeneficios[i].CorreoElectronico;
+        ObjVoucher.Telefono = ListaBeneficios[i].Telefono;
         let idVoucher = await Voucher.Alta(ObjVoucher, ObjDomicilio);
         _ListaVouchers.push(idVoucher);
         i++;
@@ -142,5 +146,7 @@ function llenarEntidadVoucher(entidad) {
   objResult.Codigo = entidad.Codigo;
   objResult.Confirmado = entidad.Confirmado;
   objResult.Fecha = entidad.Fecha;
+  objResult.CorreoElectronico = entidad.CorreoElectronico;
+  objResult.Telefono = entidad.Telefono;
   return objResult;
 }
