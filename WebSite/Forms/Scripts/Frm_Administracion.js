@@ -97,20 +97,12 @@ async function MarcarBeneficiarios() {
 $("body").on("click", "#BtnReimprimirVoucher", async function () {
     try {
         spinner();
-        let i = 0;
-        while (i <= _ListaBeneficios.length - 1) {
-            let email = $("#P3_CorreoElectronico").val();
-            _ListaBeneficios[i].CorreoElectronico = email;
-            _ListaBeneficios[i].Telefono = $("#P3_Telefono").val();
-            i++;
-        }
-        //await Voucher.Guardar(_ListaBeneficios, _TempObjDomicilio);
         await Voucher.ArmarGrilla(
             "GrillaBeneficiariosReImpresion",
             _ListaBeneficios,
             _ListaFamiliares
         );
-        //await ImprimirVoucher();
+        await ImprimirVoucher();
         spinnerClose();
     } catch (error) {
         spinnerClose();
@@ -122,7 +114,7 @@ $("body").on("click", "#BtnReimprimirVoucher", async function () {
 async function ImprimirVoucher() {
     try {
         spinner();
-        let divbol = $("#ImpresionVoucher");
+        let divbol = $("#ReimpresionVoucher");
         let divContents = divbol.html();
         let _window = window.open("", "Impresion Voucher");
         if (_window != null) {

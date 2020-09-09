@@ -248,10 +248,10 @@ Namespace DataAccessLibrary
             Dim pa As New parametrosArray
             pa.add("@idafiliado", entidad.IdTitular)
             pa.add("@idfamiliar", entidad.IdFamiliar)
-            pa.add("@domicilio", entidad.Domicilio)
+            pa.add("@domicilio", entidad.Domicilio.ToUpper.Trim)
             pa.add("@cp", entidad.CodigoPostal)
             pa.add("@idlocalidad", entidad.IdLocalidad)
-            pa.add("@CorreoElectronico", entidad.CorreoElectronico)
+            pa.add("@CorreoElectronico", entidad.CorreoElectronico.ToUpper.Trim)
             pa.add("@Telefono", entidad.Telefono)
             Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
                 If Not dt Is Nothing Then
