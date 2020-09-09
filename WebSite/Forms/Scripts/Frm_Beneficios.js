@@ -142,33 +142,34 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
     }
 });
 async function ImprimirVoucher() {
-    try {
-        spinner();
-        let divbol = $("#ImpresionVoucher");
-        let divContents = divbol.html();
-        let _window = window.open("", "Impresion Voucher");
-        if (_window != null) {
-            _window.document.write(
-                '<html><head><link rel="stylesheet" media="print,screen"  type="text/css" href="../Styles/bootstrap.css"/></head><body>'
-            );
-            _window.document.write(divContents);
-            _window.document.write("</body></html>");
-            _window.document.close();
-            _window.focus();
-            _window.document.body.onload = function () {
-                _window.print();
-                _window.close();
-            };
-        } else {
-            throw new Error(
-                "Desbloquee las venranas emergentes para imprimir por favor"
-            );
-        }
-        spinnerClose();
-    } catch (err) {
-        spinnerClose();
-        alertAlerta(err);
+  try {
+    spinner();
+    let divbol = $("#ImpresionVoucher");
+    let divContents = divbol.html();
+    let _window = window.open("", "Impresion Voucher");
+    if (_window != null) {
+      _window.document.write(
+        '<html><head><link rel="stylesheet" media="print,screen"  type="text/css" href="../Styles/bootstrap.css"/></head><body>'
+      );
+      _window.document.write(divContents);
+      _window.document.write("</body></html>");
+      _window.document.close();
+      _window.focus();
+      _window.document.body.onload = function () {
+        _window.print();
+        _window.close();
+      };
+    } else {
+      throw new Error(
+        "Desbloquee las ventanas emergentes para imprimir por favor"
+      );
     }
+
+    spinnerClose();
+  } catch (err) {
+    spinnerClose();
+    alertAlerta(err);
+  }
 }
 $("body").on("click", "#BtnConfirmacion", function () {
     alertInfo(
