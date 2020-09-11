@@ -9,6 +9,21 @@
         this.Edad = 0;
     }
 
+    static async TraerUno(IdFamiliar, IdAfiliado) {
+        let data = {
+            "IdAfiliado": IdAfiliado,
+            "IdFamiliar": IdFamiliar
+        };
+        let entidad = 'Familiares';
+        let metodo = 'TraerUno';
+        let url = ApiURL + '/' + entidad + '/' + metodo;
+        let datos = await TraerAPI(url, data);
+        let result = [];
+        $.each(datos, function (key, value) {
+            result.push(llenarEntidadFamiliar(value));
+        });
+        return result;
+    }
     static async TraerTodosXTitular(IdAfiliado) {
         let data = {
             "IdTitular": IdAfiliado

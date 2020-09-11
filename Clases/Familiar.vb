@@ -371,7 +371,7 @@ Namespace DataAccessLibrary
         End Function
 #End Region
 #Region " Métodos Privados "
-        Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Familiar
+        Public Shared Function LlenarEntidad(ByVal dr As DataRow) As Familiar
             Dim entidad As New Familiar
             ' DBE
             If dr.Table.Columns.Contains("idUsuarioAlta") Then
@@ -417,7 +417,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("parentesco") Then
                 If dr.Item("parentesco") IsNot DBNull.Value Then
-                    entidad.idParentesco = CInt(dr.Item("parentesco"))
+                    entidad.IdParentesco = CInt(dr.Item("parentesco"))
                 End If
             End If
             If dr.Table.Columns.Contains("id_afiliado") Then

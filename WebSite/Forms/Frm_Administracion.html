@@ -35,7 +35,8 @@
     <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200904"></script>
     <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200904"></script>
     <script>
-      var ApiURL = "http://localhost:64802/api";
+        var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
+        //var ApiURL = "http://localhost:64802/api";
       $("body").on("keypress", "input[type=text]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
@@ -59,15 +60,48 @@
       <div id="Contenedor" style="margin-top: 100px">
         <div class="row">
           <div id="Menu" class="col-3">
-            <div class="row mt-1 mb-4">
-              <div class="col-12">
+            <div class="row mt-2 mb-4">
+              <div class="col-12 text-center">
                 <h1>Administración</h1>
               </div>
             </div>
             <div class="row mt-2 justify-content-center">
-              <div class="col-10">
-                <a href="#" id="BtnMenuReimpresion" class="btn btn-success"
+              <div class="col-9">
+                <a
+                  href="#"
+                  id="BtnMenuReimpresion"
+                  class="btn btn-success btn-block"
                   >Reimpresión de Vouchers</a
+                >
+              </div>
+            </div>
+            <div class="row mt-2 justify-content-center">
+              <div class="col-9">
+                <a
+                  href="#"
+                  id="BtnMenuReporteInscripciones"
+                  class="btn btn-success btn-block"
+                  >Reporte de Inscripciones</a
+                >
+              </div>
+            </div>
+            <div class="row mt-2 justify-content-center" style="display:none;">
+              <div class="col-9">
+                <a
+                  href="#"
+                  id="BtnMenuReporteEntregados"
+                  class="btn btn-success btn-block"
+                  >Reporte de Entregas</a
+                >
+              </div>
+            </div>
+            <div class="row mt-2 justify-content-center" style="display:none;">
+              <div class="col-9">
+                <a
+                  href="#"
+                  id="BtnMenuReporteEtiquetasEntregas"
+                  class="btn btn-success btn-block"
+                  >Etiquetas</a
                 >
               </div>
             </div>
@@ -75,10 +109,10 @@
           <div ir="Contenido" class="col-9">
             <div class="col-12 text-center">
               <h1>
-                <em><div id="TituloContenido"></div></em>
+                <em><span id="TituloContenido"></span></em>
               </h1>
             </div>
-            <div id="divReimpresionVaoucher" style="display: none">
+            <div id="divReimpresionVoucher" style="display: none">
               <div class="container mb-4">
                 <div class="row justify-content-end mb-1">
                   <div class="col-10 bg-primary text-light"></div>
@@ -162,6 +196,21 @@
                 </div>
               </div>
             </div>
+            <div id="divReporteInscripciones" style="display: none">
+              <div class="row justify-content-end mb-1">
+                <div class="col-4 bg-info text-light text-right">
+                  Cantidad de Inscripciones:
+                  <span id="LblCantidadRegistros"></span>
+                </div>
+                <div class="col-1"></div>
+              </div>
+              <div
+                id="GrillaReporteInscripciones"
+                style="max-height: 400px; overflow-y: scroll"
+              ></div>
+            </div>
+            <div id="divReporteEntregados" style="display: none"></div>
+            <div id="divReporteEtiquetasEntregas" style="display: none"></div>
           </div>
         </div>
         <div style="width: 300px; float: left; height: 500px"></div>

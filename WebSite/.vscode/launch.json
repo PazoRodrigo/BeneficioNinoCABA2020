@@ -8,7 +8,7 @@
       "type": "firefox",
       "request": "launch",
       "name": "Firefox",
-      "url": "http://localhost:64324/Forms/Frm_Beneficios.html",
+      "url": "http://localhost:64324/Forms/Frm_administracion.html",
       "webRoot": "${workspaceFolder}"
     },
 
@@ -16,7 +16,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Chrome",
-      "url": "http://localhost:64324/Forms/Frm_Beneficios.html",
+      "url": "http://localhost:64324/Forms/Frm_administracion.html",
       "webRoot": "${workspaceFolder}"
     }
   ]

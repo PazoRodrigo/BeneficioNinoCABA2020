@@ -13,6 +13,8 @@ class Voucher {
     this.IdLocalidad = 0;
     this.CorreoElectronico = '';
     this.Telefono = 0;
+
+    this.ObjFamiliar;
   }
 
   static async TraerUnoXId(idVoucher) {
@@ -35,6 +37,22 @@ class Voucher {
 
   }
 
+  static async TraerTodos() {
+    try {
+      let data = '';
+      let entidad = "Voucher";
+      let metodo = "TraerTodos";
+      let url = ApiURL + "/" + entidad + "/" + metodo;
+      let datos = await TraerAPI(url, data);
+      let result = [];
+      $.each(datos, function (key, value) {
+        result.push(llenarEntidadVoucher(value));
+      });
+      return result;
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
   static async TraerTodosxAfiliado(idTitular) {
     try {
       let data = {
@@ -52,7 +70,6 @@ class Voucher {
     } catch (error) {
       throw new Error(error)
     }
-
   }
   static async Guardar(ListaBeneficios, ObjDomicilio) {
     try {
@@ -137,6 +154,36 @@ class Voucher {
     }
     return $('#' + div + '').html(str);
   }
+  static async ArmarGrillaImpresion(div, ListaBeneficios) {
+    $('#' + div + '').html('');
+    let str = '';
+    if (ListaBeneficios.length > 0) {
+      str += ' <table class="table table-bordered">';
+      str += '     <thead>';
+      str += '         <tr class="bg-primary text-light">';
+      str += '             <th class="text-center">Nombre</th>';
+      str += '             <th class="text-center">Nacimiento</th>';
+      str += '             <th class="text-center">Nro. Documento</th>';
+      // str += '             <th class="text-center">Edad</th>';
+      str += '             <th class="text-center">Codigo Beneficio</th>';
+      str += '         </tr>';
+      str += '     </thead>';
+      str += '     <tbody>';
+      for (let item of ListaBeneficios) {
+        str += '    <tr>';
+        str += '        <td class="text-left pl-1"> ' + item.ObjFamiliar.ApellidoNombre + '</td>';
+        str += '        <td class="text-center"> ' + LongToDateString(item.ObjFamiliar.FechaNacimiento) + '</td>';
+        str += '        <td class="text-center"> ' + Right('00000000' + item.ObjFamiliar.NroDocumento, 8) + '</td>';
+        // str += '        <td class="text-right pr-4"> </td>';
+        str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
+        str += '    </tr>';
+      }
+      str += '     <t/body>';
+      str += ' </table>';
+    }
+    return $('#' + div + '').html(str);
+  }
+
 }
 function llenarEntidadVoucher(entidad) {
   let objResult = new Voucher();
@@ -148,5 +195,6 @@ function llenarEntidadVoucher(entidad) {
   objResult.Fecha = entidad.Fecha;
   objResult.CorreoElectronico = entidad.CorreoElectronico;
   objResult.Telefono = entidad.Telefono;
+  objResult.ObjFamiliar = entidad.ObjFamiliar;
   return objResult;
 }

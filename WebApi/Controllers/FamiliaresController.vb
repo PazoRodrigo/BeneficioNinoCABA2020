@@ -7,7 +7,17 @@ Namespace Controllers
     <RoutePrefix("api/Familiares")>
     Public Class FamiliaresController
         Inherits ApiController
-
+        <HttpGet>
+        <ActionName("TraerUno")>
+        <ResponseType(GetType(List(Of DTO.DTO_Familiar)))>
+        Public Function TraerUno(IdFamiliar As Integer, IdAfiliado As Integer) As IHttpActionResult
+            Try
+                Dim result As List(Of DTO.DTO_Familiar) = Entidad.Familiar.TraerTodosXTitular_DTO(IdAfiliado)
+                Return Ok(result)
+            Catch ex As Exception
+                Return Content(HttpStatusCode.InternalServerError, ex.Message)
+            End Try
+        End Function
         <HttpGet>
         <ActionName("TraerTodosXTitular")>
         <ResponseType(GetType(List(Of DTO.DTO_Familiar)))>

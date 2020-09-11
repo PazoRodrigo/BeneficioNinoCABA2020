@@ -22,6 +22,8 @@ Namespace Entidad
         Public Property Fecha() As Date?
         Public Property CorreoElectronico() As String = ""
         Public Property Telefono() As Long = 0
+
+        Public Property ObjFamiliar() As Familiar
 #End Region
 #Region " Lazy Load "
         Public ReadOnly Property LngFecha() As Long
@@ -109,6 +111,17 @@ Namespace Entidad
             'End If
             Return result
         End Function
+        Public Shared Function TraerTodos() As List(Of DTO.DTO_Voucher)
+            Dim L As List(Of Voucher) = DAL_Voucher.TraerTodos()
+            Dim result As New List(Of DTO.DTO_Voucher)
+            For Each item As Voucher In L
+                result.Add(item.ToDTO)
+            Next
+            'If result Is Nothing Or result.Count = 0 Then
+            '    Throw New Exception("No existen vouchers para el grupo")
+            'End If
+            Return result
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -134,6 +147,7 @@ Namespace Entidad
             result.Confirmado = Confirmado
             result.Codigo = Codigo
             result.Fecha = LngFecha
+            result.ObjFamiliar = ObjFamiliar.ToDTO
             'result.CodigoPostal = CodigoPostal
             'result.IdLocalidad = IdLocalidad
             'result.Domicilio = Domicilio
@@ -224,6 +238,8 @@ Namespace DTO
         Public Property Domicilio() As String = ""
         Public Property CorreoElectronico() As String = ""
         Public Property Telefono() As Long = 0
+
+        Public Property ObjFamiliar() As DTO.DTO_Familiar
 #End Region
     End Class ' DTO_Voucher
 End Namespace ' DTO
@@ -239,6 +255,7 @@ Namespace DataAccessLibrary
         Const storeModifica As String = "p_Voucher_Modifica"
         Const storeTraerUnoXId As String = "p_VoucherDiaDelNino2020_TraerUnoXId"
         Const storeTraerTodosxTitular As String = "p_VoucherDiaDelNino2020_TraerTodosxTitular"
+        Const storeTraerTodos As String = "p_VoucherDiaDelNino2020_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Voucher_TraerTodosActivos"
 #End Region
 #Region " Métodos Públicos "
@@ -305,6 +322,20 @@ Namespace DataAccessLibrary
             End Using
             Return listaResult
         End Function
+        Public Shared Function TraerTodos() As List(Of Voucher)
+            Dim store As String = storeTraerTodos
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of Voucher)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidad(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
+
 #End Region
 #Region " Métodos Privados "
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Voucher
@@ -391,6 +422,9 @@ Namespace DataAccessLibrary
                     entidad.Telefono = CLng(dr.Item("Telefono"))
                 End If
             End If
+            Dim ObjFamiliar As New Familiar
+            ObjFamiliar = DAL_Familiar.LlenarEntidad(dr)
+            entidad.ObjFamiliar = ObjFamiliar
             Return entidad
         End Function
 #End Region

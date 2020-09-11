@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/WebApi/My Project/PublishProfiles/Local.pubxml
+/WebSite/App_Data/PublishProfiles/Local.pubxml

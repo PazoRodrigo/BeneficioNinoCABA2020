@@ -6,7 +6,11 @@ var _ListaVouchers = [];
 
 function ContenidoOcultarTodo() {
     $("#TituloContenido").text('');
-    $("#divReimpresionVaoucher").css('display', 'none');
+    $("#LblCantidadRegistros").text('');
+    $("#divReimpresionVoucher").css('display', 'none');
+    $("#divReporteInscripciones").css('display', 'none');
+    $("#divReporteEntregados").css('display', 'none');
+    $("#divReporteEtiquetasEntregas").css('display', 'none');
 
 }
 //Botones Menu
@@ -15,8 +19,41 @@ $("body").on("click", "#BtnMenuReimpresion", async function () {
         ContenidoOcultarTodo();
         LimpiarReimpresion();
         $("#TituloContenido").text('Reimpresión de Vouchers');
-        $("#divReimpresionVaoucher").css('display', 'block');
+        $("#divReimpresionVoucher").css('display', 'block');
         $("#P2_NroDocumentoTitular").focus();
+    } catch (error) {
+        spinnerClose();
+        alertInfo(error);
+    }
+});
+$("body").on("click", "#BtnMenuReporteInscripciones", async function () {
+    try {
+        ContenidoOcultarTodo();
+        $("#TituloContenido").text('Reporte de Inscripciones');
+        let ListaImpresion = await Voucher.TraerTodos();
+        $("#LblCantidadRegistros").text(ListaImpresion.length - 1);
+        await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', ListaImpresion);
+        $("#divReporteInscripciones").css('display', 'block');
+    } catch (error) {
+        spinnerClose();
+        alertInfo(error);
+    }
+});
+$("body").on("click", "#BtnMenuReporteEntregados", async function () {
+    try {
+        ContenidoOcultarTodo();
+        $("#TituloContenido").text('Reporte de Beneficios Entregados');
+        $("#divReporteEntregados").css('display', 'block');
+    } catch (error) {
+        spinnerClose();
+        alertInfo(error);
+    }
+});
+$("body").on("click", "#BtnMenuReporteEtiquetasEntregas", async function () {
+    try {
+        ContenidoOcultarTodo();
+        $("#TituloContenido").text('Etiquetas de Entrega');
+        $("#divReporteEtiquetasEntregas").css('display', 'block');
     } catch (error) {
         spinnerClose();
         alertInfo(error);

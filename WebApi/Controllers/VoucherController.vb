@@ -8,6 +8,17 @@ Namespace Controllers
     Public Class VoucherController
         Inherits ApiController
         <HttpGet>
+        <ActionName("TraerTodos")>
+        <ResponseType(GetType(List(Of DTO.DTO_Voucher)))>
+        Public Function TraerTodos() As IHttpActionResult
+            Try
+                Dim result As List(Of DTO.DTO_Voucher) = Entidad.Voucher.TraerTodos()
+                Return Ok(result)
+            Catch ex As Exception
+                Return Content(HttpStatusCode.InternalServerError, ex.Message)
+            End Try
+        End Function
+        <HttpGet>
         <ActionName("TraerTodosxAfiliado")>
         <ResponseType(GetType(List(Of DTO.DTO_Voucher)))>
         Public Function TraerTodosxAfiliado(idAfiliado As Integer) As IHttpActionResult

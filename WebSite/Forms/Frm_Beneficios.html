@@ -32,12 +32,6 @@
         width: 200px;
         top: 100px;
       }
-
-      /*@media screen and (max-width: 600px) {
-        body {
-          display: none;
-        }
-      }*/
     </style>
   </head>
   <body>
@@ -64,7 +58,8 @@
     <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200904"></script>
     <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200904"></script>
     <script>
-      var ApiURL = "http://localhost:64802/api";
+        var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
+        //var ApiURL = "http://localhost:64802/api";
       $("body").on("keypress", "input[type=text]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
