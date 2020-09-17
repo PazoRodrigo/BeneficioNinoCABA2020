@@ -53,5 +53,15 @@ Namespace Controllers
                 Return Content(HttpStatusCode.InternalServerError, ex.Message)
             End Try
         End Function
+        <HttpPost>
+        <ActionName("EnviarEMail")>
+        Public Function EnviarEMail(<FromBody()> IdAfiliado As Integer) As IHttpActionResult
+            Try
+                Voucher.EnviarEMail(IdAfiliado)
+                Return Ok(IdAfiliado)
+            Catch ex As Exception
+                Return Content(HttpStatusCode.InternalServerError, ex.Message)
+            End Try
+        End Function
     End Class
 End Namespace

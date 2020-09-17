@@ -1,4 +1,5 @@
-﻿Option Explicit On
+﻿
+Option Explicit On
 Option Strict On
 
 Imports Clases.DataAccessLibrary
@@ -6,6 +7,8 @@ Imports LUM
 Imports Clases.Entidad
 Imports Connection
 Imports LUM.DTO
+Imports System.Configuration
+Imports System.Net.Mail
 
 Namespace Entidad
     Public Class Voucher
@@ -122,6 +125,42 @@ Namespace Entidad
             'End If
             Return result
         End Function
+        Public Shared Sub EnviarEMail(IdAfiliado As Integer)
+            Try
+                Dim Lista As List(Of Voucher) = DAL_Voucher.TraerTodosPorTitular(IdAfiliado)
+                If Lista.Count > 0 Then
+                    Dim str As String = ""
+                    Dim i As Integer = 0
+                    While i <= Lista.Count - 1
+                        Dim item As New Familiar(Lista(i).IdFamiliar)
+                        str += "Beneficiario " & i + 1 & ": " & item.ApellidoNombre & ". - " & Lista(i).Codigo.ToString & vbCrLf
+                        i += 1
+                    End While
+                    Dim DireccionEnvio As String = Lista(0).CorreoElectronico
+                    Dim DireccionEnvioPrueba As String = "pazo.rodrigo@gmail.com"
+                    Dim DesdeCuenta As String = ConfigurationManager.AppSettings("smtpFrom").ToString
+                    Dim DesdePass As String = ConfigurationManager.AppSettings("smtpPassword").ToString
+                    Using Mail As New MailMessage()
+                        str += vbCrLf & "Saludos."
+                        Dim Smtp = New SmtpClient
+                        Mail.From = New MailAddress(DesdeCuenta)
+                        Mail.To.Add(New MailAddress(DireccionEnvio))
+                        Mail.Subject = "Voucher Beneficio Día de la Niñez !!!"
+                        Mail.Body = str
+                        Mail.IsBodyHtml = False
+                        Mail.Priority = MailPriority.Normal
+                        Smtp.Host = ConfigurationManager.AppSettings("smtpHost").ToString
+                        Smtp.Port = 587
+                        Smtp.UseDefaultCredentials = False
+                        Smtp.Credentials = New System.Net.NetworkCredential(DesdeCuenta, DesdePass)
+                        Smtp.EnableSsl = True
+                        Smtp.Send(Mail)
+                    End Using
+                End If
+            Catch ex As Exception
+                Throw New Exception(ex.Message)
+            End Try
+        End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"

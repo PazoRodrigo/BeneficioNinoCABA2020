@@ -105,6 +105,18 @@ class Voucher {
       throw new Error(error)
     }
   }
+  static async EnviarEMail(IdAfiliado) {
+    try {
+      let data = IdAfiliado
+      let entidad = 'Voucher';
+      let metodo = 'EnviarEMail';
+      let url = ApiURL + '/' + entidad + '/' + metodo;
+      return await PostAPI(url, data);
+    } catch (error) {
+      throw new Error(error.Message)
+    }
+  }
+
 
   static async ArmarGrilla(div, ListaBeneficios, ListaFamiliares) {
     $('#' + div + '').html('');
@@ -164,7 +176,6 @@ class Voucher {
       str += '             <th class="text-center">Nombre</th>';
       str += '             <th class="text-center">Nacimiento</th>';
       str += '             <th class="text-center">Nro. Documento</th>';
-      // str += '             <th class="text-center">Edad</th>';
       str += '             <th class="text-center">Codigo Beneficio</th>';
       str += '         </tr>';
       str += '     </thead>';
@@ -174,7 +185,6 @@ class Voucher {
         str += '        <td class="text-left pl-1"> ' + item.ObjFamiliar.ApellidoNombre + '</td>';
         str += '        <td class="text-center"> ' + LongToDateString(item.ObjFamiliar.FechaNacimiento) + '</td>';
         str += '        <td class="text-center"> ' + Right('00000000' + item.ObjFamiliar.NroDocumento, 8) + '</td>';
-        // str += '        <td class="text-right pr-4"> </td>';
         str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
         str += '    </tr>';
       }
@@ -183,7 +193,52 @@ class Voucher {
     }
     return $('#' + div + '').html(str);
   }
-
+  static async ArmarGrillaImpresionString(ListaBeneficios, ListaFamiliares) {
+    let ListaImpresion = [];
+    let f = 0;
+    let Impresion;
+    while (f <= ListaFamiliares.length - 1) {
+      let b = 0;
+      while (b <= ListaBeneficios.length - 1) {
+        if (ListaBeneficios[b].IdFamiliar == ListaFamiliares[f].IdEntidad) {
+          Impresion = [];
+          Impresion.ApellidoNombre = ListaFamiliares[f].ApellidoNombre;
+          Impresion.FechaNacimiento = ListaFamiliares[f].FechaNacimiento;
+          Impresion.NroDocumento = ListaFamiliares[f].NroDocumento;
+          Impresion.Edad = ListaFamiliares[f].Edad;
+          Impresion.Codigo = ListaBeneficios[b].Codigo;
+          ListaImpresion.push(Impresion);
+        }
+        b++;
+      }
+      f++;
+    }
+    if (ListaImpresion.length > 0) {
+      str += ' <table class="table table-bordered">';
+      str += '     <thead>';
+      str += '         <tr class="bg-primary text-light">';
+      str += '             <th class="text-center">Nombre</th>';
+      str += '             <th class="text-center">Nacimiento</th>';
+      str += '             <th class="text-center">Nro. Documento</th>';
+      str += '             <th class="text-center">Edad</th>';
+      str += '             <th class="text-center">Codigo Beneficio</th>';
+      str += '         </tr>';
+      str += '     </thead>';
+      str += '     <tbody>';
+      for (let item of ListaImpresion) {
+        str += '    <tr>';
+        str += '        <td class="text-left pl-1"> ' + item.ApellidoNombre + '</td>';
+        str += '        <td class="text-center"> ' + LongToDateString(item.FechaNacimiento) + '</td>';
+        str += '        <td class="text-center"> ' + Right('00000000' + item.NroDocumento, 8) + '</td>';
+        str += '        <td class="text-right pr-4"> ' + item.Edad + '</td>';
+        str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
+        str += '    </tr>';
+      }
+      str += '     <t/body>';
+      str += ' </table>';
+    }
+    return (str);
+  }
 }
 function llenarEntidadVoucher(entidad) {
   let objResult = new Voucher();

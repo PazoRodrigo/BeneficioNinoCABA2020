@@ -30,10 +30,12 @@ $("body").on("click", "#BtnMenuReporteInscripciones", async function () {
     try {
         ContenidoOcultarTodo();
         $("#TituloContenido").text('Reporte de Inscripciones');
+        spinner();
         let ListaImpresion = await Voucher.TraerTodos();
         $("#LblCantidadRegistros").text(ListaImpresion.length - 1);
         await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', ListaImpresion);
         $("#divReporteInscripciones").css('display', 'block');
+        spinnerClose();
     } catch (error) {
         spinnerClose();
         alertInfo(error);
@@ -60,7 +62,7 @@ $("body").on("click", "#BtnMenuReporteEtiquetasEntregas", async function () {
     }
 });
 
-//Reimpresion
+//BtnMenuReimpresion
 function LimpiarReimpresion() {
     _ListaBeneficios = [];
     _ListaFamiliares = [];
@@ -177,3 +179,4 @@ async function ImprimirVoucher() {
         alertAlerta(err);
     }
 }
+//BtnMenuReporteInscripciones

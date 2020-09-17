@@ -264,7 +264,7 @@ Namespace DataAccessLibrary
         Const storeAlta As String = "p_Familiar_Alta"
         Const storeBaja As String = "p_Familiar_Baja"
         Const storeModifica As String = "p_Familiar_Modifica"
-        Const storeTraerUnoXId As String = "p_Familiar_TraerUnoXId"
+        Const storeTraerUnoXId As String = "p_Familiar_TraerUno"
         Const storeTraerTodos As String = "p_Familiar_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Familiar_TraerTodosActivos"
         Const storeTraerTodosXTitular As String = "p_Familiar_getAllByid_afiliado"
@@ -330,7 +330,7 @@ Namespace DataAccessLibrary
             Dim store As String = storeTraerUnoXId
             Dim result As New Familiar
             Dim pa As New parametrosArray
-            pa.add("@id", id)
+            pa.add("@id_Familiar", id)
             Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
@@ -410,9 +410,9 @@ Namespace DataAccessLibrary
                     entidad.IdEntidad = CInt(dr.Item("id_familiar"))
                 End If
             End If
-            If dr.Table.Columns.Contains("IdAfiliadoTitular") Then
-                If dr.Item("IdAfiliadoTitular") IsNot DBNull.Value Then
-                    entidad.IdAfiliadoTitular = CInt(dr.Item("IdAfiliadoTitular"))
+            If dr.Table.Columns.Contains("id_afiliado") Then
+                If dr.Item("id_afiliado") IsNot DBNull.Value Then
+                    entidad.IdAfiliadoTitular = CInt(dr.Item("id_afiliado"))
                 End If
             End If
             If dr.Table.Columns.Contains("parentesco") Then

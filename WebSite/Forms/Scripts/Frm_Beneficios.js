@@ -124,12 +124,14 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
             i++;
         }
         await Voucher.Guardar(_ListaBeneficios, _TempObjDomicilio);
-        // let l = _ListaVouchers;
         await Voucher.ArmarGrilla(
             "GrillaBeneficiariosImpresion",
             _ListaVouchers,
             _ListaFamiliares
         );
+        // $("#DivMailEnviado").css('display', 'none');
+        // await Voucher.EnviarEMail(_ObjTitular.IdEntidad)
+        // $("#DivMailEnviado").css('display', 'block');
         await ImprimirVoucher();
         spinnerClose();
         LimpiarFormulario();
@@ -164,7 +166,6 @@ async function ImprimirVoucher() {
                 "Desbloquee las ventanas emergentes para imprimir por favor"
             );
         }
-
         spinnerClose();
     } catch (err) {
         spinnerClose();

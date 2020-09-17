@@ -35,8 +35,8 @@
     <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200904"></script>
     <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200904"></script>
     <script>
-        var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
-        //var ApiURL = "http://localhost:64802/api";
+      var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
+      //var ApiURL = "http://localhost:64802/api";
       $("body").on("keypress", "input[type=text]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
@@ -85,7 +85,7 @@
                 >
               </div>
             </div>
-            <div class="row mt-2 justify-content-center" style="display:none;">
+            <div class="row mt-2 justify-content-center" style="display: none">
               <div class="col-9">
                 <a
                   href="#"
@@ -95,7 +95,7 @@
                 >
               </div>
             </div>
-            <div class="row mt-2 justify-content-center" style="display:none;">
+            <div class="row mt-2 justify-content-center" style="display: none">
               <div class="col-9">
                 <a
                   href="#"
@@ -198,6 +198,25 @@
             </div>
             <div id="divReporteInscripciones" style="display: none">
               <div class="row justify-content-end mb-1">
+                <!-- <div class="col-2 text-right">Buscador por C.P.:</div>
+                <div class="col-2 mr-1">
+                  <input
+                    id="Txt_BuscadorCodigoPostal"
+                    type="text"
+                    class="form-control text-center"
+                    placeholder="Cod. Pos."
+                    maxlength="4"
+                    onkeypress="return jsSoloNumeros(event)"
+                  />
+                </div>
+                <div class="col-1 mr-2">
+                  <a
+                    href="#"
+                    id="BtnBuscarInscripcionesXCP"
+                    class="btn btn-success"
+                    >Buscar</a
+                  >
+                </div> -->
                 <div class="col-4 bg-info text-light text-right">
                   Cantidad de Inscripciones:
                   <span id="LblCantidadRegistros"></span>
