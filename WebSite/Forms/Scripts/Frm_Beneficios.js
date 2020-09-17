@@ -129,9 +129,9 @@ $("body").on("click", "#BtnGenerarVoucher", async function () {
             _ListaVouchers,
             _ListaFamiliares
         );
-        // $("#DivMailEnviado").css('display', 'none');
-        // await Voucher.EnviarEMail(_ObjTitular.IdEntidad)
-        // $("#DivMailEnviado").css('display', 'block');
+        $("#DivMailEnviado").css('display', 'none');
+        await Voucher.EnviarEMail(_ObjTitular.IdEntidad)
+        $("#DivMailEnviado").css('display', 'block');
         await ImprimirVoucher();
         spinnerClose();
         LimpiarFormulario();

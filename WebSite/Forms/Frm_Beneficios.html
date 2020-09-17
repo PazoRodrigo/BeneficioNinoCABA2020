@@ -58,8 +58,8 @@
     <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200904"></script>
     <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200904"></script>
     <script>
-      //var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
-      var ApiURL = "http://localhost:64802/api";
+      var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
+      //var ApiURL = "http://localhost:64802/api";
       $("body").on("keypress", "input[type=text]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
@@ -323,7 +323,7 @@
                 <div class="row justify-content-end" style="margin-top: 20px">
                   <div
                     id="DivMailEnviado"
-                    class="col-4 text-light text-center bg-success"
+                    class="col-4 text-light text-center bg-success rounded"
                     style="display: none"
                   >
                     Se ha enviado un Correo con los Vouchers a la dirección de

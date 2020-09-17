@@ -129,7 +129,9 @@ Namespace Entidad
             Try
                 Dim Lista As List(Of Voucher) = DAL_Voucher.TraerTodosPorTitular(IdAfiliado)
                 If Lista.Count > 0 Then
-                    Dim str As String = ""
+                    Dim str As String = "Gracias por participar del evento del Día de la Niñez con UTEDyC Seccional Capital Federal" & vbCrLf
+                    str += "Te enviamos los comprobantes de participacióm que seleccionaste desde nuestra plataforma." & vbCrLf
+                    str += "No es necesario que los imprimas." & vbCrLf & vbCrLf
                     Dim i As Integer = 0
                     While i <= Lista.Count - 1
                         Dim item As New Familiar(Lista(i).IdFamiliar)
@@ -137,11 +139,11 @@ Namespace Entidad
                         i += 1
                     End While
                     Dim DireccionEnvio As String = Lista(0).CorreoElectronico
-                    Dim DireccionEnvioPrueba As String = "pazo.rodrigo@gmail.com"
+                    'Dim DireccionEnvio As String = "pazo.rodrigo@gmail.com"
                     Dim DesdeCuenta As String = ConfigurationManager.AppSettings("smtpFrom").ToString
                     Dim DesdePass As String = ConfigurationManager.AppSettings("smtpPassword").ToString
                     Using Mail As New MailMessage()
-                        str += vbCrLf & "Saludos."
+                        str += vbCrLf & vbCrLf & "Atentamente." & vbCrLf & "Equipo de Sistemas UTEDyC Capital."
                         Dim Smtp = New SmtpClient
                         Mail.From = New MailAddress(DesdeCuenta)
                         Mail.To.Add(New MailAddress(DireccionEnvio))

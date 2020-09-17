@@ -141,6 +141,9 @@ $("body").on("click", "#BtnReimprimirVoucher", async function () {
             _ListaBeneficios,
             _ListaFamiliares
         );
+        $("#DivMailEnviado").css('display', 'none');
+        await Voucher.EnviarEMail(_ObjTitular.IdEntidad)
+        $("#DivMailEnviado").css('display', 'block');
         await ImprimirVoucher();
         spinnerClose();
     } catch (error) {
