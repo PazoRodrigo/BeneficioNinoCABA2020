@@ -130,7 +130,7 @@ Namespace Entidad
                 Dim Lista As List(Of Voucher) = DAL_Voucher.TraerTodosPorTitular(IdAfiliado)
                 If Lista.Count > 0 Then
                     Dim str As String = "Gracias por participar del evento del Día de la Niñez con UTEDyC Seccional Capital Federal" & vbCrLf
-                    str += "Te enviamos los comprobantes de participacióm que seleccionaste desde nuestra plataforma." & vbCrLf
+                    str += "Te enviamos los comprobantes de participación que seleccionaste desde nuestra plataforma." & vbCrLf
                     str += "No es necesario que los imprimas." & vbCrLf & vbCrLf
                     Dim i As Integer = 0
                     While i <= Lista.Count - 1
