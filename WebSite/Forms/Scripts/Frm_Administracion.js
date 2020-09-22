@@ -4,6 +4,7 @@ var _ListaFamiliares = [];
 var _ListaBeneficios = [];
 var _ListaVouchers = [];
 var _ListaImpresion = [];
+var _ListaImpresionTitulares = [];
 
 function ContenidoOcultarTodo() {
     $("#TituloContenido").text('');
@@ -34,12 +35,12 @@ $("body").on("click", "#BtnMenuReporteInscripciones", async function () {
         $("#TituloContenido").text('Reporte de Inscripciones');
         spinner();
         _ListaImpresion = await Voucher.TraerTodos();
-        $("#LblCantidadRegistros").text(_ListaImpresion.length - 1);
+        $("#LblCantidadRegistros").text(_ListaImpresion.length);
         await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', _ListaImpresion);
-        $("#divReporteInscripciones").css('display', 'block');
         $("#Txt_BuscadorCodigoPostal").val('');
         $("#LblCantidadRegistrosCP").text('');
         $("#DivRegistrosXCP").css('visibility', 'hidden');
+        $("#divReporteInscripciones").css('display', 'block');
         spinnerClose();
         $("#Txt_BuscadorCodigoPostal").focus();
     } catch (error) {
@@ -51,7 +52,22 @@ $("body").on("click", "#BtnMenuReporteTitulares", async function () {
     try {
         ContenidoOcultarTodo();
         $("#TituloContenido").text('Reporte de Titulares');
-        $("#divReporteTirulares").css('display', 'block');
+        spinner();
+        _ListaImpresionTitulares = await Titular.TraerTodosConVoucher();
+        let TempCantidadBeneficiarios = 0;
+        let i = 0;
+        while (i <= _ListaImpresionTitulares.length - 1) {
+            TempCantidadBeneficiarios += _ListaImpresionTitulares[i].Beneficios;
+            i++;
+        }
+        $("#LblCantidadRegistrosTitulares").text(_ListaImpresionTitulares.length);
+        $("#LblCantidadRegistrosTitularesBeneficiarios").text(TempCantidadBeneficiarios);
+        await Titular.ArmarGrillaImpresion('GrillaReporteTitulares', _ListaImpresionTitulares);
+        $("#Txt_BuscadorCUIT").val('');
+        $("#LblCantidadRegistrosTitularesCUIT").text('');
+        $("#DivRegistrosXCUIT").css('visibility', 'hidden');
+        $("#divReporteTitulares").css('display', 'block');
+        spinnerClose();
     } catch (error) {
         spinnerClose();
         alertInfo(error);
@@ -215,6 +231,31 @@ $("body").on("click", "#BtnBuscarInscripcionesXCP", async function () {
         await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', ListaImpresion);
         $("#LblCantidadRegistrosCP").text(ListaImpresion.length);
         $("#DivRegistrosXCP").css('visibility', 'visible');
+        spinnerClose();
+    } catch (error) {
+        spinnerClose();
+        alertInfo(
+            error
+        );
+    }
+});
+//BtnMenuReporteTitulares
+$("body").on("click", "#BtnBuscarTitularesXCUIT", async function () {
+    try {
+        let Buscado = $("#Txt_BuscadorCUIT").val();
+        if (parseInt(Buscado.length) != 11) {
+            throw 'El CUIT debe tener 11 dígitos';
+        }
+        spinner();
+        let ListaImpresion = $.grep(_ListaImpresionTitulares, function (entidad, index) {
+            return entidad.CUITEmpresa == Buscado;
+        });
+        if (ListaImpresion?.length == 0) {
+            throw 'No existen titulares para ese CUIT';
+        }
+        await Titular.ArmarGrillaImpresion('GrillaReporteTitulares', ListaImpresion);
+        $("#LblCantidadRegistrosTitularesCUIT").text(ListaImpresion.length);
+        $("#DivRegistrosXCUIT").css('visibility', 'visible');
         spinnerClose();
     } catch (error) {
         spinnerClose();

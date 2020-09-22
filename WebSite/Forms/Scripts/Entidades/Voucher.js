@@ -175,6 +175,7 @@ class Voucher {
       str += '         <tr class="bg-primary text-light">';
       str += '             <th class="text-center">Nombre</th>';
       str += '             <th class="text-center">Nacimiento</th>';
+      str += '             <th class="text-center">Edad</th>';
       str += '             <th class="text-center">Nro. Documento</th>';
       str += '             <th class="text-center">Codigo Beneficio</th>';
       str += '         </tr>';
@@ -182,8 +183,9 @@ class Voucher {
       str += '     <tbody>';
       for (let item of ListaBeneficios) {
         str += '    <tr>';
-        str += '        <td class="text-left pl-1"> ' + item.ObjFamiliar.ApellidoNombre + '</td>';
+        str += '        <td class="text-left pl-1"> ' + Left(item.ObjFamiliar.ApellidoNombre, 30) + '</td>';
         str += '        <td class="text-center"> ' + LongToDateString(item.ObjFamiliar.FechaNacimiento) + '</td>';
+        str += '        <td class="text-right pr-4"> ' + CalcularEdad(Date_LongToDate(item.ObjFamiliar.FechaNacimiento, '/')) + '</td>';
         str += '        <td class="text-center"> ' + Right('00000000' + item.ObjFamiliar.NroDocumento, 8) + '</td>';
         str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
         str += '    </tr>';

@@ -107,6 +107,13 @@ function CantCaracteresRestantes(CantTotal, Texto) {
     return (valor = CantTotal - Texto.length);
 }
 
+function CalcularEdad(FechaNacimiento) {
+    let FNac = new Date(FechaNacimiento);
+    ageDifMs = Date.now() - FNac.getTime();
+    var ageDate = new Date(ageDifMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
 function MonedaDecimales2(valor) {
     let result = "$ 0.00";
     if (valor !== undefined) {
@@ -181,8 +188,8 @@ async function validarEmail(email) {
     }
     return result;
 }
-function esImpar(num) { 
-    return num % 2; 
+function esImpar(num) {
+    return num % 2;
 }
 function validarFecha(strFecha) {
     console.log(strFecha);

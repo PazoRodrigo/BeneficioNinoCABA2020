@@ -30,6 +30,11 @@ Namespace Entidad
         Public Property NroDocumento() As Integer = 0
         Public Property IdSeccional() As Integer = 0
 
+        Public Property CUIL() As Long = 0
+        Public Property CUITEmpresa() As Long = 0
+        Public Property RazonSocial() As String = ""
+        Public Property Beneficios() As Integer = 0
+
         Public Property ObjDomicilio As Domicilio
 #End Region
 #Region " Lazy Load "
@@ -51,12 +56,12 @@ Namespace Entidad
         Sub New(ByVal id As Integer)
             Dim objImportar As Titular = TraerUno(id)
             ' DBE
-            idUsuarioAlta = objImportar.idUsuarioAlta
-            idUsuarioBaja = objImportar.idUsuarioBaja
-            idUsuarioModifica = objImportar.idUsuarioModifica
+            IdUsuarioAlta = objImportar.IdUsuarioAlta
+            IdUsuarioBaja = objImportar.IdUsuarioBaja
+            IdUsuarioModifica = objImportar.IdUsuarioModifica
             IdMotivoBaja = objImportar.IdMotivoBaja
-            fechaAlta = objImportar.fechaAlta
-            fechaBaja = objImportar.FechaBaja
+            FechaAlta = objImportar.FechaAlta
+            FechaBaja = objImportar.FechaBaja
             ' Entidad
             IdEntidad = objImportar.IdEntidad
             NroAfiliado = objImportar.NroAfiliado
@@ -123,6 +128,14 @@ Namespace Entidad
             Result.Add(TraerUnoXNroDocumento(NroDocumento).ToDTO)
             Return Result
         End Function
+        Public Shared Function TraerTodosConVoucher() As List(Of DTO.DTO_Titular)
+            Dim L As List(Of Titular) = DAL_Titular.TraerTodosConVoucher()
+            Dim result As New List(Of DTO.DTO_Titular)
+            For Each item As Titular In L
+                result.Add(item.ToDTO)
+            Next
+            Return result
+        End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -147,6 +160,10 @@ Namespace Entidad
             result.ApellidoNombre = ApellidoNombre
             result.NroDocumento = NroDocumento
             result.IdSeccional = IdSeccional
+            result.CUIL = CUIL
+            result.CUITEmpresa = CUITEmpresa
+            result.RazonSocial = RazonSocial
+            result.Beneficios = Beneficios
             If ObjDomicilio IsNot Nothing Then
                 result.ObjDomicilio = ObjDomicilio.ToDTO
             End If
@@ -161,6 +178,7 @@ Namespace Entidad
             End If
             Return ListaResult
         End Function
+
         'Public Shared Sub refresh()
         '    _Todos = DAL_Titular.TraerTodos
         'End Sub
@@ -169,15 +187,15 @@ Namespace Entidad
 #Region " Métodos Privados "
         ' ABM
         Private Sub ValidarAlta()
-            ValidarUsuario(Me.idUsuarioAlta)
+            ValidarUsuario(Me.IdUsuarioAlta)
             ValidarCampos()
             ValidarNoDuplicados()
         End Sub
         Private Sub ValidarBaja()
-            ValidarUsuario(Me.idUsuarioBaja)
+            ValidarUsuario(Me.IdUsuarioBaja)
         End Sub
         Private Sub ValidarModifica()
-            ValidarUsuario(Me.idUsuarioModifica)
+            ValidarUsuario(Me.IdUsuarioModifica)
             ValidarCampos()
             ValidarNoDuplicados()
         End Sub
@@ -240,6 +258,11 @@ Namespace DTO
         Public Property NroDocumento() As Integer = 0
         Public Property IdSeccional() As Integer = 0
 
+        Public Property CUIL() As Long = 0
+        Public Property CUITEmpresa() As Long = 0
+        Public Property RazonSocial() As String = ""
+        Public Property Beneficios() As Integer = 0
+
         Public Property ObjDomicilio As DTO.DTO_Domicilio
 #End Region
     End Class ' DTO_Titular
@@ -254,17 +277,18 @@ Namespace DataAccessLibrary
         Const storeAlta As String = "p_Titular_Alta"
         Const storeBaja As String = "p_Titular_Baja"
         Const storeModifica As String = "p_Titular_Modifica"
-        Const storeTraerUnoXId As String = "p_Titular_TraerUnoXId"
+        Const storeTraerUnoXId As String = "p_Representado_TraerUnoXId"
         Const storeTraerTodos As String = "p_Titular_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Titular_TraerTodosActivos"
         Const storeTraerUnoXNroDocumento As String = "p_Representado_TraerUnoXNroDocumento"
+        Const storeTraerTodosConVoucher As String = "p_VoucherDiaDelNino2020_TraerTodosTitularesConVoucher"
 #End Region
 #Region " Métodos Públicos "
         ' ABM
         Public Shared Sub Alta(ByVal entidad As Titular)
             Dim store As String = storeAlta
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioAlta", entidad.idUsuarioAlta)
+            pa.add("@idUsuarioAlta", entidad.IdUsuarioAlta)
             ' Variable Numérica
             '	If entidad.codPostal <> 0 Then
             '		pa.add("@VariableNumero", entidad.VariableNumero)
@@ -290,15 +314,15 @@ Namespace DataAccessLibrary
         Public Shared Sub Baja(ByVal entidad As Titular)
             Dim store As String = storeBaja
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioBaja", entidad.idUsuarioBaja)
-            pa.add("@id", entidad.idEntidad)
+            pa.add("@idUsuarioBaja", entidad.IdUsuarioBaja)
+            pa.add("@id", entidad.IdEntidad)
             Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
         End Sub
         Public Shared Sub Modifica(ByVal entidad As Titular)
             Dim store As String = storeModifica
             Dim pa As New parametrosArray
-            pa.add("@idUsuarioModifica", entidad.idUsuarioModifica)
-            pa.add("@id", entidad.idEntidad)
+            pa.add("@idUsuarioModifica", entidad.IdUsuarioModifica)
+            pa.add("@id", entidad.IdEntidad)
             ' Variable Numérica
             '	If entidad.codPostal <> 0 Then
             '		pa.add("@VariableNumero", entidad.VariableNumero)
@@ -325,8 +349,6 @@ Namespace DataAccessLibrary
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
-                    ElseIf dt.Rows.Count = 0 Then
-                        result = Nothing
                     End If
                 End If
             End Using
@@ -360,6 +382,20 @@ Namespace DataAccessLibrary
             End Using
             Return result
         End Function
+        Friend Shared Function TraerTodosConVoucher() As List(Of Titular)
+            Dim store As String = storeTraerTodosConVoucher
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of Titular)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidad(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
+
 #End Region
 #Region " Métodos Privados "
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Titular
@@ -367,17 +403,17 @@ Namespace DataAccessLibrary
             ' DBE
             If dr.Table.Columns.Contains("idUsuarioAlta") Then
                 If dr.Item("idUsuarioAlta") IsNot DBNull.Value Then
-                    entidad.idUsuarioAlta = CInt(dr.Item("idUsuarioAlta"))
+                    entidad.IdUsuarioAlta = CInt(dr.Item("idUsuarioAlta"))
                 End If
             End If
             If dr.Table.Columns.Contains("idUsuarioBaja") Then
                 If dr.Item("idUsuarioBaja") IsNot DBNull.Value Then
-                    entidad.idUsuarioBaja = CInt(dr.Item("idUsuarioBaja"))
+                    entidad.IdUsuarioBaja = CInt(dr.Item("idUsuarioBaja"))
                 End If
             End If
             If dr.Table.Columns.Contains("idUsuarioModifica") Then
                 If dr.Item("idUsuarioModifica") IsNot DBNull.Value Then
-                    entidad.idUsuarioModifica = CInt(dr.Item("idUsuarioModifica"))
+                    entidad.IdUsuarioModifica = CInt(dr.Item("idUsuarioModifica"))
                 End If
             End If
             If dr.Table.Columns.Contains("IdMotivoBaja") Then
@@ -387,7 +423,7 @@ Namespace DataAccessLibrary
             End If
             If dr.Table.Columns.Contains("fechaAlta") Then
                 If dr.Item("fechaAlta") IsNot DBNull.Value Then
-                    entidad.fechaAlta = CDate(dr.Item("fechaAlta"))
+                    entidad.FechaAlta = CDate(dr.Item("fechaAlta"))
                 End If
             End If
             If dr.Table.Columns.Contains("FEC_BAJA") Then
@@ -419,6 +455,26 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("sec") Then
                 If dr.Item("sec") IsNot DBNull.Value Then
                     entidad.IdSeccional = CInt(dr.Item("sec"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("CUIL") Then
+                If dr.Item("CUIL") IsNot DBNull.Value Then
+                    entidad.CUIL = CLng(dr.Item("CUIL"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("CUIT") Then
+                If dr.Item("CUIT") IsNot DBNull.Value Then
+                    entidad.CUITEmpresa = CLng(dr.Item("CUIT"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Razon_Social") Then
+                If dr.Item("Razon_Social") IsNot DBNull.Value Then
+                    entidad.RazonSocial = dr.Item("Razon_Social").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Beneficios") Then
+                If dr.Item("Beneficios") IsNot DBNull.Value Then
+                    entidad.Beneficios = CInt(dr.Item("Beneficios"))
                 End If
             End If
             Dim ObjDomicilio As New Domicilio

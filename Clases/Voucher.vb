@@ -121,18 +121,17 @@ Namespace Entidad
             For Each item As Voucher In L
                 result.Add(item.ToDTO)
             Next
-            'If result Is Nothing Or result.Count = 0 Then
-            '    Throw New Exception("No existen vouchers para el grupo")
-            'End If
             Return result
         End Function
         Public Shared Sub EnviarEMail(IdAfiliado As Integer)
             Try
                 Dim Lista As List(Of Voucher) = DAL_Voucher.TraerTodosPorTitular(IdAfiliado)
+                Dim ObjTitular As New Titular(IdAfiliado)
                 If Lista.Count > 0 Then
                     Dim str As String = "Gracias por participar del evento del Día de la Niñez con UTEDyC Seccional Capital Federal" & vbCrLf
                     str += "Te enviamos los comprobantes de participación que seleccionaste desde nuestra plataforma." & vbCrLf
-                    str += "No es necesario que los imprimas." & vbCrLf & vbCrLf
+                    str += "No es necesario que los imprimas." & vbCrLf & vbCrLf & vbCrLf
+                    str += ObjTitular.ApellidoNombre & ". DNI: " & ObjTitular.NroDocumento & vbCrLf & vbCrLf
                     Dim i As Integer = 0
                     While i <= Lista.Count - 1
                         Dim item As New Familiar(Lista(i).IdFamiliar)
@@ -377,6 +376,7 @@ Namespace DataAccessLibrary
             End Using
             Return listaResult
         End Function
+
 
 #End Region
 #Region " Métodos Privados "

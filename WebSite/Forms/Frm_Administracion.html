@@ -8,6 +8,7 @@
       rel="shortcut icon"
       type="image/x-icon"
     />
+    <meta http-equiv="content-type" content="text/plain; charset=UTF-8" />
     <link href="../Styles/bootstrap.css" rel="stylesheet" />
     <link href="../Styles/jquery.steps.css" rel="stylesheet" />
   </head>
@@ -20,20 +21,20 @@
     </noscript>
     <!-- jQuery library -->
     <script src="../Scripts/jquery-3.5.1.js"></script>
-    <script src="../Scripts/LUM.js?version=20200922"></script>
-    <script src="../Scripts/Conexion.js?version=20200922"></script>
+    <script src="../Scripts/LUM.js?version=20200922_"></script>
+    <script src="../Scripts/Conexion.js?version=20200922_"></script>
     <script src="../Scripts/jquery.blockUI.js"></script>
     <script src="../Scripts/jquery-ui.js"></script>
     <script src="../Scripts/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="../Scripts/jquery.steps.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <!-- Entidades -->
-    <script src="../Forms/Scripts/Entidades/Titular.js?version=20200922"></script>
-    <script src="../Forms/Scripts/Entidades/Familiar.js?version=20200922"></script>
-    <script src="../Forms/Scripts/Entidades/Voucher.js?version=20200922"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Domicilio.js?version=20200922"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200922"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Titular.js?version=20200922_"></script>
+    <script src="../Forms/Scripts/Entidades/Familiar.js?version=20200922_"></script>
+    <script src="../Forms/Scripts/Entidades/Voucher.js?version=20200922_"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Domicilio.js?version=20200922_"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200922_"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200922_"></script>
     <script>
       var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
       //var ApiURL = "http://localhost:64802/api";
@@ -43,6 +44,26 @@
       $("body").on("keypress", "input[type=email]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
+    </script>
+    <script type="text/javascript">
+      var tableToExcel = (function () {
+        var uri = "data:application/vnd.ms-excel;base64,",
+          template =
+            '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>',
+          base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)));
+          },
+          format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+              return c[p];
+            });
+          };
+        return function (table, name) {
+          if (!table.nodeType) table = document.getElementById(table);
+          var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
+          window.location.href = uri + base64(format(template, ctx));
+        };
+      })();
     </script>
     <div class="container-fluid">
       <div class="row fixed-top">
@@ -85,7 +106,7 @@
                 >
               </div>
             </div>
-            <div class="row mt-2 justify-content-center" style="display: none">
+            <div class="row mt-2 justify-content-center">
               <div class="col-9">
                 <a
                   href="#"
@@ -105,6 +126,7 @@
                 >
               </div>
             </div>
+
             <div class="row mt-2 justify-content-center" style="display: none">
               <div class="col-9">
                 <a
@@ -258,10 +280,75 @@
               </div>
               <div
                 id="GrillaReporteInscripciones"
-                style="max-height: 400px; overflow-y: scroll"
+                style="max-height: 380px; overflow-y: scroll"
               ></div>
+              <a
+                id="BtnExcelInscripciones"
+                href="#"
+                class="btn btn-block btn-info"
+                onclick="tableToExcel('GrillaReporteInscripciones', 'Reporte Titulares')"
+              >
+                Exportar a EXCEL</a
+              >
             </div>
-            <div id="divReporteTitulares" style="display: none"></div>
+            <div id="divReporteTitulares" style="display: none">
+              <div class="row mb-1">
+                <div class="col-1 text-right">CUIT :</div>
+                <div class="col-2 mr-1">
+                  <input
+                    id="Txt_BuscadorCUIT"
+                    type="text"
+                    class="form-control text-center"
+                    placeholder="CUIT"
+                    autocomplete="off"
+                    maxlength="11"
+                    onkeypress="return jsSoloNumeros(event)"
+                  />
+                </div>
+                <div class="col-1 mr-2">
+                  <a
+                    href="#"
+                    id="BtnBuscarTitularesXCUIT"
+                    class="btn btn-success"
+                    >Buscar</a
+                  >
+                </div>
+                <div class="col-7 bg-info text-light text-right">
+                  <div class="row">
+                    <div
+                      class="col-4"
+                      id="DivRegistrosXCUIT"
+                      style="visibility: hidden"
+                    >
+                      Registros por CUIT:
+                      <span id="LblCantidadRegistrosTitularesCUIT"></span>
+                    </div>
+                    <div class="col-34">
+                      Titulares:
+                      <span id="LblCantidadRegistrosTitulares"></span>
+                    </div>
+                    <div class="col-4">
+                      Beneficiarios:
+                      <span
+                        id="LblCantidadRegistrosTitularesBeneficiarios"
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="GrillaReporteTitulares"
+                style="max-height: 380px; overflow-y: scroll"
+              ></div>
+              <a
+                id="BtnExcelTitulares"
+                href="#"
+                class="btn btn-block btn-info"
+                onclick="tableToExcel('GrillaReporteTitulares', 'Reporte Titulares')"
+              >
+                Exportar a EXCEL</a
+              >
+            </div>
             <div id="divReporteEntregados" style="display: none"></div>
             <div id="divReporteEtiquetasEntregas" style="display: none"></div>
           </div>
@@ -308,6 +395,6 @@
         </div>
       </div>
     </div>
-    <script src="Scripts/Frm_Administracion.js?version=20200922"></script>
+    <script src="Scripts/Frm_Administracion.js?version=20200922_"></script>
   </body>
 </html>

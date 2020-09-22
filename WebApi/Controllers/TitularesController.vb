@@ -19,6 +19,16 @@ Namespace Controllers
                 Return Content(HttpStatusCode.InternalServerError, ex.Message)
             End Try
         End Function
-
+        <HttpGet>
+        <ActionName("TraerTodosConVoucher")>
+        <ResponseType(GetType(List(Of DTO.DTO_Titular)))>
+        Public Function TraerTodosConVoucher() As IHttpActionResult
+            Try
+                Dim result As List(Of DTO.DTO_Titular) = Entidad.Titular.TraerTodosConVoucher()
+                Return Ok(result)
+            Catch ex As Exception
+                Return Content(HttpStatusCode.InternalServerError, ex.Message)
+            End Try
+        End Function
     End Class
 End Namespace
