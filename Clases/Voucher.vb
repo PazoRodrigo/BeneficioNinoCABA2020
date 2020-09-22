@@ -19,6 +19,7 @@ Namespace Entidad
         Public Property IdFamiliar() As Integer = 0
         Public Property Codigo() As String = ""
         Public Property Confirmado() As Integer = 0
+        Public Property FechaConfirmado() As Date?
         Public Property CodigoPostal() As Integer = 0
         Public Property IdLocalidad() As Integer = 0
         Public Property Domicilio() As String = ""
@@ -189,9 +190,9 @@ Namespace Entidad
             result.Codigo = Codigo
             result.Fecha = LngFecha
             result.ObjFamiliar = ObjFamiliar.ToDTO
-            'result.CodigoPostal = CodigoPostal
-            'result.IdLocalidad = IdLocalidad
-            'result.Domicilio = Domicilio
+            result.CodigoPostal = CodigoPostal
+            result.IdLocalidad = IdLocalidad
+            result.Domicilio = Domicilio
             Return result
         End Function
         'Public Shared Sub refresh()
@@ -453,6 +454,27 @@ Namespace DataAccessLibrary
                     entidad.Confirmado = CInt(dr.Item("confirmado"))
                 End If
             End If
+            If dr.Table.Columns.Contains("fechaConfirmado") Then
+                If dr.Item("fechaConfirmado") IsNot DBNull.Value Then
+                    entidad.fechaConfirmado = CDate(dr.Item("fechaConfirmado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("cp") Then
+                If dr.Item("cp") IsNot DBNull.Value Then
+                    entidad.CodigoPostal = CInt(dr.Item("cp"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("domicilio") Then
+                If dr.Item("domicilio") IsNot DBNull.Value Then
+                    entidad.Domicilio = dr.Item("domicilio").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("id_localidad") Then
+                If dr.Item("id_localidad") IsNot DBNull.Value Then
+                    entidad.IdLocalidad = CInt(dr.Item("id_localidad"))
+                End If
+            End If
+
             If dr.Table.Columns.Contains("CorreoElectronico") Then
                 If dr.Item("CorreoElectronico") IsNot DBNull.Value Then
                     entidad.CorreoElectronico = dr.Item("CorreoElectronico").ToString.Trim.ToUpper

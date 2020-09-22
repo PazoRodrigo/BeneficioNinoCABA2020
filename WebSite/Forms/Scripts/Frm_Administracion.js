@@ -3,12 +3,14 @@ var _ObjTitular;
 var _ListaFamiliares = [];
 var _ListaBeneficios = [];
 var _ListaVouchers = [];
+var _ListaImpresion = [];
 
 function ContenidoOcultarTodo() {
     $("#TituloContenido").text('');
     $("#LblCantidadRegistros").text('');
     $("#divReimpresionVoucher").css('display', 'none');
     $("#divReporteInscripciones").css('display', 'none');
+    $("#divReporteTitulares").css('display', 'none');
     $("#divReporteEntregados").css('display', 'none');
     $("#divReporteEtiquetasEntregas").css('display', 'none');
 
@@ -31,11 +33,25 @@ $("body").on("click", "#BtnMenuReporteInscripciones", async function () {
         ContenidoOcultarTodo();
         $("#TituloContenido").text('Reporte de Inscripciones');
         spinner();
-        let ListaImpresion = await Voucher.TraerTodos();
-        $("#LblCantidadRegistros").text(ListaImpresion.length - 1);
-        await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', ListaImpresion);
+        _ListaImpresion = await Voucher.TraerTodos();
+        $("#LblCantidadRegistros").text(_ListaImpresion.length - 1);
+        await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', _ListaImpresion);
         $("#divReporteInscripciones").css('display', 'block');
+        $("#Txt_BuscadorCodigoPostal").val('');
+        $("#LblCantidadRegistrosCP").text('');
+        $("#DivRegistrosXCP").css('visibility', 'hidden');
         spinnerClose();
+        $("#Txt_BuscadorCodigoPostal").focus();
+    } catch (error) {
+        spinnerClose();
+        alertInfo(error);
+    }
+});
+$("body").on("click", "#BtnMenuReporteTitulares", async function () {
+    try {
+        ContenidoOcultarTodo();
+        $("#TituloContenido").text('Reporte de Titulares');
+        $("#divReporteTirulares").css('display', 'block');
     } catch (error) {
         spinnerClose();
         alertInfo(error);
@@ -183,3 +199,27 @@ async function ImprimirVoucher() {
     }
 }
 //BtnMenuReporteInscripciones
+$("body").on("click", "#BtnBuscarInscripcionesXCP", async function () {
+    try {
+        let Buscado = $("#Txt_BuscadorCodigoPostal").val();
+        if (parseInt(Buscado.length) != 4) {
+            throw 'El Código Postal debe tener 4 dígitos';
+        }
+        spinner();
+        let ListaImpresion = $.grep(_ListaImpresion, function (entidad, index) {
+            return entidad.CodigoPostal == Buscado;
+        });
+        if (ListaImpresion?.length == 0) {
+            throw 'No existen beneficiarios para ese Código Postal';
+        }
+        await Voucher.ArmarGrillaImpresion('GrillaReporteInscripciones', ListaImpresion);
+        $("#LblCantidadRegistrosCP").text(ListaImpresion.length);
+        $("#DivRegistrosXCP").css('visibility', 'visible');
+        spinnerClose();
+    } catch (error) {
+        spinnerClose();
+        alertInfo(
+            error
+        );
+    }
+});

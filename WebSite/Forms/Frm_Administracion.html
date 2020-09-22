@@ -20,23 +20,23 @@
     </noscript>
     <!-- jQuery library -->
     <script src="../Scripts/jquery-3.5.1.js"></script>
-    <script src="../Scripts/LUM.js?version=20200917"></script>
-    <script src="../Scripts/Conexion.js?version=20200917"></script>
+    <script src="../Scripts/LUM.js?version=20200922"></script>
+    <script src="../Scripts/Conexion.js?version=20200922"></script>
     <script src="../Scripts/jquery.blockUI.js"></script>
     <script src="../Scripts/jquery-ui.js"></script>
     <script src="../Scripts/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="../Scripts/jquery.steps.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <!-- Entidades -->
-    <script src="../Forms/Scripts/Entidades/Titular.js?version=20200917"></script>
-    <script src="../Forms/Scripts/Entidades/Familiar.js?version=20200917"></script>
-    <script src="../Forms/Scripts/Entidades/Voucher.js?version=20200917"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Domicilio.js?version=20200917"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200917"></script>
-    <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200917"></script>
+    <script src="../Forms/Scripts/Entidades/Titular.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Familiar.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Voucher.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Domicilio.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Localidad.js?version=20200922"></script>
+    <script src="../Forms/Scripts/Entidades/Domicilio/Provincia.js?version=20200922"></script>
     <script>
-      //var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
-      var ApiURL = "http://localhost:64802/api";
+      var ApiURL = "http://www.utedyccapital.org.ar/webApi/api";
+      //var ApiURL = "http://localhost:64802/api";
       $("body").on("keypress", "input[type=text]", function (e) {
         $(this).val($(this).val().toUpperCase());
       });
@@ -82,6 +82,16 @@
                   id="BtnMenuReporteInscripciones"
                   class="btn btn-success btn-block"
                   >Reporte de Inscripciones</a
+                >
+              </div>
+            </div>
+            <div class="row mt-2 justify-content-center" style="display: none">
+              <div class="col-9">
+                <a
+                  href="#"
+                  id="BtnMenuReporteTitulares"
+                  class="btn btn-success btn-block"
+                  >Reporte de Titulares</a
                 >
               </div>
             </div>
@@ -207,15 +217,17 @@
               </div>
             </div>
             <div id="divReporteInscripciones" style="display: none">
-              <div class="row justify-content-end mb-1">
-                <!-- <div class="col-2 text-right">Buscador por C.P.:</div>
+              <div class="row mb-1">
+                <div class="col-1 text-right">Cod.Pos.:</div>
                 <div class="col-2 mr-1">
                   <input
                     id="Txt_BuscadorCodigoPostal"
                     type="text"
                     class="form-control text-center"
                     placeholder="Cod. Pos."
+                    autocomplete="off"
                     maxlength="4"
+                    style="width: 100px"
                     onkeypress="return jsSoloNumeros(event)"
                   />
                 </div>
@@ -226,18 +238,30 @@
                     class="btn btn-success"
                     >Buscar</a
                   >
-                </div> -->
-                <div class="col-4 bg-info text-light text-right">
-                  Cantidad de Inscripciones:
-                  <span id="LblCantidadRegistros"></span>
                 </div>
-                <div class="col-1"></div>
+                <div class="col-7 bg-info text-light text-right">
+                  <div class="row">
+                    <div
+                      class="col-6"
+                      id="DivRegistrosXCP"
+                      style="visibility: hidden"
+                    >
+                      Registros por C.P.:
+                      <span id="LblCantidadRegistrosCP"></span>
+                    </div>
+                    <div class="col-6">
+                      Total de Inscripciones:
+                      <span id="LblCantidadRegistros"></span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 id="GrillaReporteInscripciones"
                 style="max-height: 400px; overflow-y: scroll"
               ></div>
             </div>
+            <div id="divReporteTitulares" style="display: none"></div>
             <div id="divReporteEntregados" style="display: none"></div>
             <div id="divReporteEtiquetasEntregas" style="display: none"></div>
           </div>
@@ -284,6 +308,6 @@
         </div>
       </div>
     </div>
-    <script src="Scripts/Frm_Administracion.js?version=20200917"></script>
+    <script src="Scripts/Frm_Administracion.js?version=20200922"></script>
   </body>
 </html>

@@ -248,6 +248,9 @@ function llenarEntidadVoucher(entidad) {
   objResult.Codigo = entidad.Codigo;
   objResult.Confirmado = entidad.Confirmado;
   objResult.Fecha = entidad.Fecha;
+  objResult.Domicilio = entidad.Domicilio;
+  objResult.CodigoPostal = entidad.CodigoPostal;
+  objResult.IdLocalidad = entidad.IdLocalidad;
   objResult.CorreoElectronico = entidad.CorreoElectronico;
   objResult.Telefono = entidad.Telefono;
   objResult.ObjFamiliar = entidad.ObjFamiliar;
