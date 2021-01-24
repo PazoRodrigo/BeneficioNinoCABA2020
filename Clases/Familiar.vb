@@ -110,6 +110,13 @@ Namespace Entidad
             End If
             Return result
         End Function
+        Public Shared Function TraerUno(ByVal IdRepresentado As Integer, NroDocumento As Integer) As Familiar
+            Dim result As Familiar = DAL_Familiar.TraerUno(IdRepresentado, NroDocumento)
+            If result Is Nothing Then
+                Throw New Exception("No existen resultados para la búsqueda")
+            End If
+            Return result
+        End Function
         Public Shared Function TraerTodos() As List(Of Familiar)
             Dim result As List(Of Familiar) = DAL_Familiar.TraerTodos()
             If result Is Nothing Then
@@ -120,7 +127,7 @@ Namespace Entidad
         Public Shared Function TraerTodosXTitular(idTitular As Integer) As List(Of Familiar)
             'Con filtro menores por parentesco 3,5,7,8,9,10 y de alta
             Dim result As List(Of Familiar) = DAL_Familiar.TraerTodosXTitular(idTitular)
-            result = result.Where(Function(s) (s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10) And s.FechaBaja Is Nothing And s.Edad <= 12).ToList
+            'result = result.Where(Function(s) (s.IdParentesco = 3 Or s.IdParentesco = 5 Or s.IdParentesco = 7 Or s.IdParentesco = 8 Or s.IdParentesco = 9 Or s.IdParentesco = 10) And s.FechaBaja Is Nothing).ToList
             If result Is Nothing Then
                 Throw New Exception("No existen resultados para la búsqueda")
             End If
@@ -265,6 +272,7 @@ Namespace DataAccessLibrary
         Const storeBaja As String = "p_Familiar_Baja"
         Const storeModifica As String = "p_Familiar_Modifica"
         Const storeTraerUnoXId As String = "p_Familiar_TraerUno"
+        Const storeTraerUno As String = "p_Familiar_TraerUnoXDatos"
         Const storeTraerTodos As String = "p_Familiar_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Familiar_TraerTodosActivos"
         Const storeTraerTodosXTitular As String = "p_Familiar_getAllByid_afiliado"
@@ -326,6 +334,23 @@ Namespace DataAccessLibrary
             Connection.Connection.Ejecutar(store, pa, "strConn_UTEDyC")
         End Sub
         ' Traer
+        Public Shared Function TraerUno(ByVal IdRepresentado As Integer, NroDocumento As Integer) As Familiar
+            Dim store As String = storeTraerUno
+            Dim result As New Familiar
+            Dim pa As New parametrosArray
+            pa.add("@IdRepresentado", IdRepresentado)
+            pa.add("@NroDocumento", NroDocumento)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+                If Not dt Is Nothing Then
+                    If dt.Rows.Count = 1 Then
+                        result = LlenarEntidad(dt.Rows(0))
+                    ElseIf dt.Rows.Count = 0 Then
+                        result = Nothing
+                    End If
+                End If
+            End Using
+            Return result
+        End Function
         Public Shared Function TraerUno(ByVal id As Integer) As Familiar
             Dim store As String = storeTraerUnoXId
             Dim result As New Familiar

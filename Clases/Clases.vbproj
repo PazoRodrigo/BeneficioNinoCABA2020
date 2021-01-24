@@ -71,9 +71,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Beneficio.vb" />
     <Compile Include="Domicilio\Domicilio.vb" />
     <Compile Include="Domicilio\Localidad.vb" />
     <Compile Include="Domicilio\Provincia.vb" />
+    <Compile Include="EntregaBeneficio.vb" />
     <Compile Include="Familiar.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -90,6 +92,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TipoBeneficio.vb" />
+    <Compile Include="TipoParentesco.vb" />
     <Compile Include="Titular.vb" />
     <Compile Include="Voucher.vb" />
   </ItemGroup>

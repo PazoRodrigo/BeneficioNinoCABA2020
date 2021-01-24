@@ -194,9 +194,13 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.vb" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.vb" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.vb" />
+    <Compile Include="Controllers\BeneficiosController.vb" />
+    <Compile Include="Controllers\EntregaBeneficiosController.vb" />
     <Compile Include="Controllers\Domicilio\LocalidadesController.vb" />
     <Compile Include="Controllers\Domicilio\ProvinciasController.vb" />
     <Compile Include="Controllers\FamiliaresController.vb" />
+    <Compile Include="Controllers\TipoParentescosController.vb" />
+    <Compile Include="Controllers\TipoBeneficiosController.vb" />
     <Compile Include="Controllers\TitularesController.vb" />
     <Compile Include="Controllers\VoucherController.vb" />
     <Compile Include="Global.asax.vb">
@@ -309,6 +313,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\" />
+    <Folder Include="Views\Beneficios\" />
+    <Folder Include="Views\TipoBeneficios\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Clases\Clases.vbproj">

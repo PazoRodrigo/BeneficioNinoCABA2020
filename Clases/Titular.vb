@@ -398,7 +398,7 @@ Namespace DataAccessLibrary
 
 #End Region
 #Region " Métodos Privados "
-        Private Shared Function LlenarEntidad(ByVal dr As DataRow) As Titular
+        Public Shared Function LlenarEntidad(ByVal dr As DataRow) As Titular
             Dim entidad As New Titular
             ' DBE
             If dr.Table.Columns.Contains("idUsuarioAlta") Then

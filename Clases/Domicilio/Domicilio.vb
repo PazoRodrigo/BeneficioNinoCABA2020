@@ -100,13 +100,6 @@ Namespace Entidad
         '    End If
         '    Return result
         'End Function
-        'Public Shared Function TraerTodos() As List(Of Domicilio)
-        '    Dim result As List(Of Domicilio) = DAL_Domicilio.TraerTodos()
-        '    If result Is Nothing Then
-        '        Throw New Exception("No existen resultados para la búsqueda")
-        '    End If
-        '    Return result
-        'End Function
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"

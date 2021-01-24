@@ -23,6 +23,8 @@ function LimpiarFormulario() {
     $("#P3_Domicilio").val("");
     $("#P3_CodigoPostal").val("");
     $("#P3_Localidad").val("");
+    $("#P3_CboLocalidad").css('display','none');
+    $("#P3_Localidad").css('display','block');
     $("#P3_Provincia").val("");
     $("#P3_Telefono").val("");
     $("#P3_CorreoElectronico").val("");
