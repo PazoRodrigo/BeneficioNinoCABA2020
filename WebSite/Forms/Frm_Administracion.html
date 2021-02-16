@@ -1,23 +1,21 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <title>Beneficios CABA</title>
     <meta charset="utf-8" />
-    <link
-      href="../Imagenes/favicon.ico"
-      rel="shortcut icon"
-      type="image/x-icon"
-    />
+    <link href="../Imagenes/favicon.ico"
+          rel="shortcut icon"
+          type="image/x-icon" />
     <meta http-equiv="content-type" content="text/plain; charset=UTF-8" />
     <link href="../Styles/bootstrap.css" rel="stylesheet" />
     <link href="../Styles/jquery.steps.css" rel="stylesheet" />
-  </head>
-  <body>
+</head>
+<body>
     <noscript>
-      <p>
-        El Sistema requiere para su funcionamiento el uso de JavaScript. Si lo
-        has deshabilitado intencionadamente, por favor vuelve a activarlo.
-      </p>
+        <p>
+            El Sistema requiere para su funcionamiento el uso de JavaScript. Si lo
+            has deshabilitado intencionadamente, por favor vuelve a activarlo.
+        </p>
     </noscript>
     <!-- jQuery library -->
     <script src="../Scripts/jquery-3.5.1.js"></script>
@@ -66,335 +64,279 @@
       })();
     </script>
     <div class="container-fluid">
-      <div class="row fixed-top">
-        <div class="col-1">
-          <img
-            src="../Imagenes/logo_utedyc30.jpg"
-            alt="Logo UTEDyC"
-            style="width: 80%; height: 80%"
-          />
+        <div class="row fixed-top">
+            <div class="col-1">
+                <img src="../Imagenes/logo_utedyc30.jpg"
+                     alt="Logo UTEDyC"
+                     style="width: 80%; height: 80%" />
+            </div>
+            <div class="col-10 text-center text-light display-4 bg-primary">
+                Beneficio Día de la Niñez - Administración
+            </div>
         </div>
-        <div class="col-10 text-center text-light display-4 bg-primary">
-          Beneficio Día de la Niñez - Administración
-        </div>
-      </div>
-      <div id="Contenedor" style="margin-top: 100px">
-        <div class="row">
-          <div id="Menu" class="col-3">
-            <div class="row mt-2 mb-4">
-              <div class="col-12 text-center">
-                <h1>Administración</h1>
-              </div>
-            </div>
-            <div class="row mt-2 justify-content-center">
-              <div class="col-9">
-                <a
-                  href="#"
-                  id="BtnMenuReimpresion"
-                  class="btn btn-success btn-block"
-                  >Reimpresión de Vouchers</a
-                >
-              </div>
-            </div>
-            <div class="row mt-2 justify-content-center">
-              <div class="col-9">
-                <a
-                  href="#"
-                  id="BtnMenuReporteInscripciones"
-                  class="btn btn-success btn-block"
-                  >Reporte de Inscripciones</a
-                >
-              </div>
-            </div>
-            <div class="row mt-2 justify-content-center">
-              <div class="col-9">
-                <a
-                  href="#"
-                  id="BtnMenuReporteTitulares"
-                  class="btn btn-success btn-block"
-                  >Reporte de Titulares</a
-                >
-              </div>
-            </div>
-            <div class="row mt-2 justify-content-center" style="display: none">
-              <div class="col-9">
-                <a
-                  href="#"
-                  id="BtnMenuReporteEntregados"
-                  class="btn btn-success btn-block"
-                  >Reporte de Entregas</a
-                >
-              </div>
-            </div>
+        <div id="Contenedor" style="margin-top: 100px">
+            <div class="row">
+                <div id="Menu" class="col-3">
+                    <div class="row mt-2 mb-4">
+                        <div class="col-12 text-center">
+                            <h1>Administración</h1>
+                        </div>
+                    </div>
+                    <div class="row mt-2 justify-content-center">
+                        <div class="col-9">
+                            <a href="#"
+                               id="BtnMenuReimpresion"
+                               class="btn btn-success btn-block">Reimpresión de Vouchers</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2 justify-content-center">
+                        <div class="col-9">
+                            <a href="#"
+                               id="BtnMenuReporteInscripciones"
+                               class="btn btn-success btn-block">Reporte de Inscripciones</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2 justify-content-center">
+                        <div class="col-9">
+                            <a href="#"
+                               id="BtnMenuReporteTitulares"
+                               class="btn btn-success btn-block">Reporte de Titulares</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2 justify-content-center" style="display: none">
+                        <div class="col-9">
+                            <a href="#"
+                               id="BtnMenuReporteEntregados"
+                               class="btn btn-success btn-block">Reporte de Entregas</a>
+                        </div>
+                    </div>
 
-            <div class="row mt-2 justify-content-center" style="display: none">
-              <div class="col-9">
-                <a
-                  href="#"
-                  id="BtnMenuReporteEtiquetasEntregas"
-                  class="btn btn-success btn-block"
-                  >Etiquetas</a
-                >
-              </div>
+                    <div class="row mt-2 justify-content-center" style="display: none">
+                        <div class="col-9">
+                            <a href="#"
+                               id="BtnMenuReporteEtiquetasEntregas"
+                               class="btn btn-success btn-block">Etiquetas</a>
+                        </div>
+                    </div>
+                </div>
+                <div ir="Contenido" class="col-9">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <em><span id="TituloContenido"></span></em>
+                        </h1>
+                    </div>
+                    <div id="divReimpresionVoucher" style="display: none">
+                        <div class="container mb-4">
+                            <div class="row justify-content-end mb-1">
+                                <div class="col-10 bg-primary text-light"></div>
+                            </div>
+                            <div class="container">
+                                <div class="row justify-content-end mb-1">
+                                    <div class="col-10 bg-primary text-light"></div>
+                                </div>
+                                <div class="row justify-content-end mt-2 mb-2">
+                                    <div class="col-5 bg-info text-light">
+                                        <span class="TituloPaso">Datos de Titular</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-2 text-right pr-3">Nro. Documento</div>
+                                    <div class="col-3 text-center">
+                                        <input id="P2_NroDocumentoTitular"
+                                               type="text"
+                                               class="form-control"
+                                               placeholder="Nro. Documento"
+                                               maxlength="8"
+                                               onkeypress="return jsSoloNumeros(event)" />
+                                    </div>
+                                    <div class="col-3"></div>
+                                    <div class="col-3">
+                                        <a id="BtnBuscarTitular"
+                                           href="#"
+                                           class="btn btn-primary btn-block">
+                                            Buscar
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-2 text-right pr-3">Apellido / Nombre</div>
+                                    <div class="col-6 text-right pr-3">
+                                        <input id="P2_ApellidoNombreTitular"
+                                               type="text"
+                                               class="form-control"
+                                               readonly="readonly"
+                                               placeholder="Apellido / Nombre de Titular" />
+                                    </div>
+                                    <div class="col-3">
+                                        <a id="BtnAceptarTitular"
+                                           href="#"
+                                           class="btn btn-success btn-block">
+                                            Continuar
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end mt-2 mb-2">
+                                    <div class="col-5 bg-info text-light">
+                                        <span class="TituloPaso">Datos de Familiares</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-2 text-right pr-3 DatosFamiliares">
+                                        Familiares
+                                    </div>
+                                    <div class="col-8 text-center DatosFamiliares">
+                                        <div style="height: 180px; overflow-y: scroll">
+                                            <div id="GrillaFamiliares"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 text-right pr-3 DatosFamiliares">
+                                        <a id="BtnReimprimirVoucher"
+                                           href="#"
+                                           class="btn btn-success btn-block">Reimprimir !</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="DivMailEnviado"
+                                         class="col-12 text-light text-center bg-success rounded"
+                                         style="display: none">
+                                        Se ha enviado un Correo con los Vouchers a la dirección de
+                                        mail informada.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divReporteInscripciones" style="display: none">
+                        <div class="row mb-1">
+                            <div class="col-1 text-right">Cod.Pos.:</div>
+                            <div class="col-2 mr-1">
+                                <input id="Txt_BuscadorCodigoPostal"
+                                       type="text"
+                                       class="form-control text-center"
+                                       placeholder="Cod. Pos."
+                                       autocomplete="off"
+                                       maxlength="4"
+                                       style="width: 100px"
+                                       onkeypress="return jsSoloNumeros(event)" />
+                            </div>
+                            <div class="col-1 mr-2">
+                                <a href="#"
+                                   id="BtnBuscarInscripcionesXCP"
+                                   class="btn btn-success">Buscar</a>
+                            </div>
+                            <div class="col-7 bg-info text-light text-right">
+                                <div class="row">
+                                    <div class="col-6"
+                                         id="DivRegistrosXCP"
+                                         style="visibility: hidden">
+                                        Registros por C.P.:
+                                        <span id="LblCantidadRegistrosCP"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        Total de Inscripciones:
+                                        <span id="LblCantidadRegistros"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="GrillaReporteInscripciones"
+                             style="max-height: 380px; overflow-y: scroll"></div>
+                        <a id="BtnExcelInscripciones"
+                           href="#"
+                           class="btn btn-block btn-info"
+                           onclick="tableToExcel('GrillaReporteInscripciones', 'Reporte Titulares')">
+                            Exportar a EXCEL
+                        </a>
+                    </div>
+                    <div id="divReporteTitulares" style="display: none">
+                        <div class="row mb-1">
+                            <div class="col-1 text-right">CUIT :</div>
+                            <div class="col-2 mr-1">
+                                <input id="Txt_BuscadorCUIT"
+                                       type="text"
+                                       class="form-control text-center"
+                                       placeholder="CUIT"
+                                       autocomplete="off"
+                                       maxlength="11"
+                                       onkeypress="return jsSoloNumeros(event)" />
+                            </div>
+                            <div class="col-1 mr-2">
+                                <a href="#"
+                                   id="BtnBuscarTitularesXCUIT"
+                                   class="btn btn-success">Buscar</a>
+                            </div>
+                            <div class="col-7 bg-info text-light text-right">
+                                <div class="row">
+                                    <div class="col-4"
+                                         id="DivRegistrosXCUIT"
+                                         style="visibility: hidden">
+                                        Registros por CUIT:
+                                        <span id="LblCantidadRegistrosTitularesCUIT"></span>
+                                    </div>
+                                    <div class="col-34">
+                                        Titulares:
+                                        <span id="LblCantidadRegistrosTitulares"></span>
+                                    </div>
+                                    <div class="col-4">
+                                        Beneficiarios:
+                                        <span id="LblCantidadRegistrosTitularesBeneficiarios"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="GrillaReporteTitulares"
+                             style="max-height: 380px; overflow-y: scroll"></div>
+                        <a id="BtnExcelTitulares"
+                           href="#"
+                           class="btn btn-block btn-info"
+                           onclick="tableToExcel('GrillaReporteTitulares', 'Reporte Titulares')">
+                            Exportar a EXCEL
+                        </a>
+                    </div>
+                    <div id="divReporteEntregados" style="display: none"></div>
+                    <div id="divReporteEtiquetasEntregas" style="display: none"></div>
+                </div>
             </div>
-          </div>
-          <div ir="Contenido" class="col-9">
-            <div class="col-12 text-center">
-              <h1>
-                <em><span id="TituloContenido"></span></em>
-              </h1>
-            </div>
-            <div id="divReimpresionVoucher" style="display: none">
-              <div class="container mb-4">
-                <div class="row justify-content-end mb-1">
-                  <div class="col-10 bg-primary text-light"></div>
-                </div>
-                <div class="container">
-                  <div class="row justify-content-end mb-1">
-                    <div class="col-10 bg-primary text-light"></div>
-                  </div>
-                  <div class="row justify-content-end mt-2 mb-2">
-                    <div class="col-5 bg-info text-light">
-                      <span class="TituloPaso">Datos de Titular</span>
-                    </div>
-                  </div>
-                  <div class="row mb-1">
-                    <div class="col-2 text-right pr-3">Nro. Documento</div>
-                    <div class="col-3 text-center">
-                      <input
-                        id="P2_NroDocumentoTitular"
-                        type="text"
-                        class="form-control"
-                        placeholder="Nro. Documento"
-                        maxlength="8"
-                        onkeypress="return jsSoloNumeros(event)"
-                      />
-                    </div>
-                    <div class="col-3"></div>
-                    <div class="col-3">
-                      <a
-                        id="BtnBuscarTitular"
-                        href="#"
-                        class="btn btn-primary btn-block"
-                      >
-                        Buscar
-                      </a>
-                    </div>
-                  </div>
-                  <div class="row mb-1">
-                    <div class="col-2 text-right pr-3">Apellido / Nombre</div>
-                    <div class="col-6 text-right pr-3">
-                      <input
-                        id="P2_ApellidoNombreTitular"
-                        type="text"
-                        class="form-control"
-                        readonly="readonly"
-                        placeholder="Apellido / Nombre de Titular"
-                      />
-                    </div>
-                    <div class="col-3">
-                      <a
-                        id="BtnAceptarTitular"
-                        href="#"
-                        class="btn btn-success btn-block"
-                      >
-                        Continuar
-                      </a>
-                    </div>
-                  </div>
-                  <div class="row justify-content-end mt-2 mb-2">
-                    <div class="col-5 bg-info text-light">
-                      <span class="TituloPaso">Datos de Familiares</span>
-                    </div>
-                  </div>
-                  <div class="row mb-1">
-                    <div class="col-2 text-right pr-3 DatosFamiliares">
-                      Familiares
-                    </div>
-                    <div class="col-8 text-center DatosFamiliares">
-                      <div style="height: 180px; overflow-y: scroll">
-                        <div id="GrillaFamiliares"></div>
-                      </div>
-                    </div>
-                    <div class="col-2 text-right pr-3 DatosFamiliares">
-                      <a
-                        id="BtnReimprimirVoucher"
-                        href="#"
-                        class="btn btn-success btn-block"
-                        >Reimprimir !</a
-                      >
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div
-                      id="DivMailEnviado"
-                      class="col-12 text-light text-center bg-success rounded"
-                      style="display: none"
-                    >
-                      Se ha enviado un Correo con los Vouchers a la dirección de
-                      mail informada.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="divReporteInscripciones" style="display: none">
-              <div class="row mb-1">
-                <div class="col-1 text-right">Cod.Pos.:</div>
-                <div class="col-2 mr-1">
-                  <input
-                    id="Txt_BuscadorCodigoPostal"
-                    type="text"
-                    class="form-control text-center"
-                    placeholder="Cod. Pos."
-                    autocomplete="off"
-                    maxlength="4"
-                    style="width: 100px"
-                    onkeypress="return jsSoloNumeros(event)"
-                  />
-                </div>
-                <div class="col-1 mr-2">
-                  <a
-                    href="#"
-                    id="BtnBuscarInscripcionesXCP"
-                    class="btn btn-success"
-                    >Buscar</a
-                  >
-                </div>
-                <div class="col-7 bg-info text-light text-right">
-                  <div class="row">
-                    <div
-                      class="col-6"
-                      id="DivRegistrosXCP"
-                      style="visibility: hidden"
-                    >
-                      Registros por C.P.:
-                      <span id="LblCantidadRegistrosCP"></span>
-                    </div>
-                    <div class="col-6">
-                      Total de Inscripciones:
-                      <span id="LblCantidadRegistros"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                id="GrillaReporteInscripciones"
-                style="max-height: 380px; overflow-y: scroll"
-              ></div>
-              <a
-                id="BtnExcelInscripciones"
-                href="#"
-                class="btn btn-block btn-info"
-                onclick="tableToExcel('GrillaReporteInscripciones', 'Reporte Titulares')"
-              >
-                Exportar a EXCEL</a
-              >
-            </div>
-            <div id="divReporteTitulares" style="display: none">
-              <div class="row mb-1">
-                <div class="col-1 text-right">CUIT :</div>
-                <div class="col-2 mr-1">
-                  <input
-                    id="Txt_BuscadorCUIT"
-                    type="text"
-                    class="form-control text-center"
-                    placeholder="CUIT"
-                    autocomplete="off"
-                    maxlength="11"
-                    onkeypress="return jsSoloNumeros(event)"
-                  />
-                </div>
-                <div class="col-1 mr-2">
-                  <a
-                    href="#"
-                    id="BtnBuscarTitularesXCUIT"
-                    class="btn btn-success"
-                    >Buscar</a
-                  >
-                </div>
-                <div class="col-7 bg-info text-light text-right">
-                  <div class="row">
-                    <div
-                      class="col-4"
-                      id="DivRegistrosXCUIT"
-                      style="visibility: hidden"
-                    >
-                      Registros por CUIT:
-                      <span id="LblCantidadRegistrosTitularesCUIT"></span>
-                    </div>
-                    <div class="col-34">
-                      Titulares:
-                      <span id="LblCantidadRegistrosTitulares"></span>
-                    </div>
-                    <div class="col-4">
-                      Beneficiarios:
-                      <span
-                        id="LblCantidadRegistrosTitularesBeneficiarios"
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                id="GrillaReporteTitulares"
-                style="max-height: 380px; overflow-y: scroll"
-              ></div>
-              <a
-                id="BtnExcelTitulares"
-                href="#"
-                class="btn btn-block btn-info"
-                onclick="tableToExcel('GrillaReporteTitulares', 'Reporte Titulares')"
-              >
-                Exportar a EXCEL</a
-              >
-            </div>
-            <div id="divReporteEntregados" style="display: none"></div>
-            <div id="divReporteEtiquetasEntregas" style="display: none"></div>
-          </div>
+            <div style="width: 300px; float: left; height: 500px"></div>
         </div>
-        <div style="width: 300px; float: left; height: 500px"></div>
-      </div>
     </div>
     <div id="ReimpresionVoucher" style="display: none">
-      <div class="container">
-        <div class="row mb-4">
-          <div class="col-2">
-            <img
-              src="../Imagenes/logo_utedyc30.jpg"
-              alt="Logo UTEDyC"
-              style="width: 80px; height: 80px"
-            />
-          </div>
-          <div class="col-10">
-            <div class="col-10 text-center text-primary display-4 bg-light">
-              Beneficio Día de la Niñez
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-2">
+                    <img src="../Imagenes/logo_utedyc30.jpg"
+                         alt="Logo UTEDyC"
+                         style="width: 80px; height: 80px" />
+                </div>
+                <div class="col-10">
+                    <div class="col-10 text-center text-primary display-4 bg-light">
+                        Beneficio Día de la Niñez
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="row mt-2 justify-content-center">
+                <div class="col-10">
+                    <div id="GrillaBeneficiariosReImpresion"></div>
+                </div>
+            </div>
+            <div class="row mt-4 justify-content-end">
+                <div class="col-9 text-left">
+                    <p>
+                        <small>
+                            <em>
+                                * Válido para participación de sorteos de premios en vivo.
+                                <br />
+                                * Mediante el presente comprobante durante el mes de octubre
+                                se entregará y/o enviará a su domicilio registrado un juguete
+                                para el niño/a según grupo etario.
+                            </em>
+                        </small>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+            </div>
         </div>
-        <div class="row mt-2 justify-content-center">
-          <div class="col-10">
-            <div id="GrillaBeneficiariosReImpresion"></div>
-          </div>
-        </div>
-        <div class="row mt-4 justify-content-end">
-          <div class="col-9 text-left">
-            <p>
-              <small
-                ><em>
-                  * Válido para participación de sorteos de premios en vivo.
-                  <br />
-                  * Mediante el presente comprobante durante el mes de octubre
-                  se entregará y/o enviará a su domicilio registrado un juguete
-                  para el niño/a según grupo etario.
-                </em></small
-              >
-            </p>
-          </div>
-          <div class="col-1"></div>
-        </div>
-      </div>
     </div>
     <script src="Scripts/Frm_Administracion.js?version=20200922_"></script>
-  </body>
+</body>
 </html>

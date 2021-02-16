@@ -131,7 +131,7 @@ async function TraerAPI(url, params) {
         console.log(error);
         console.log(xhr.responseJSON);
         //console.log(xhr.responseJSON.Message);
-        throw xhr;
+          throw xhr;
       },
     });
   } catch (xhr) {

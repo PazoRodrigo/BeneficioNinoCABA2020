@@ -40,6 +40,13 @@ class Beneficio {
         let url = ApiURL + '/' + entidad + '/' + metodo;
         let datos = await TraerAPI(url, data);
         let result = [];
+        // if (datos?.length > 0) {
+        //     let i = 0;
+        //     while (i <= datos.length - 1) {
+        //         result.push(llenarEntidadBeneficio(datos[i]));
+        //         i++;
+        //     }
+        // }
         $.each(datos, function (key, value) {
             result.push(llenarEntidadBeneficio(value));
         });
@@ -101,7 +108,7 @@ class Beneficio {
                 let ObjFamiliar = $.grep(_ListaFamiliares, function (entidad, index) {
                     return entidad.NroDocumento == NroDocumentoFamiliar;
                 });
-                let Nombre = ObjFamiliar[0].ApellidoNombre;
+                let Nombre = ObjFamiliar[i].ApellidoNombre;
                 let ObjParentesco = await TipoParentesco.TraerUno(BeneficioFamiliares[i].IdTipoParentesco);
                 let ObjTipoBeneficio = await TipoBeneficio.TraerUno(BeneficioFamiliares[i].IdTipoBeneficio);
 
@@ -131,7 +138,6 @@ function llenarEntidadBeneficio(entidad) {
     objResult.Entregado = entidad.Entregado;
     objResult.FechaEntrega = entidad.FechaEntrega;
     objResult.IdSeccional = entidad.IdSeccional;
-
     objResult._ObjFamiliar = entidad.ObjFamiliar;
     return objResult;
 }
@@ -163,4 +169,223 @@ class EntregaBeneficio {
             throw new Error(error);
         }
     }
+    static async TraerTodos() {
+        let entidad = 'EntregaBeneficios';
+        let metodo = 'TraerTodos';
+        let url = ApiURL + '/' + entidad + '/' + metodo;
+        let datos = await TraerAPI(url);
+        let result = [];
+        $.each(datos, function (key, value) {
+            result.push(llenarEntidadEntregaBeneficio(value));
+        });
+        return result;
+    }
+
+
+}
+function llenarEntidadEntregaBeneficio(entidad) {
+    let objResult = new Beneficio;
+    objResult.IdEntidad = entidad.IdEntidad;
+    objResult.IdTitular = entidad.IdTitular;
+    objResult.CodigoPostal = entidad.CodigoPostal;
+    objResult.IdLocalidad = entidad.IdLocalidad;
+    objResult.Domicilio = entidad.Domicilio;
+    objResult.CorreoElectronico = entidad.CorreoElectronico;
+    objResult.Telefono = entidad.Telefono;
+    return objResult;
+}
+class EntregaBeneficio_ReporteEntregas {
+    constructor() {
+        this.IdTitular = 0;
+        this.Tit_Apellido = '';
+        this.Tit_Nombre = '';
+        this.Tit_NroDocumento = 0;
+        this.Tit_Ape_Sind = '';
+        this.Tit_NroSindical = 0;
+        this.Telefono = 0;
+        this.Fam_Apellido = '';
+        this.Fam_Nombre = '';
+        this.TipoBeneficio = '';
+        this.Domicilio = '';
+        this.CodigoPostal = 0;
+        this.Localidad = '';
+        this.RazonSocial = '';
+        this.FechaSolicitudEntrega = 0;
+        this.CorreoElectronico = '';
+    }
+    static async TraerTodosReporte_Entregas() {
+        let entidad = 'EntregaBeneficios';
+        let metodo = 'TraerTodosReporte_Entregas';
+        let url = ApiURL + '/' + entidad + '/' + metodo;
+        let datos = await TraerAPI(url);
+        let result = [];
+        $.each(datos, function (key, value) {
+            result.push(llenarEntidadReporte_Entrega(value));
+        });
+        return result;
+    }
+    static async TraerTodosReporte_Solicitados() {
+        let entidad = 'EntregaBeneficios';
+        let metodo = 'TraerTodosReporte_Solicitados';
+        let url = ApiURL + '/' + entidad + '/' + metodo;
+        let datos = await TraerAPI(url);
+        let result = [];
+        $.each(datos, function (key, value) {
+            result.push(llenarEntidadReporte_Solicitados(value));
+        });
+        return result;
+    }
+
+    static async ArmarGrillaImpresionReporte(div, Lista) {
+        $('#' + div + '').html('');
+        let str = '';
+        if (Lista.length > 0) {
+            str += ' <table class="table table-bordered">';
+            str += '     <thead>';
+            str += '         <tr class="bg-primary text-light">';
+            str += '             <th class="text-center">Id Rep.</th>';
+            str += '             <th class="text-center">Apellido Titular</th>';
+            str += '             <th class="text-center">Nombre Titular</th>';
+            str += '             <th class="text-center">Nro Documento</th>';
+            str += '             <th class="text-center">Afil / Apor</th>';
+            str += '             <th class="text-center">Nro. Sindical</th>';
+            str += '             <th class="text-center">Telefono</th>';
+            str += '             <th class="text-center">Apellido Familiar</th>';
+            str += '             <th class="text-center">Nombre Familiar</th>';
+            str += '             <th class="text-center">Beneficio</th>';
+            str += '             <th class="text-center">Domicilio</th>';
+            str += '             <th class="text-center">Código Postal</th>';
+            str += '             <th class="text-center">Localidad</th>';
+            str += '             <th class="text-center">Entidad</th>';
+            str += '             <th class="text-center">Alta Solic. Entrega</th>';
+            str += '         </tr>';
+            str += '     </thead>';
+            str += '     <tbody>';
+            for (let item of Lista) {
+                str += '    <tr>';
+                str += '        <td class="text-right pr-1"> ' + item.IdTitular + '</td>';
+                str += '             <td class="text-center">' + Left(item.Tit_Apellido, 30) + '</td>';
+                str += '             <td class="text-center">' + Left(item.Tit_Nombre, 30) + '</td>';
+                str += '             <td class="text-center">' + Right('00000000' + item.Tit_NroDocumento, 8) + '</td>';
+                str += '             <td class="text-center">' + item.Tit_Ape_Sind + '</td>';
+                str += '             <td class="text-center">' + item.Tit_NroSindical + '</td>';
+                str += '             <td class="text-center">' + Right('00000000' + item.Telefono, 8) + '</td>';
+                str += '             <td class="text-center">' + Left(item.Fam_Apellido, 30) + '</td>';
+                str += '             <td class="text-center">' + Left(item.Fam_Nombre, 30) + '</td>';
+                str += '             <td class="text-center">' + item.TipoBeneficio + '</td>';
+                str += '             <td class="text-center">' + item.Domicilio + '</td>';
+                str += '             <td class="text-center">' + item.CodigoPostal + '</td>';
+                str += '             <td class="text-center">' + item.Localidad + '</td>';
+                str += '             <td class="text-center">' + item.RazonSocial + '</td>';
+                str += '             <td class="text-center">' + LongToDateString(item.FechaSolicitudEntrega) + '</td>';
+                str += '    </tr>';
+            }
+            str += '     <t/body>';
+            str += ' </table>';
+        }
+        return $('#' + div + '').html(str);
+    }
+}
+function llenarEntidadReporte_Entrega(entidad) {
+    let objResult = new EntregaBeneficio_ReporteEntregas;
+    objResult.IdTitular = entidad.IdTitular;
+    objResult.Tit_Apellido = entidad.Tit_Apellido;
+    objResult.Tit_Nombre = entidad.Tit_Nombre;
+    objResult.Tit_NroDocumento = entidad.Tit_NroDocumento;
+    objResult.Tit_Ape_Sind = entidad.Tit_Ape_Sind;
+    objResult.Tit_NroSindical = entidad.Tit_NroSindical;
+    objResult.Telefono = entidad.Telefono;
+    objResult.Fam_Apellido = entidad.Fam_Apellido;
+    objResult.Fam_Nombre = entidad.Fam_Nombre;
+    objResult.TipoBeneficio = entidad.TipoBeneficio;
+    objResult.Domicilio = entidad.Domicilio;
+    objResult.CodigoPostal = entidad.CodigoPostal;
+    objResult.Localidad = entidad.Localidad;
+    objResult.RazonSocial = entidad.RazonSocial;
+    objResult.FechaSolicitudEntrega = entidad.FechaSolicitudEntrega;
+    objResult.CorreoElectronico = entidad.CorreoElectronico;
+    return objResult;
+}
+
+class EntregaBeneficio_ReporteSolicitados {
+    constructor() {
+        this.IdTitular = 0;
+        this.Tit_Apellido = '';
+        this.Tit_Nombre = '';
+        this.Tit_NroDocumento = 0;
+        this.Tit_NroSindical = 0;
+        this.TipoBeneficio = '';
+        this.RazonSocial = '';
+        this.FechaEntrega = 0;
+        this.NroRemito = 0;
+    }
+    static async TraerTodosReporte_Solicitados() {
+        let entidad = 'EntregaBeneficios';
+        let metodo = 'TraerTodosReporte_Solicitados';
+        let url = ApiURL + '/' + entidad + '/' + metodo;
+        let datos = await TraerAPI(url);
+        let result = [];
+        $.each(datos, function (key, value) {
+            result.push(llenarEntidadReporte_Solicitados(value));
+        });
+        return result;
+    }
+    static async ArmarGrillaImpresionReporte(div, Lista) {
+        $('#' + div + '').html('');
+        let str = '';
+        if (Lista.length > 0) {
+            str += ' <table class="table table-bordered">';
+            str += '     <thead>';
+            str += '         <tr class="bg-primary text-light">';
+            str += '             <th class="text-center">Id Rep.</th>';
+            str += '             <th class="text-center">Apellido</th>';
+            str += '             <th class="text-center">Nombre</th>';
+            str += '             <th class="text-center">Nro Documento</th>';
+            str += '             <th class="text-center">Nro. Sindical</th>';
+            str += '             <th class="text-center">Beneficio</th>';
+            str += '             <th class="text-center">Entidad</th>';
+            str += '             <th class="text-center">Entrega</th>';
+            str += '             <th class="text-center">Nro. Remito</th>';
+            str += '         </tr>';
+            str += '     </thead>';
+            str += '     <tbody>';
+            for (let item of Lista) {
+                let NroSindical = '';
+                if (item.Tit_NroSindical > 0) {
+                    NroSindical = item.Tit_NroSindical;
+                }
+                let NroRemito = '';
+                if (item.NroRemito > 0) {
+                    NroRemito = item.NroRemito;
+                }
+                str += '    <tr>';
+                str += '        <td class="text-right pr-1"> ' + item.IdTitular + '</td>';
+                str += '             <td class="text-center">' + Left(item.Tit_Apellido, 30) + '</td>';
+                str += '             <td class="text-center">' + Left(item.Tit_Nombre, 30) + '</td>';
+                str += '             <td class="text-center">' + Right('00000000' + item.Tit_NroDocumento, 8) + '</td>';
+                str += '             <td class="text-center">' + NroSindical + '</td>';
+                str += '             <td class="text-center">' + item.TipoBeneficio + '</td>';
+                str += '             <td class="text-center">' + item.RazonSocial + '</td>';
+                str += '             <td class="text-center">' + LongToDateString(item.FechaEntrega) + '</td>';
+                str += '             <td class="text-center">' + NroRemito + '</td>';
+                str += '    </tr>';
+            }
+            str += '     <t/body>';
+            str += ' </table>';
+        }
+        return $('#' + div + '').html(str);
+    }
+}
+function llenarEntidadReporte_Solicitados(entidad) {
+    let objResult = new EntregaBeneficio_ReporteSolicitados;
+    objResult.IdTitular = entidad.IdTitular;
+    objResult.Tit_Apellido = entidad.Tit_Apellido;
+    objResult.Tit_Nombre = entidad.Tit_Nombre;
+    objResult.Tit_NroDocumento = entidad.Tit_NroDocumento;
+    objResult.Tit_NroSindical = entidad.Tit_NroSindical;
+    objResult.TipoBeneficio = entidad.TipoBeneficio;
+    objResult.RazonSocial = entidad.RazonSocial;
+    objResult.FechaEntrega = entidad.FechaEntrega;
+    objResult.NroRemito = entidad.NroRemito;
+    return objResult;
 }

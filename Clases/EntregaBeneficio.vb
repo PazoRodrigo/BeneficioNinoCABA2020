@@ -10,6 +10,35 @@ Imports System.Configuration
 Imports System.Net.Mail
 
 Namespace Entidad
+    Public Class EntregaBeneficio_ReporteEntregas
+        Public Property IdTitular() As Integer = 0
+        Public Property Tit_Apellido() As String = ""
+        Public Property Tit_Nombre() As String = ""
+        Public Property Tit_NroDocumento() As Long = 0
+        Public Property Tit_Ape_Sind() As String = ""
+        Public Property Tit_NroSindical() As Long = 0
+        Public Property Telefono() As Long = 0
+        Public Property Fam_Apellido() As String = ""
+        Public Property Fam_Nombre() As String = ""
+        Public Property TipoBeneficio() As String = ""
+        Public Property Domicilio() As String = ""
+        Public Property CodigoPostal() As Integer = 0
+        Public Property Localidad() As String = ""
+        Public Property RazonSocial() As String = ""
+        Public Property FechaSolicitudEntrega() As Long = 0
+        Public Property CorreoElectronico() As String = ""
+    End Class
+    Public Class EntregaBeneficio_ReporteSolicitados
+        Public Property IdTitular() As Integer = 0
+        Public Property Tit_Apellido() As String = ""
+        Public Property Tit_Nombre() As String = ""
+        Public Property Tit_NroDocumento() As Long = 0
+        Public Property Tit_NroSindical() As Long = 0
+        Public Property TipoBeneficio() As String = ""
+        Public Property RazonSocial() As String = ""
+        Public Property FechaEntrega() As Long = 0
+        Public Property NroRemito() As Long = 0
+    End Class
     Public Class EntregaBeneficio
         'Inherits DBE
 #Region " Atributos / Propiedades "
@@ -100,6 +129,13 @@ Namespace Entidad
             Next
             Return result
         End Function
+        Public Shared Function TraerTodosReporte_Entregas() As List(Of EntregaBeneficio_ReporteEntregas)
+            Return DAL_EntregaBeneficio.TraerTodosReporte_Entregas()
+        End Function
+        Public Shared Function TraerTodosReporte_Solicitados() As List(Of EntregaBeneficio_ReporteSolicitados)
+            Return DAL_EntregaBeneficio.TraerTodosReporte_Solicitados()
+        End Function
+
         ' Nuevos
 #End Region
 #Region " Métodos Públicos"
@@ -128,17 +164,6 @@ Namespace Entidad
             result.Telefono = Telefono
             Return result
         End Function
-
-        'Public Property IdEntidad() As Integer = 0
-        'Public Property IdTitular() As Integer = 0
-        'Public Property CodigoPostal() As Integer = 0
-        'Public Property IdLocalidad() As Integer = 0
-        'Public Property Domicilio() As String = ""
-        'Public Property CorreoElectronico() As String = ""
-        'Public Property Telefono() As Long = 0
-        'Public Shared Sub refresh()
-        '    _Todos = DAL_EntregaBeneficio.TraerTodos
-        'End Sub
         ' Nuevos
 #End Region
 #Region " Métodos Privados "
@@ -222,8 +247,6 @@ Namespace DTO
     End Class ' DTO_EntregaBeneficio
 End Namespace ' DTO
 
-
-
 Namespace DataAccessLibrary
     Public Class DAL_EntregaBeneficio
 
@@ -232,8 +255,12 @@ Namespace DataAccessLibrary
         'Const storeBaja As String = "p_EntregaBeneficioDiaDelNino2020_Baja"
         'Const storeModifica As String = "p_EntregaBeneficio_Modifica"
         Const storeTraerUnoXIdTitular As String = "p_EntregaBeneficio_TraerUnoXIdTitular"
-        Const storeTraerTodosxTitular As String = "p_EntregaBeneficioDiaDelNino2020_TraerTodosxTitular"
-        'Const storeTraerTodos As String = "p_EntregaBeneficioDiaDelNino2020_TraerTodos"
+        'Const storeTraerTodosxTitular As String = "p_EntregaBeneficioDiaDelNino2020_TraerTodosxTitular"
+        Const storeTraerTodosxTitular As String = "p_EntregaBeneficioMochilas_TraerTodosxTitular"
+        Const storeTraerTodos As String = "p_EntregaBeneficioMochilas_TraerTodos"
+        Const storeTraerTodosReporte As String = "p_EntregaBeneficioMochilas_TraerTodosReporte"
+        Const storeTraerTodosReporte_Entregas As String = "p_EntregaBeneficioMochilas_TraerTodosReporte_Entregas"
+        Const storeTraerTodosReporte_Solicitados As String = "p_EntregaBeneficioMochilas_TraerTodosReporte_Solicitados"
         'Const storeTraerTodosActivos As String = "p_EntregaBeneficio_TraerTodosActivos"
 #End Region
 #Region " Métodos Públicos "
@@ -300,22 +327,203 @@ Namespace DataAccessLibrary
             Return listaResult
         End Function
         Public Shared Function TraerTodos() As List(Of EntregaBeneficio)
-            'Dim store As String = storeTraerTodos
-            'Dim pa As New parametrosArray
-            'Dim listaResult As New List(Of EntregaBeneficio)
-            'Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
-            '    If dt.Rows.Count > 0 Then
-            '        For Each dr As DataRow In dt.Rows
-            '            listaResult.Add(LlenarEntidad(dr))
-            '        Next
-            '    End If
-            'End Using
-            'Return listaResult
+            Dim store As String = storeTraerTodos
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of EntregaBeneficio)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidad(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
         End Function
 
+        Public Shared Function TraerTodosReporte_Solicitados() As List(Of EntregaBeneficio_ReporteSolicitados)
+            Dim store As String = storeTraerTodosReporte_Solicitados
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of EntregaBeneficio_ReporteSolicitados)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidadReporte_Solicitados(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
+        Public Shared Function TraerTodosReporte_Entregas() As List(Of EntregaBeneficio_ReporteEntregas)
+            Dim store As String = storeTraerTodosReporte_Entregas
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of EntregaBeneficio_ReporteEntregas)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidadReporte_Entregas(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
+        Public Shared Function TraerTodosReporte() As List(Of EntregaBeneficio)
+            Dim store As String = storeTraerTodosReporte
+            Dim pa As New parametrosArray
+            Dim listaResult As New List(Of EntregaBeneficio)
+            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+                If dt.Rows.Count > 0 Then
+                    For Each dr As DataRow In dt.Rows
+                        listaResult.Add(LlenarEntidad(dr))
+                    Next
+                End If
+            End Using
+            Return listaResult
+        End Function
 
 #End Region
 #Region " Métodos Privados "
+        Private Shared Function LlenarEntidadReporte_Entregas(ByVal dr As DataRow) As EntregaBeneficio_ReporteEntregas
+            Dim entidad As New EntregaBeneficio_ReporteEntregas
+
+            ' Entidad
+            If dr.Table.Columns.Contains("IdTitular") Then
+                If dr.Item("IdTitular") IsNot DBNull.Value Then
+                    entidad.IdTitular = CInt(dr.Item("IdTitular"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Tit_Apellido") Then
+                If dr.Item("Tit_Apellido") IsNot DBNull.Value Then
+                    entidad.Tit_Apellido = dr.Item("Tit_Apellido").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Tit_Nombre") Then
+                If dr.Item("Tit_Nombre") IsNot DBNull.Value Then
+                    entidad.Tit_Nombre = dr.Item("Tit_Nombre").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Nro_Documento") Then
+                If dr.Item("Nro_Documento") IsNot DBNull.Value Then
+                    entidad.Tit_NroDocumento = CLng(dr.Item("Nro_Documento"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Apo_Sin") Then
+                If dr.Item("Apo_Sin") IsNot DBNull.Value Then
+                    entidad.Tit_Ape_Sind = dr.Item("Apo_Sin").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Nro_Sindical") Then
+                If dr.Item("Nro_Sindical") IsNot DBNull.Value Then
+                    entidad.Tit_NroSindical = CLng(dr.Item("Nro_Sindical"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Telefono") Then
+                If dr.Item("Telefono") IsNot DBNull.Value Then
+                    entidad.Telefono = CLng(dr.Item("Telefono"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Fam_Apellido") Then
+                If dr.Item("Fam_Apellido") IsNot DBNull.Value Then
+                    entidad.Fam_Apellido = dr.Item("Fam_Apellido").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Fam_Nombre") Then
+                If dr.Item("Fam_Nombre") IsNot DBNull.Value Then
+                    entidad.Fam_Nombre = dr.Item("Fam_Nombre").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("TipoBeneficio") Then
+                If dr.Item("TipoBeneficio") IsNot DBNull.Value Then
+                    entidad.TipoBeneficio = dr.Item("TipoBeneficio").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("domicilio") Then
+                If dr.Item("domicilio") IsNot DBNull.Value Then
+                    entidad.Domicilio = dr.Item("domicilio").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("CodigoPostal") Then
+                If dr.Item("CodigoPostal") IsNot DBNull.Value Then
+                    entidad.CodigoPostal = CInt(dr.Item("CodigoPostal"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Localidad") Then
+                If dr.Item("Localidad") IsNot DBNull.Value Then
+                    entidad.Localidad = dr.Item("Localidad").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Razon_Social") Then
+                If dr.Item("Razon_Social") IsNot DBNull.Value Then
+                    entidad.RazonSocial = dr.Item("Razon_Social").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("FechaSolicitudEntrega") Then
+                If dr.Item("FechaSolicitudEntrega") IsNot DBNull.Value Then
+                    Dim FechaTemp As Date? = CDate(dr.Item("FechaSolicitudEntrega"))
+                    If FechaTemp.HasValue Then
+                        entidad.FechaSolicitudEntrega = CLng(Year(FechaTemp.Value).ToString & Right("00" & Month(FechaTemp.Value).ToString, 2) & Right("00" & Day(FechaTemp.Value).ToString, 2))
+                    End If
+                End If
+            End If
+            If dr.Table.Columns.Contains("CorreoElectronico") Then
+                If dr.Item("CorreoElectronico") IsNot DBNull.Value Then
+                    entidad.CorreoElectronico = dr.Item("CorreoElectronico").ToString.Trim.ToUpper
+                End If
+            End If
+            Return entidad
+        End Function
+        Private Shared Function LlenarEntidadReporte_Solicitados(ByVal dr As DataRow) As EntregaBeneficio_ReporteSolicitados
+            Dim entidad As New EntregaBeneficio_ReporteSolicitados
+            ' Entidad
+            If dr.Table.Columns.Contains("Id_representado") Then
+                If dr.Item("Id_representado") IsNot DBNull.Value Then
+                    entidad.IdTitular = CInt(dr.Item("Id_representado"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Apellido") Then
+                If dr.Item("Apellido") IsNot DBNull.Value Then
+                    entidad.Tit_Apellido = dr.Item("Apellido").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Nombres") Then
+                If dr.Item("Nombres") IsNot DBNull.Value Then
+                    entidad.Tit_Nombre = dr.Item("Nombres").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Nro_Documento") Then
+                If dr.Item("Nro_Documento") IsNot DBNull.Value Then
+                    entidad.Tit_NroDocumento = CLng(dr.Item("Nro_Documento"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("Nro_Sindical") Then
+                If dr.Item("Nro_Sindical") IsNot DBNull.Value Then
+                    entidad.Tit_NroSindical = CLng(dr.Item("Nro_Sindical"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("TipoBeneficio") Then
+                If dr.Item("TipoBeneficio") IsNot DBNull.Value Then
+                    entidad.TipoBeneficio = dr.Item("TipoBeneficio").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Razon_Social") Then
+                If dr.Item("Razon_Social") IsNot DBNull.Value Then
+                    entidad.RazonSocial = dr.Item("Razon_Social").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("FechaEntrega") Then
+                If dr.Item("FechaEntrega") IsNot DBNull.Value Then
+                    Dim FechaTemp As Date? = CDate(dr.Item("FechaEntrega"))
+                    If FechaTemp.HasValue Then
+                        entidad.FechaEntrega = CLng(Year(FechaTemp.Value).ToString & Right("00" & Month(FechaTemp.Value).ToString, 2) & Right("00" & Day(FechaTemp.Value).ToString, 2))
+                    End If
+                End If
+            End If
+            If dr.Table.Columns.Contains("NroRemito") Then
+                If dr.Item("NroRemito") IsNot DBNull.Value Then
+                    entidad.NroRemito = CInt(dr.Item("NroRemito"))
+                End If
+            End If
+            Return entidad
+        End Function
         Private Shared Function LlenarEntidad(ByVal dr As DataRow) As EntregaBeneficio
             Dim entidad As New EntregaBeneficio
             ' DBE
@@ -365,19 +573,19 @@ Namespace DataAccessLibrary
             '    End If
             'End If
             ' Entidad
-            If dr.Table.Columns.Contains("id_EntregaBeneficio") Then
-                If dr.Item("id_EntregaBeneficio") IsNot DBNull.Value Then
-                    entidad.IdEntidad = CInt(dr.Item("id_EntregaBeneficio"))
+            If dr.Table.Columns.Contains("id") Then
+                If dr.Item("id") IsNot DBNull.Value Then
+                    entidad.IdEntidad = CInt(dr.Item("id"))
                 End If
             End If
-            If dr.Table.Columns.Contains("id_afiliado") Then
-                If dr.Item("id_afiliado") IsNot DBNull.Value Then
-                    entidad.IdTitular = CInt(dr.Item("id_afiliado"))
+            If dr.Table.Columns.Contains("IdTitular") Then
+                If dr.Item("IdTitular") IsNot DBNull.Value Then
+                    entidad.IdTitular = CInt(dr.Item("IdTitular"))
                 End If
             End If
-            If dr.Table.Columns.Contains("cp") Then
-                If dr.Item("cp") IsNot DBNull.Value Then
-                    entidad.CodigoPostal = CInt(dr.Item("cp"))
+            If dr.Table.Columns.Contains("CodigoPostal") Then
+                If dr.Item("CodigoPostal") IsNot DBNull.Value Then
+                    entidad.CodigoPostal = CInt(dr.Item("CodigoPostal"))
                 End If
             End If
             If dr.Table.Columns.Contains("domicilio") Then
@@ -385,9 +593,9 @@ Namespace DataAccessLibrary
                     entidad.Domicilio = dr.Item("domicilio").ToString.Trim.ToUpper
                 End If
             End If
-            If dr.Table.Columns.Contains("id_localidad") Then
-                If dr.Item("id_localidad") IsNot DBNull.Value Then
-                    entidad.IdLocalidad = CInt(dr.Item("id_localidad"))
+            If dr.Table.Columns.Contains("IdLocalidad") Then
+                If dr.Item("IdLocalidad") IsNot DBNull.Value Then
+                    entidad.IdLocalidad = CInt(dr.Item("IdLocalidad"))
                 End If
             End If
 
@@ -401,6 +609,12 @@ Namespace DataAccessLibrary
                     entidad.Telefono = CLng(dr.Item("Telefono"))
                 End If
             End If
+
+
+
+
+
+
             Return entidad
         End Function
 #End Region

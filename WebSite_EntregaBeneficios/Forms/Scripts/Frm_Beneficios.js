@@ -79,7 +79,19 @@ $("body").on("click", "#BtnAceptarTitular", async function () {
         spinner();
         _ListaBeneficios = await Beneficio.TraerTodosxAfiliado_BeneficioEntrega(_ObjTitular.IdEntidad);
         if (_ListaBeneficios?.length == 0) {
+            _ObjTitular = null;
+            LimpiarFormulario();
             throw "Usted no tiene Beneficios a ser Entregados";
+        }
+        console.log(_ListaBeneficios);
+        let buscado = $.grep(_ListaBeneficios, function (entidad, index) {
+            return entidad.FechaEntrega > 0;
+        });
+        console.log(buscado);
+        if (buscado?.length > 0) {
+            _ObjTitular = null;
+            LimpiarFormulario();
+            throw "Ya fue registrado su domicilio para la entrega.<br><br> Si necesita cambiar dicho domicilio contáctese a <br> <i> administrativa@utedyccapital.org.ar </i><br> <i>Teléfono : 11 6587 2073</i>";
         }
         await Beneficio.ArmarGrilla(
             "GrillaBeneficios",
@@ -102,13 +114,13 @@ $("body").on("click", "#BtnGuardarDatos", async function () {
         await ValidarGuardarDatos();
         await EntregaBeneficio.GuardarEntregaBeneficio(_ObjTitular.IdEntidad, _TempObjDomicilio, $("#P3_CorreoElectronico").val().trim(), $("#P3_Telefono").val().trim());
         $("#DivMailEnviado").css('display', 'none');
-        spinnerClose();
         LimpiarFormulario();
-        alertOk('<b>Trabajamos para vos !</b><br><br> UTEDyC Capital agradece tu compromiso.');
+        spinnerClose();
+        alertOk('<b>Fue  realizada con éxito la carga de los datos de entrega.<b><br><br> Para consultas comuníquese con la Seccional Capital Federal.<br> <i>WhastApp: 54 9 11 6587-2073 / 54 9 11 2515-7856.</i>');
     } catch (error) {
         spinnerClose();
         alertInfo(
-            "<b>Realice las correcciones informadas para Generar el Envío</b><br><br>" +
+            "<br>Realice las correcciones informadas para Generar el Envío</br><br><br>" +
             error
         );
     }

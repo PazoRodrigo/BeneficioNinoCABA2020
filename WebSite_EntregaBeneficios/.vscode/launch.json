@@ -16,7 +16,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Chrome",
-      "url": "http://localhost:55046/Forms/Frm_beneficios.html",
+      "url": "http://localhost:55046/Forms/Frm_administracion.html",
       "webRoot": "${workspaceFolder}"
     }
   ]
