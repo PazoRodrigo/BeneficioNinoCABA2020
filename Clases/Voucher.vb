@@ -139,7 +139,6 @@ Namespace Entidad
                         i += 1
                     End While
                     Dim DireccionEnvio As String = Lista(0).CorreoElectronico
-                    'Dim DireccionEnvio As String = "pazo.rodrigo@gmail.com"
                     Dim DesdeCuenta As String = ConfigurationManager.AppSettings("smtpFrom").ToString
                     Dim DesdePass As String = ConfigurationManager.AppSettings("smtpPassword").ToString
                     Using Mail As New MailMessage()

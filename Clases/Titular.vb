@@ -109,7 +109,7 @@ Namespace Entidad
                 If result.FechaBaja IsNot Nothing Then
                     Throw New Exception("EL Beneficio es solo para Titulares de Alta")
                 End If
-                If result.IdSeccional <> 1 Then
+                If result.IdSeccional <> 1 And result.IdSeccional <> 40 Then
                     Throw New Exception("EL Beneficio es solo para Titulares de Seccional Capital Federal")
                 End If
             End If
@@ -281,6 +281,7 @@ Namespace DataAccessLibrary
         Const storeTraerTodos As String = "p_Titular_TraerTodos"
         Const storeTraerTodosActivos As String = "p_Titular_TraerTodosActivos"
         Const storeTraerUnoXNroDocumento As String = "p_Representado_TraerUnoXNroDocumento"
+        Const storeTraerTraerTodosXNroDocumento As String = "[Padrones].[usp_Representado_TraerTodosXNroDocumento]"
         Const storeTraerTodosConVoucher As String = "p_VoucherDiaDelNino2020_TraerTodosTitularesConVoucher"
 #End Region
 #Region " Métodos Públicos "
