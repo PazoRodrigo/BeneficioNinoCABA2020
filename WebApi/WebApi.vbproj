@@ -231,6 +231,13 @@
     <Compile Include="Controllers\TipoBeneficiosController.vb" />
     <Compile Include="Controllers\TitularesController.vb" />
     <Compile Include="Controllers\VoucherController.vb" />
+    <Compile Include="Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Forms\Reportes\BeneficiosEntregados.aspx.designer.vb">
       <DependentUpon>BeneficiosEntregados.aspx</DependentUpon>
     </Compile>
@@ -280,6 +287,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Default.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

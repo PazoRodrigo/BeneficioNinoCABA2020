@@ -42,7 +42,7 @@ $("body").on("click", "#BtnImprimirReporteSolicitados", async function () {
         let reporte = "";
         let carpeta = "";
         // let url = "http://www.utedyccapital.org.ar/webApi/Forms/BeneficiosSolicitados.aspx";
-        let url = "http://localhost:64802/Forms/Reportes/BeneficiosSolicitados.aspx"
+        let url = "http://www.utedyccapital.org.ar/WebApi/Forms/Reportes/BeneficiosSolicitados.aspx"
         var win = window.open(url);
         win.focus();
         spinnerClose();
