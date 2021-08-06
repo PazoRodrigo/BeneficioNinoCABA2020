@@ -181,7 +181,7 @@ $("body").on("click", "#BtnConfirmacion", function () {
 });
 $("body").on("click", "#BtnAyuda", function () {
     alertOk(
-        "<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6224 (LUN A VIER 10 A 18 HS)</em>"
+        "<b>Ayuda</b><br><br><em>Si necesitas asesoramiento para la carga del formulario comuníquese al 5277-6226 teléfono de línea y wapp 1125157856 (solo mensajes) (LUN A VIER 10 A 18 HS)</em>"
     );
 });
 $("body").on("click", "#BtnAgregarFamiliar", function () {
