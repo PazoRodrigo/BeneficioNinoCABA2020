@@ -50,7 +50,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LUM">
-      <HintPath>..\..\..\LibreriasPropias\LUM\bin\Debug\LUM.dll</HintPath>
+      <HintPath>..\..\LibreriasPropias\LUM\bin\Debug\LUM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
