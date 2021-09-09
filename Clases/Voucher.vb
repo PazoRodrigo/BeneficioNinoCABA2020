@@ -192,6 +192,7 @@ Namespace Entidad
             result.CodigoPostal = CodigoPostal
             result.IdLocalidad = IdLocalidad
             result.Domicilio = Domicilio
+            result.CorreoElectronico = CorreoElectronico
             Return result
         End Function
         'Public Shared Sub refresh()
@@ -483,6 +484,11 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("Telefono") Then
                 If dr.Item("Telefono") IsNot DBNull.Value Then
                     entidad.Telefono = CLng(dr.Item("Telefono"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("fechaingreso") Then
+                If dr.Item("fechaingreso") IsNot DBNull.Value Then
+                    entidad.Fecha = CDate(dr.Item("fechaingreso"))
                 End If
             End If
             Dim ObjFamiliar As New Familiar
