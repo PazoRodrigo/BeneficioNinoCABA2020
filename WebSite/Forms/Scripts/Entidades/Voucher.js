@@ -166,35 +166,49 @@ class Voucher {
     }
     return $('#' + div + '').html(str);
   }
-  static async ArmarGrillaImpresion(div, ListaBeneficios) {
-    $('#' + div + '').html('');
-    let str = '';
-    if (ListaBeneficios.length > 0) {
-      str += ' <table class="table table-bordered">';
-      str += '     <thead>';
-      str += '         <tr class="bg-primary text-light">';
-      str += '             <th class="text-center">Nombre</th>';
-      str += '             <th class="text-center">Nacimiento</th>';
-      str += '             <th class="text-center">Edad</th>';
-      str += '             <th class="text-center">Nro. Documento</th>';
-      str += '             <th class="text-center">Codigo Beneficio</th>';
-      str += '         </tr>';
-      str += '     </thead>';
-      str += '     <tbody>';
-      for (let item of ListaBeneficios) {
-        str += '    <tr>';
-        str += '        <td class="text-left pl-1"> ' + Left(item.ObjFamiliar.ApellidoNombre, 30) + '</td>';
-        str += '        <td class="text-center"> ' + LongToDateString(item.ObjFamiliar.FechaNacimiento) + '</td>';
-        str += '        <td class="text-right pr-4"> ' + CalcularEdad(Date_LongToDate(item.ObjFamiliar.FechaNacimiento, '/')) + '</td>';
-        str += '        <td class="text-center"> ' + Right('00000000' + item.ObjFamiliar.NroDocumento, 8) + '</td>';
-        str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
-        str += '    </tr>';
-      }
-      str += '     <t/body>';
-      str += ' </table>';
+    static async ArmarGrillaImpresion(div, ListaBeneficios) {
+        $('#' + div + '').html('');
+        let str = '';
+        if (ListaBeneficios.length > 0) {
+            str += ' <table class="table table-bordered">';
+            str += '     <thead>';
+            str += '         <tr class="bg-primary text-light">';
+            str += '             <th class="text-center">Fecha Carga</th>';
+            str += '             <th class="text-center">Nombre</th>';
+            str += '             <th class="text-center">Nacimiento</th>';
+            str += '             <th class="text-center">Edad</th>';
+            str += '             <th class="text-center">Nro. Documento</th>';
+            str += '             <th class="text-center">Codigo Beneficio</th>';
+            str += '             <th class="text-center">Domicilio</th>';
+            str += '             <th class="text-center">C.P.</th>';
+           // str += '             <th class="text-center">Localidad</th>';
+            str += '             <th class="text-center">EMail</th>';
+            str += '         </tr>';
+            str += '     </thead>';
+            str += '     <tbody>';
+            let i = 0;
+            while (i <= ListaBeneficios?.length - 1) {
+                let item = ListaBeneficios[i];
+              //  let ObjLocalidad = await Localidad.TraerUno(item.IdLocalidad);
+                str += '    <tr>';
+                str += '        <td class="text-center pl-1"> ' + LongToDateString(item.Fecha, '/') + '</td>';
+                str += '        <td class="text-left pl-1"> ' + Left(item.ObjFamiliar.ApellidoNombre, 30) + '</td>';
+                str += '        <td class="text-center"> ' + LongToDateString(item.ObjFamiliar.FechaNacimiento) + '</td>';
+                str += '        <td class="text-right pr-4"> ' + CalcularEdad(Date_LongToDate(item.ObjFamiliar.FechaNacimiento, '/')) + '</td>';
+                str += '        <td class="text-center"> ' + Right('00000000' + item.ObjFamiliar.NroDocumento, 8) + '</td>';
+                str += '        <td class="text-right pr-4"><small> ' + item.Codigo + '</small></td>';
+                str += '        <td class="text-right pr-4"><small> ' + item.Domicilio + '</small></td>';
+                str += '        <td class="text-right pr-4"><small> ' + item.CodigoPostal + '</small></td>';
+             //   str += '        <td class="text-right pr-4"><small> ' + ObjLocalidad.Nombre + '</small></td>';
+                str += '        <td class="text-right pr-4"><small> ' + item.CorreoElectronico + '</small></td>';
+                str += '    </tr>';
+                i++;
+            }
+            str += '     <t/body>';
+            str += ' </table>';
+        }
+        return $('#' + div + '').html(str);
     }
-    return $('#' + div + '').html(str);
-  }
   static async ArmarGrillaImpresionString(ListaBeneficios, ListaFamiliares) {
     let ListaImpresion = [];
     let f = 0;

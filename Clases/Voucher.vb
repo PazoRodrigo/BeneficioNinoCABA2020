@@ -129,7 +129,7 @@ Namespace Entidad
                 Dim ObjTitular As New Titular(IdAfiliado)
                 If Lista.Count > 0 Then
                     Dim str As String = "Gracias por participar del evento del Día de la Niñez con UTEDyC Seccional Capital Federal" & vbCrLf
-                    str += "Te enviamos los comprobantes de participación que seleccionaste desde nuestra plataforma." & vbCrLf
+                    str += "El siguiente mail es válido como comprobante de la participación." & vbCrLf
                     str += "No es necesario que los imprimas." & vbCrLf & vbCrLf & vbCrLf
                     str += ObjTitular.ApellidoNombre & ". DNI: " & ObjTitular.NroDocumento & vbCrLf & vbCrLf
                     Dim i As Integer = 0
@@ -191,6 +191,7 @@ Namespace Entidad
             result.CodigoPostal = CodigoPostal
             result.IdLocalidad = IdLocalidad
             result.Domicilio = Domicilio
+            result.CorreoElectronico = CorreoElectronico
             Return result
         End Function
         'Public Shared Sub refresh()
@@ -482,6 +483,11 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("Telefono") Then
                 If dr.Item("Telefono") IsNot DBNull.Value Then
                     entidad.Telefono = CLng(dr.Item("Telefono"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("fechaingreso") Then
+                If dr.Item("fechaingreso") IsNot DBNull.Value Then
+                    entidad.Fecha = CDate(dr.Item("fechaingreso"))
                 End If
             End If
             Dim ObjFamiliar As New Familiar

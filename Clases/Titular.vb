@@ -34,6 +34,9 @@ Namespace Entidad
         Public Property CUITEmpresa() As Long = 0
         Public Property RazonSocial() As String = ""
         Public Property Beneficios() As Integer = 0
+        Public Property EdadesBeneficiarios() As String = ""
+        Public Property CorreoElectronico() As String = ""
+        Public Property Telefono() As String = ""
 
         Public Property ObjDomicilio As Domicilio
 #End Region
@@ -164,6 +167,9 @@ Namespace Entidad
             result.CUITEmpresa = CUITEmpresa
             result.RazonSocial = RazonSocial
             result.Beneficios = Beneficios
+            result.EdadesBeneficiarios = EdadesBeneficiarios
+            result.CorreoElectronico = CorreoElectronico
+            result.Telefono = Telefono
             If ObjDomicilio IsNot Nothing Then
                 result.ObjDomicilio = ObjDomicilio.ToDTO
             End If
@@ -262,6 +268,9 @@ Namespace DTO
         Public Property CUITEmpresa() As Long = 0
         Public Property RazonSocial() As String = ""
         Public Property Beneficios() As Integer = 0
+        Public Property EdadesBeneficiarios() As String = ""
+        Public Property CorreoElectronico() As String = ""
+        Public Property Telefono() As String = ""
 
         Public Property ObjDomicilio As DTO.DTO_Domicilio
 #End Region
@@ -304,7 +313,7 @@ Namespace DataAccessLibrary
             '	End If
             ' VariableString
             '	pa.add("@VariableString", entidad.VariableString.ToUpper.Trim)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_UTEDyC")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         entidad.IdEntidad = CInt(dt.Rows(0)(0))
@@ -346,7 +355,7 @@ Namespace DataAccessLibrary
             Dim result As New Titular
             Dim pa As New parametrosArray
             pa.add("@id", id)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_UTEDyC")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -359,7 +368,7 @@ Namespace DataAccessLibrary
             Dim store As String = storeTraerTodos
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Titular)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_UTEDyC")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -374,7 +383,7 @@ Namespace DataAccessLibrary
             pa.add("@nroDocumento", nroDocumento)
             Dim result As New Titular
             Dim listaResult As New List(Of Titular)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_UTEDyC")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_UTEDyC")
                 If Not dt Is Nothing Then
                     If dt.Rows.Count = 1 Then
                         result = LlenarEntidad(dt.Rows(0))
@@ -387,7 +396,7 @@ Namespace DataAccessLibrary
             Dim store As String = storeTraerTodosConVoucher
             Dim pa As New parametrosArray
             Dim listaResult As New List(Of Titular)
-            Using dt As DataTable = Connection.Connection.TraerDT(store, pa, "strConn_CABA")
+            Using dt As DataTable = Connection.Connection.TraerDt(store, pa, "strConn_CABA")
                 If dt.Rows.Count > 0 Then
                     For Each dr As DataRow In dt.Rows
                         listaResult.Add(LlenarEntidad(dr))
@@ -476,6 +485,21 @@ Namespace DataAccessLibrary
             If dr.Table.Columns.Contains("Beneficios") Then
                 If dr.Item("Beneficios") IsNot DBNull.Value Then
                     entidad.Beneficios = CInt(dr.Item("Beneficios"))
+                End If
+            End If
+            If dr.Table.Columns.Contains("edades") Then
+                If dr.Item("edades") IsNot DBNull.Value Then
+                    entidad.EdadesBeneficiarios = dr.Item("edades").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("CorreoElectronico") Then
+                If dr.Item("CorreoElectronico") IsNot DBNull.Value Then
+                    entidad.CorreoElectronico = dr.Item("CorreoElectronico").ToString.Trim.ToUpper
+                End If
+            End If
+            If dr.Table.Columns.Contains("Telefono") Then
+                If dr.Item("Telefono") IsNot DBNull.Value Then
+                    entidad.Telefono = dr.Item("Telefono").ToString.Trim.ToUpper
                 End If
             End If
             Dim ObjDomicilio As New Domicilio

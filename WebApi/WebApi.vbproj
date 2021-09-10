@@ -53,7 +53,7 @@
       <HintPath>..\..\..\Dll\AjaxControlToolkit.dll</HintPath>
     </Reference>
     <Reference Include="LUM">
-      <HintPath>..\..\..\LibreriasPropias\LUM\bin\Debug\LUM.dll</HintPath>
+      <HintPath>..\..\LibreriasPropias\LUM\bin\Debug\LUM.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
